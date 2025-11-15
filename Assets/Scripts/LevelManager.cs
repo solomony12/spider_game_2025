@@ -379,7 +379,11 @@ public class LevelManager : MonoBehaviour
                 canUseToilet = false;
                 break;
             default:
-                CloneSpiders(1);
+                int totalLiveSpiders = spiderManager.numberOfLiveSpiders();
+                int totalNeeded = (day - 2) * 6; // -2 since first two days are no-spawn days
+                int amountToSpawn = totalNeeded - totalLiveSpiders;
+                int setsOfSix = amountToSpawn / 6;
+                CloneSpiders(setsOfSix);
                 break;
         }
         

@@ -116,4 +116,9 @@ public class SpiderManager : MonoBehaviour
             }
         }
     }
+
+    public int numberOfLiveSpiders()
+    {
+        return spiderClones.Count;
+    }
 }
