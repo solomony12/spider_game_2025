@@ -390,10 +390,9 @@ public class LevelManager : MonoBehaviour
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
                 break;
-            case 4:
-                CloneSpiders(2); // 12 total
+            default:
+                CloneSpiders(1);
                 break;
-            // TODO: We'll have some fallthrough cases to prevent too many spiders
         }
         
     }
