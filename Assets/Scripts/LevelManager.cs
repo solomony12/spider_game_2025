@@ -32,6 +32,8 @@ public class LevelManager : MonoBehaviour
     public Camera mainCamera;
     public GameObject playerParent;
 
+    public GameObject smackSpiderText;
+
     private int day;
 
     void Awake()
@@ -43,6 +45,8 @@ public class LevelManager : MonoBehaviour
     {
         characterObject.SetActive(false);
         day = 1;
+        stillSpider.SetActive(true);
+        smackSpiderText.SetActive(false);
         LevelManage();
     }
 
@@ -190,8 +194,7 @@ public class LevelManager : MonoBehaviour
     private void LevelManage()
     {
         // StartDialogue(); (temp use elsewhere)
-        stillSpider.SetActive(false);
-
+        
         switch (day)
         {
             case 1:
@@ -203,16 +206,21 @@ public class LevelManager : MonoBehaviour
 
             case 2:
                 // Show only 3 base spiders
+                stillSpider.SetActive(false);
                 spiderManager.HideBaseSpiders();
                 spiderManager.ShowThreeBaseSpiders();
                 break;
 
             case 3:
                 // Show one clone each of all 6 base spiders
-                spiderManager.ShowBaseSpiders();
-                CloneSpiders(1);
-                spiderManager.HideBaseSpiders();
+                CloneSpiders(1); // 6 total
+                smackSpiderText.SetActive(true);
                 break;
+            case 4:
+                CloneSpiders(2); // 12 total
+                smackSpiderText.SetActive(false);
+                break;
+            // TODO: We'll have some fallthrough cases to prevent too many spiders
         }
         
     }
@@ -223,6 +231,8 @@ public class LevelManager : MonoBehaviour
     /// <param name="amount">Clone each spider by this amount</param>
     private void CloneSpiders(int amount = 1)
     {
+        spiderManager.ShowBaseSpiders();
+
         // Spawn one extra clone for each base spider
         foreach (GameObject baseSpider in spiderManager.baseSpiders)
         {
@@ -230,5 +240,7 @@ public class LevelManager : MonoBehaviour
 
             spiderManager.SpawnClones(baseSpider, amount, spawnPos, Vector3.zero);
         }
+
+        spiderManager.HideBaseSpiders();
     }
 }

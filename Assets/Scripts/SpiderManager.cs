@@ -37,9 +37,9 @@ public class SpiderManager : MonoBehaviour
             Vector3 position = startPosition + offset * i;
             GameObject clone = Instantiate(baseSpider, position, baseSpider.transform.rotation);
 
-            // Different size spiders
-            float minScale = 0.3f;
-            float maxScale = 1.6f;
+            // Different size spiders (25%)
+            float minScale = 0.85f;
+            float maxScale = 1.25f;
             float randomScale = Random.Range(minScale, maxScale);
             clone.transform.localScale = baseSpider.transform.localScale * randomScale;
 

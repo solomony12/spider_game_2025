@@ -2894,6 +2894,7 @@ MonoBehaviour:
   foodAnimator: {fileID: 0}
   mainCamera: {fileID: 330585545}
   playerParent: {fileID: 1814168985}
+  smackSpiderText: {fileID: 174919936}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0
