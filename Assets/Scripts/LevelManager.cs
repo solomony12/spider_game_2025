@@ -40,7 +40,7 @@ public class LevelManager : MonoBehaviour
     private TMP_Text tutorialText;
     private string toiletText = "Use the toilet.";
     private string foodText = "Eat the meal.";
-    private string talkText = "Talk to the guard.";
+    private string talkText = "Talk to the guard (food slot).";
     private string bedText = "Go to bed.";
     public GameObject dayText;
     private string currentTutorialText;
@@ -58,6 +58,8 @@ public class LevelManager : MonoBehaviour
 
     private int day;
 
+    public GameObject spork;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -73,6 +75,7 @@ public class LevelManager : MonoBehaviour
         tutorialText = tutorialTextObject.GetComponent<TMP_Text>();
         tutorialText.text = "WASD to move. | Mouse to look around.";
         currentTutorialText = tutorialText.text;
+        spork.GetComponent<MeshRenderer>().enabled = false;
         LevelManage();
     }
 
@@ -263,6 +266,9 @@ public class LevelManager : MonoBehaviour
 
         // If door slider is clicked on, start next dialogue (they also have needed to finish their daily tasks)
         // TODO: Select dialogue from story (just the next yarn node)
+        tutorialText.text = "Click anywhere to continue.";
+        currentTutorialText = tutorialText.text;
+
         dialogueRunner.StartDialogue("Start");
     }
 
@@ -315,10 +321,12 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        food.GetComponent<MeshRenderer>().enabled = false;
-
         dsAnimator.SetBool("isOpen", false);
+
+        yield return new WaitForSeconds(1f);
+
         canTalkToGuard = true;
+        food.GetComponent<MeshRenderer>().enabled = false;
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
@@ -331,7 +339,11 @@ public class LevelManager : MonoBehaviour
 
     private void LevelManage()
     {
-        // StartDialogue(); (temp use elsewhere)
+        if (day != 1)
+        {
+            tutorialText.text = toiletText;
+            currentTutorialText = tutorialText.text;
+        }
 
         canUseBed = false;
         canUseToilet = true;
@@ -359,6 +371,7 @@ public class LevelManager : MonoBehaviour
                 // Show one clone each of all 6 base spiders
                 CloneSpiders(1); // 6 total
                 smackSpiderText.SetActive(true);
+                spork.GetComponent<MeshRenderer>().enabled = true;
                 break;
             case 4:
                 CloneSpiders(2); // 12 total

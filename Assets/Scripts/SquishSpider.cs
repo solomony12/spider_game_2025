@@ -9,10 +9,14 @@ public class SquishSpider : MonoBehaviour
     public Camera mainCamera;
     public GameObject playerParent;
 
+    public Animator sporkAnimator;
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            sporkAnimator.SetTrigger("HitSpider");
+
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100f))
             {
