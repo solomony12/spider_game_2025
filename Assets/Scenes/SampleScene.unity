@@ -20,12 +20,12 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.106369145, g: 0.090047844, b: 0.18238991, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SubtractiveShadowColor: {r: 0.029073173, g: 0.07424465, b: 0.18867922, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 410087040}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1363,6 +1363,7 @@ GameObject:
   - component: {fileID: 410087041}
   - component: {fileID: 410087040}
   - component: {fileID: 410087042}
+  - component: {fileID: 410087043}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1479,6 +1480,32 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &410087043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410087039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7ddfa96e1727e4b8ba8558f9fadab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DynamicLightingController
+  directionalLight: {fileID: 410087040}
+  morningColor: {r: 1, g: 0.85, b: 0.6, a: 1}
+  noonColor: {r: 1, g: 1, b: 1, a: 1}
+  eveningColor: {r: 1, g: 0.45, b: 0.3, a: 1}
+  nightColor: {r: 0.1, g: 0.1, b: 0.25, a: 1}
+  transitionDuration: 2
+  maxSunIntensity: 1.2
+  skyboxMinExposure: 0.8
+  skyboxMaxExposure: 1.3
+  morningSkybox: {fileID: 2100000, guid: 2662bc056e1a33143a6198981fb3cc0f, type: 2}
+  noonSkybox: {fileID: 2100000, guid: aa49129d80dd1764c8eb7ed7ff60f8b1, type: 2}
+  eveningSkybox: {fileID: 2100000, guid: e669d67acd70db64697b37e16c7c344c, type: 2}
+  nightSkybox: {fileID: 2100000, guid: c6ae117e57e5d4b4b9dc47c6d4585909, type: 2}
+  currentPhase: 0
 --- !u!1 &412173815 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dbd7dc365f6d7dc489bde684e08a90a8, type: 3}
@@ -3236,8 +3263,6 @@ MonoBehaviour:
   stillSpider: {fileID: 1171559005}
   startPosition: {x: 0, y: 0, z: 0}
   dialogueRunner: {fileID: 1717801149}
-  characterObject: {fileID: 1576929618}
-  characterArtPath: Art/Characters/
   doorSlider: {fileID: 1518068045}
   bed: {fileID: 717288670}
   food: {fileID: 1465645996}
@@ -3251,6 +3276,7 @@ MonoBehaviour:
   tutorialTextObject: {fileID: 1090862475}
   dayText: {fileID: 1496263012}
   spork: {fileID: 1135175341}
+  lightingController: {fileID: 410087043}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0
@@ -4438,7 +4464,7 @@ GameObject:
   - component: {fileID: 1576929620}
   m_Layer: 5
   m_Name: CharacterImage
-  m_TagString: Untagged
+  m_TagString: VN_Char
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

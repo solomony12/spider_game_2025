@@ -57,6 +57,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject spork;
 
+    public DynamicLightingController lightingController;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -282,6 +284,8 @@ public class LevelManager : MonoBehaviour
         characterObject.SetActive(false);
         canTalkToGuard = false;
 
+        lightingController.AdvancePhase();
+
         StartCoroutine(WrapUpTalking());
     }
 
@@ -329,10 +333,14 @@ public class LevelManager : MonoBehaviour
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
+
+        lightingController.AdvancePhase();
     }
 
     private void LevelManage()
     {
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
+
         if (day != 1 && day != 3)
         {
             tutorialText.text = toiletText;
@@ -419,6 +427,8 @@ public class LevelManager : MonoBehaviour
 
     private void UseToiletFinish()
     {
+        lightingController.AdvancePhase();
+
         canUseToilet = false;
 
         tutorialText.text = foodText;
