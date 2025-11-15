@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class SpiderAI : MonoBehaviour
@@ -39,6 +40,8 @@ public class SpiderAI : MonoBehaviour
 
     private Vector3 lastPosition;
     private float stuckTimer = 0f;
+
+    public Animator animator;
 
     void Awake()
     {
@@ -92,7 +95,10 @@ public class SpiderAI : MonoBehaviour
 
         // Stop when close enough
         if (distance < 0.1f)
+        {
             isMoving = false;
+            animator.SetBool("isWalking", isMoving);
+        }
     }
 
     // Checks if spider is stuck and picks a new target if necessary
@@ -158,6 +164,7 @@ public class SpiderAI : MonoBehaviour
             fleeDir = Vector3.ProjectOnPlane(fleeDir, planeNormal);
             targetPosition = GetSurfaceBoundedPosition(rb.position + fleeDir * wanderRadius);
             isMoving = true;
+            animator.SetBool("isWalking", isMoving);
 
             yield return null;
         }
@@ -168,6 +175,7 @@ public class SpiderAI : MonoBehaviour
     {
         targetPosition = GetSurfaceBoundedPosition(player.position);
         isMoving = true;
+        animator.SetBool("isWalking", isMoving);
         yield return new WaitForSeconds(0.5f); // Small attack pause
     }
 
@@ -200,6 +208,7 @@ public class SpiderAI : MonoBehaviour
             randomDir = Vector3.ProjectOnPlane(randomDir, planeNormal);
             targetPosition = GetSurfaceBoundedPosition(rb.position + randomDir * wanderRadius);
             isMoving = true;
+            animator.SetBool("isWalking", isMoving);
         }
 
         // Break wandering into small steps to allow fleeing
