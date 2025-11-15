@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SquishSpider : MonoBehaviour
@@ -12,6 +13,8 @@ public class SquishSpider : MonoBehaviour
     public Animator sporkAnimator;
 
     public GameObject crushedSpiderBase;
+
+    public static event Action OnSpiderSquished;
 
     void Update()
     {
@@ -50,6 +53,8 @@ public class SquishSpider : MonoBehaviour
                                 // Remove the original spider clone
                                 Destroy(clickedObject);
                                 clones.Remove(kvp.Key);
+
+                                OnSpiderSquished?.Invoke();
 
                                 Debug.Log($"Squished spider clone ID {kvp.Key} of {baseSpider.name}");
                             }

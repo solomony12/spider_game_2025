@@ -69,6 +69,7 @@ public class LevelManager : MonoBehaviour
     {
         characterObject.SetActive(false);
         day = 1;
+        dayOneTutorialFinished = false;
         stillSpider.SetActive(true);
         smackSpiderText.SetActive(false);
         tutorialTextObject.SetActive(true); // ALWAYS TRUE
@@ -77,6 +78,31 @@ public class LevelManager : MonoBehaviour
         currentTutorialText = tutorialText.text;
         spork.GetComponent<MeshRenderer>().enabled = false;
         LevelManage();
+    }
+
+    void OnEnable()
+    {
+        SquishSpider.OnSpiderSquished += HandleSpiderSquished;
+    }
+
+    void OnDisable()
+    {
+        SquishSpider.OnSpiderSquished -= HandleSpiderSquished;
+    }
+
+    // Day 3 Tutorial
+    void HandleSpiderSquished()
+    {
+        if (day == 3 && smackSpiderText.activeSelf)
+        {
+            smackSpiderText.SetActive(false);
+
+            tutorialText.text = toiletText;
+            currentTutorialText = tutorialText.text;
+
+            canUseToilet = true;
+            dayOneTutorialFinished = true;
+        }
     }
 
     private void StartDialogue()
@@ -227,20 +253,6 @@ public class LevelManager : MonoBehaviour
                 dayOneTutorialFinished = true;
             }
         }
-
-        // Give food // temp
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            Debug.Log("open sesame");
-            StartCoroutine(giveFood());
-        }
-
-        // take back food // temp
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Debug.Log("close sesame");
-            StartCoroutine(foodFinish());
-        }
     }
 
     [YarnCommand("character")]
@@ -317,7 +329,7 @@ public class LevelManager : MonoBehaviour
     // Takes away food from player via animation
     private IEnumerator foodFinish()
     {
-        canUseFood=false;
+        canUseFood = false;
         foodAnimator.SetBool("isMealTime", false);
 
         yield return new WaitForSeconds(1f);
@@ -328,7 +340,7 @@ public class LevelManager : MonoBehaviour
 
         canTalkToGuard = true;
         food.GetComponent<MeshRenderer>().enabled = false;
-        slop.GetComponent<MeshRenderer>().enabled = true;
+        slop.GetComponent<MeshRenderer>().enabled = false;
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
@@ -341,7 +353,7 @@ public class LevelManager : MonoBehaviour
 
     private void LevelManage()
     {
-        if (day != 1)
+        if (day != 1 && day != 3)
         {
             tutorialText.text = toiletText;
             currentTutorialText = tutorialText.text;
@@ -374,10 +386,12 @@ public class LevelManager : MonoBehaviour
                 CloneSpiders(1); // 6 total
                 smackSpiderText.SetActive(true);
                 spork.GetComponent<MeshRenderer>().enabled = true;
+                tutorialText.text = "Kill a spider.";
+                currentTutorialText = tutorialText.text;
+                canUseToilet = false;
                 break;
             case 4:
                 CloneSpiders(2); // 12 total
-                smackSpiderText.SetActive(false);
                 break;
             // TODO: We'll have some fallthrough cases to prevent too many spiders
         }
