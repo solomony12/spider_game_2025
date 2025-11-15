@@ -21,6 +21,9 @@ public class PlayerMovement : MonoBehaviour
         
         // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Rotate player to face world X-axis
+        transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
     }
 
     void Update()

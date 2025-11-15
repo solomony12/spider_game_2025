@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,7 @@ public class LevelManager : MonoBehaviour
     public GameObject bed;
     public GameObject food;
     public GameObject toilet;
-    private float maxClickDistance = 3f;
+    private float maxClickDistance = 5f;
 
     public Animator dsAnimator;
     public Animator foodAnimator;
@@ -33,6 +34,22 @@ public class LevelManager : MonoBehaviour
     public GameObject playerParent;
 
     public GameObject smackSpiderText;
+    public GameObject tutorialTextObject;
+    private TMP_Text tutorialText;
+    private string toiletText = "Use the toilet.";
+    private string foodText = "Eat the meal.";
+    private string talkText = "Talk to the guard.";
+    public GameObject dayText;
+
+    private bool wPressed = false;
+    private bool aPressed = false;
+    private bool sPressed = false;
+    private bool dPressed = false;
+
+    private bool canUseToilet = false;
+    private bool canUseBed = false;
+    private bool canUseFood = false;
+    private bool canTalkToGuard = false;
 
     private int day;
 
@@ -47,6 +64,9 @@ public class LevelManager : MonoBehaviour
         day = 1;
         stillSpider.SetActive(true);
         smackSpiderText.SetActive(false);
+        tutorialTextObject.SetActive(true); // ALWAYS TRUE
+        tutorialText = tutorialTextObject.GetComponent<TMP_Text>();
+        tutorialText.text = "WASD to move. | Mouse to look around.";
         LevelManage();
     }
 
@@ -66,7 +86,7 @@ public class LevelManager : MonoBehaviour
             dialogueRunner.StartDialogue("Start");
         }
         */
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -79,7 +99,7 @@ public class LevelManager : MonoBehaviour
                 {
                     case "DoorSlider":
                         dist = Vector3.Distance(playerParent.transform.position, doorSlider.transform.position);
-                        if (dist <= maxClickDistance)
+                        if (dist <= maxClickDistance && canTalkToGuard)
                         {
                             Debug.Log("door slider clicked");
                         }
@@ -87,15 +107,23 @@ public class LevelManager : MonoBehaviour
 
                     case "Bed":
                         dist = Vector3.Distance(playerParent.transform.position, bed.transform.position);
-                        if (dist <= maxClickDistance)
+                        if (dist <= maxClickDistance && canUseBed)
                         {
                             Debug.Log("bed clicked");
+
+                            // Reset Player
+                            playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
+                            playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+
+                            day++;
+                            Debug.Log($"Day {day} begins!");
+                            LevelManage(); // temp
                         }
                         break;
 
                     case "Food":
                         dist = Vector3.Distance(playerParent.transform.position, food.transform.position);
-                        if (dist <= maxClickDistance)
+                        if (dist <= maxClickDistance && canUseFood)
                         {
                             Debug.Log("food clicked");
                         }
@@ -103,7 +131,7 @@ public class LevelManager : MonoBehaviour
 
                     case "Toilet":
                         dist = Vector3.Distance(playerParent.transform.position, toilet.transform.position);
-                        if (dist <= maxClickDistance)
+                        if (dist <= maxClickDistance && canUseToilet)
                         {
                             Debug.Log("toilet clicked");
                         }
@@ -118,12 +146,20 @@ public class LevelManager : MonoBehaviour
             dialogueRunner.RequestNextLine();
         }
 
-        // Advance day when P is pressed (temp)
-        if (Input.GetKeyDown(KeyCode.P))
+        // Update tutorial for Day 1
+        if (day == 1)
         {
-            day++;
-            Debug.Log($"Day {day} begins!");
-            LevelManage(); // temp
+            if (Input.GetKeyDown(KeyCode.W)) wPressed = true;
+            if (Input.GetKeyDown(KeyCode.A)) aPressed = true;
+            if (Input.GetKeyDown(KeyCode.S)) sPressed = true;
+            if (Input.GetKeyDown(KeyCode.D)) dPressed = true;
+
+            // Check if all have been pressed at least once
+            if (wPressed && aPressed && sPressed && dPressed)
+            {
+                tutorialText.text = toiletText;
+                canUseToilet = true;
+            }
         }
 
         /*
@@ -139,6 +175,12 @@ public class LevelManager : MonoBehaviour
             dsAnimator.SetBool("isOpen", false);
         }
         */
+
+        // enable bed // temp
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            canUseBed = true;
+        }
     }
 
     [YarnCommand("character")]
@@ -194,11 +236,17 @@ public class LevelManager : MonoBehaviour
     private void LevelManage()
     {
         // StartDialogue(); (temp use elsewhere)
-        
+
+        canUseBed = false;
+        canUseToilet = true;
+
+        ShowDay(day);
+
         switch (day)
         {
             case 1:
                 // No clone spiders since new game
+                canUseToilet = false;
                 spiderManager.DestroyAllClones();
                 spiderManager.HideBaseSpiders();
                 stillSpider.SetActive(true);
@@ -242,5 +290,19 @@ public class LevelManager : MonoBehaviour
         }
 
         spiderManager.HideBaseSpiders();
+    }
+
+    public void ShowDay(int number)
+    {
+        dayText.SetActive(true);
+        dayText.GetComponent<TMP_Text>().text = "Day " + number.ToString();
+        StartCoroutine(ShowDayCoroutine());
+    }
+
+    private IEnumerator ShowDayCoroutine()
+    {
+        yield return new WaitForSeconds(5f);
+
+        dayText.SetActive(false);
     }
 }
