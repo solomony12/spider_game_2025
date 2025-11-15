@@ -105,12 +105,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void StartDialogue()
-    {
-        dialogueRunner.StartDialogue("MainStory");
-        characterObject.SetActive(true);
-    }
-
     void Update()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -280,6 +274,8 @@ public class LevelManager : MonoBehaviour
         // TODO: Select dialogue from story (just the next yarn node)
         tutorialText.text = "Click anywhere to continue.";
         currentTutorialText = tutorialText.text;
+
+        characterObject.SetActive(true);
 
         dialogueRunner.StartDialogue("Start");
     }
