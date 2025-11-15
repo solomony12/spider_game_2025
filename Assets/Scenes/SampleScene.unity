@@ -656,7 +656,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 495bd8d609eda824594ea5a696261d70, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 952134fc3fb6f8441b9f19c6a7a1a059, type: 2}
+      objectReference: {fileID: 2100000, guid: 556eec39a483baf499149296a22daa94, type: 2}
     - target: {fileID: 919132149155446097, guid: 495bd8d609eda824594ea5a696261d70, type: 3}
       propertyPath: m_Name
       value: GJ_Food
@@ -999,7 +999,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1603d986ef866f34a988919d3038204b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2342,7 +2342,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cee29a59411943541ae2ecb301c9a630, type: 2}
+  - {fileID: 2100000, guid: 1603d986ef866f34a988919d3038204b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3380,7 +3380,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 4d9c4260498c8794fa4d4e48b0f43ece, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: cee29a59411943541ae2ecb301c9a630, type: 2}
+      objectReference: {fileID: 2100000, guid: e47a56844258bc34188b2cfa66890674, type: 2}
     - target: {fileID: 919132149155446097, guid: 4d9c4260498c8794fa4d4e48b0f43ece, type: 3}
       propertyPath: m_Name
       value: GJ_Wall_Window
@@ -4087,7 +4087,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: fd44ae51ac4e6f14db8cdd517ac5e4f8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: cee29a59411943541ae2ecb301c9a630, type: 2}
+      objectReference: {fileID: 2100000, guid: 1603d986ef866f34a988919d3038204b, type: 2}
     - target: {fileID: 919132149155446097, guid: fd44ae51ac4e6f14db8cdd517ac5e4f8, type: 3}
       propertyPath: m_Name
       value: GJ_Wall_Wide
@@ -4588,7 +4588,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: fd44ae51ac4e6f14db8cdd517ac5e4f8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: cee29a59411943541ae2ecb301c9a630, type: 2}
+      objectReference: {fileID: 2100000, guid: 1603d986ef866f34a988919d3038204b, type: 2}
     - target: {fileID: 919132149155446097, guid: fd44ae51ac4e6f14db8cdd517ac5e4f8, type: 3}
       propertyPath: m_Name
       value: GJ_Wall_Wide (1)
