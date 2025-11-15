@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
     private float xRotation = 0f;
 
+    public Transform spork;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();

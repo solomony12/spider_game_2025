@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Yarn;
 using Yarn.Unity;
 using static Unity.Collections.Unicode;
@@ -140,7 +141,7 @@ public class LevelManager : MonoBehaviour
             tutorialText.text = currentTutorialText;
         }
 
-        // E pressed
+        // E pressed // Press E
         if (Input.GetKeyDown(KeyCode.E))
         {
 
@@ -156,9 +157,7 @@ public class LevelManager : MonoBehaviour
                         {
                             Debug.Log("door slider clicked");
 
-                            // If door slider is clicked on, start next dialogue (they also have needed to finish their daily tasks)
-                            // TODO: Select dialogue from story (just the next yarn node)
-                            dialogueRunner.StartDialogue("Start");
+                            StartCoroutine(PlayNextScene());
                         }
                         break;
 
@@ -172,6 +171,8 @@ public class LevelManager : MonoBehaviour
                             playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
                             playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
 
+                            // TODO: Progress to the next day (restart everything like make new clones but keep the squished ones)
+                            // Clones, daily reset, next yarn?
                             day++;
                             Debug.Log($"Day {day} begins!");
                             LevelManage(); // temp
@@ -183,6 +184,7 @@ public class LevelManager : MonoBehaviour
                         if (dist <= maxClickDistance && canUseFood)
                         {
                             Debug.Log("food clicked");
+                            EatFood();
                         }
                         break;
 
@@ -191,6 +193,7 @@ public class LevelManager : MonoBehaviour
                         if (dist <= maxClickDistance && canUseToilet)
                         {
                             Debug.Log("toilet clicked");
+                            UseToiletStart();
                         }
                         break;
                 }
@@ -222,12 +225,6 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        // enable bed // temp
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            canUseBed = true;
-        }
-
         // Give food // temp
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -251,29 +248,49 @@ public class LevelManager : MonoBehaviour
 
         if (newSprite != null)
         {
-            characterObject.GetComponent<Image>().sprite = newSprite;
+            characterObject.GetComponent<UnityEngine.UI.Image>().sprite = newSprite;
         }
         else
         {
             throw new Exception($"'{poseName}' sprite not found.\nPath tried: {path}");
         }
     }
+    private IEnumerator PlayNextScene()
+    {
+        dsAnimator.SetBool("isOpen", true);
+
+        yield return new WaitForSeconds(1.5f);
+
+        // If door slider is clicked on, start next dialogue (they also have needed to finish their daily tasks)
+        // TODO: Select dialogue from story (just the next yarn node)
+        dialogueRunner.StartDialogue("Start");
+    }
 
     void OnDialogueFinished()
     {
-        // TODO: Progress to the next day (restart everything like make new clones but keep the squished ones)
-        // Clones, daily reset, next yarn?
         Debug.Log("End of Scene");
         characterObject.SetActive(false);
         canTalkToGuard = false;
 
+        StartCoroutine(WrapUpTalking());
+    }
+
+    private IEnumerator WrapUpTalking()
+    {
+        dsAnimator.SetBool("isOpen", false);
+
+        yield return new WaitForSeconds(1.5f);
+
         tutorialText.text = bedText;
         currentTutorialText = tutorialText.text;
+        canUseBed = true;
     }
 
     // Gives food to player via animation
     private IEnumerator giveFood()
     {
+        food.GetComponent<MeshRenderer>().enabled = true;
+
         dsAnimator.SetBool("isOpen", true);
 
         yield return new WaitForSeconds(1f);
@@ -283,6 +300,13 @@ public class LevelManager : MonoBehaviour
 
     }
 
+    private void EatFood()
+    {
+        // TODO: eat
+
+        StartCoroutine(foodFinish());
+    }
+
     // Takes away food from player via animation
     private IEnumerator foodFinish()
     {
@@ -290,6 +314,8 @@ public class LevelManager : MonoBehaviour
         foodAnimator.SetBool("isMealTime", false);
 
         yield return new WaitForSeconds(1f);
+
+        food.GetComponent<MeshRenderer>().enabled = false;
 
         dsAnimator.SetBool("isOpen", false);
         canTalkToGuard = true;
@@ -374,5 +400,22 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         dayText.SetActive(false);
+    }
+
+    private void UseToiletStart()
+    {
+        // TODO: use toilet
+
+        UseToiletFinish();
+    }
+
+    private void UseToiletFinish()
+    {
+        canUseToilet = false;
+
+        tutorialText.text = foodText;
+        currentTutorialText = tutorialText.text;
+
+        StartCoroutine(giveFood());
     }
 }
