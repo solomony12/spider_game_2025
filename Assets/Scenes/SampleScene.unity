@@ -2549,6 +2549,14 @@ MonoBehaviour:
   dialogueRunner: {fileID: 1717801149}
   characterObject: {fileID: 1576929618}
   characterArtPath: Art/Characters/
+  doorSlider: {fileID: 1518068045}
+  bed: {fileID: 717288670}
+  food: {fileID: 0}
+  toilet: {fileID: 0}
+  dsAnimator: {fileID: 1518068046}
+  foodAnimator: {fileID: 0}
+  mainCamera: {fileID: 330585545}
+  playerParent: {fileID: 1814168985}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0
@@ -2635,6 +2643,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7a4172db570c6844591c3f16d97b8db3, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7a4172db570c6844591c3f16d97b8db3, type: 3}
+      propertyPath: m_TagString
+      value: Bed
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2784,6 +2796,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1518068047}
   - {fileID: 412173816}
   - {fileID: 565431890}
   - {fileID: 1380835062}
@@ -3082,7 +3095,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1334625355}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
       propertyPath: m_LocalScale.x
@@ -3114,7 +3127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
       propertyPath: m_LocalRotation.y
@@ -3140,6 +3153,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GJ_DoorSlider
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
+      propertyPath: m_TagString
+      value: DoorSlider
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3147,6 +3164,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1518068046}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1518068050}
   m_SourcePrefab: {fileID: 100100000, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
 --- !u!1 &1518068045 stripped
 GameObject:
@@ -3163,7 +3183,7 @@ Animator:
   m_GameObject: {fileID: 1518068045}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 641fc6e5a7b1abe42b3fa57ada9c7e91, type: 2}
+  m_Controller: {fileID: 9100000, guid: 559519bdf2b873d4d82cefe52ff3fe3a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3175,6 +3195,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &1518068047 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
+  m_PrefabInstance: {fileID: 1518068044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1518068050
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518068045}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8.58444, y: 29.705784, z: 66.38166}
+  m_Center: {x: 0, y: 14.852892, z: 0}
 --- !u!1001 &1537768040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4517,4 +4563,3 @@ SceneRoots:
   - {fileID: 23238008}
   - {fileID: 772142406}
   - {fileID: 1924505995}
-  - {fileID: 1518068044}
