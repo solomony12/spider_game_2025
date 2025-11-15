@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
 
     private bool wPressed = false;
     private bool aPressed = false;
-    private bool sPressed = false;
+    private bool dPressed = false;
     private bool dayOneTutorialFinished = false;
 
     private bool canUseToilet = false;
@@ -232,10 +232,10 @@ public class LevelManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.W)) wPressed = true;
             if (Input.GetKeyDown(KeyCode.A)) aPressed = true;
-            if (Input.GetKeyDown(KeyCode.S)) sPressed = true;
+            if (Input.GetKeyDown(KeyCode.D)) dPressed = true;
 
             // Check if all have been pressed at least once
-            if (wPressed && aPressed && sPressed)
+            if (wPressed && aPressed && dPressed)
             {
                 tutorialText.text = toiletText;
                 currentTutorialText = tutorialText.text;
