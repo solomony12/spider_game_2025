@@ -5,6 +5,7 @@ public class SpiderManager : MonoBehaviour
 {
     [Header("Base Spider Prefabs")]
     public GameObject[] baseSpiders;
+    public GameObject[] threeBaseSpiders;
 
     // Nested dictionary: baseSpider -> cloneID -> clone
     private Dictionary<GameObject, Dictionary<int, GameObject>> spiderClones = new Dictionary<GameObject, Dictionary<int, GameObject>>();
@@ -78,6 +79,41 @@ public class SpiderManager : MonoBehaviour
         foreach (var spider in baseSpiders)
         {
             DestroyClones(spider);
+        }
+    }
+
+    // Hide all base spiders
+    public void HideBaseSpiders()
+    {
+        foreach (GameObject spider in baseSpiders)
+        {
+            if (spider != null)
+            {
+                spider.GetComponent<MeshRenderer>().enabled = false;
+            }
+        }
+    }
+
+    // Show all base spiders
+    public void ShowBaseSpiders()
+    {
+        foreach (GameObject spider in baseSpiders)
+        {
+            if (spider != null)
+            {
+                spider.GetComponent<MeshRenderer>().enabled = true;
+            }
+        }
+    }
+
+    public void ShowThreeBaseSpiders()
+    {
+        foreach (GameObject spider in threeBaseSpiders)
+        {
+            if (spider != null)
+            {
+                spider.GetComponent<MeshRenderer>().enabled = true;
+            }
         }
     }
 }

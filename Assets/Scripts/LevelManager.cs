@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Yarn;
@@ -10,6 +11,7 @@ public class LevelManager : MonoBehaviour
 {
     [Header("Spider Manager Reference")]
     public SpiderManager spiderManager;
+    public GameObject stillSpider;
 
     [Header("Spawn Settings")]
     public Vector3 startPosition = Vector3.zero;
@@ -30,7 +32,7 @@ public class LevelManager : MonoBehaviour
     public Camera mainCamera;
     public GameObject playerParent;
 
-    private int day = 0;
+    private int day;
 
     void Awake()
     {
@@ -40,8 +42,8 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         characterObject.SetActive(false);
-
-        StartDialogue(); // TODO: temp
+        day = 1;
+        LevelManage();
     }
 
     private void StartDialogue()
@@ -117,17 +119,7 @@ public class LevelManager : MonoBehaviour
         {
             day++;
             Debug.Log($"Day {day} begins!");
-
-            // Spawn one extra clone for each base spider
-            foreach (GameObject baseSpider in spiderManager.baseSpiders)
-            {
-                // Determine how many clones exist already
-                var existingClones = spiderManager.GetClones(baseSpider)?.Count ?? 0;
-
-                Vector3 spawnPos = baseSpider.transform.position;
-
-                spiderManager.SpawnClones(baseSpider, 1, spawnPos, Vector3.zero);
-            }
+            LevelManage(); // temp
         }
 
         /*
@@ -193,5 +185,50 @@ public class LevelManager : MonoBehaviour
     public int GetCurrentDay()
     {
         return day;
+    }
+
+    private void LevelManage()
+    {
+        // StartDialogue(); (temp use elsewhere)
+        stillSpider.SetActive(false);
+
+        switch (day)
+        {
+            case 1:
+                // No clone spiders since new game
+                spiderManager.DestroyAllClones();
+                spiderManager.HideBaseSpiders();
+                stillSpider.SetActive(true);
+                break;
+
+            case 2:
+                // Show only 3 base spiders
+                spiderManager.HideBaseSpiders();
+                spiderManager.ShowThreeBaseSpiders();
+                break;
+
+            case 3:
+                // Show one clone each of all 6 base spiders
+                spiderManager.ShowBaseSpiders();
+                CloneSpiders(1);
+                spiderManager.HideBaseSpiders();
+                break;
+        }
+        
+    }
+
+    /// <summary>
+    /// Clones spiders
+    /// </summary>
+    /// <param name="amount">Clone each spider by this amount</param>
+    private void CloneSpiders(int amount = 1)
+    {
+        // Spawn one extra clone for each base spider
+        foreach (GameObject baseSpider in spiderManager.baseSpiders)
+        {
+            Vector3 spawnPos = baseSpider.transform.position;
+
+            spiderManager.SpawnClones(baseSpider, amount, spawnPos, Vector3.zero);
+        }
     }
 }
