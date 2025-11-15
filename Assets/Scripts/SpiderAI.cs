@@ -85,7 +85,7 @@ public class SpiderAI : MonoBehaviour
         // Smooth rotation along plane
         if (direction != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction, planeNormal);
+            Quaternion targetRotation = Quaternion.LookRotation(-direction, planeNormal);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, Time.fixedDeltaTime * 5f));
         }
 
