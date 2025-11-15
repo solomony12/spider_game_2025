@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Yarn;
 using Yarn.Unity;
-using static Unity.Collections.Unicode;
 
 public class LevelManager : MonoBehaviour
 {
@@ -19,8 +17,8 @@ public class LevelManager : MonoBehaviour
     public Vector3 startPosition = Vector3.zero;
 
     public Yarn.Unity.DialogueRunner dialogueRunner;
-    public GameObject characterObject;
-    public string characterArtPath = "Art/Characters/";
+    public static GameObject characterObject;
+    public static string characterArtPath = "Art/Characters/";
 
     public GameObject doorSlider;
     public GameObject bed;
@@ -63,6 +61,7 @@ public class LevelManager : MonoBehaviour
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
+        characterObject = GameObject.FindWithTag("VN_Char");
     }
 
     private void Start()
@@ -194,11 +193,11 @@ public class LevelManager : MonoBehaviour
                             playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
                             playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
 
-                            // TODO: Progress to the next day (restart everything like make new clones but keep the squished ones)
+                            // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
                             day++;
                             Debug.Log($"Day {day} begins!");
-                            LevelManage(); // temp
+                            LevelManage();
                         }
                         break;
 
@@ -250,7 +249,7 @@ public class LevelManager : MonoBehaviour
     }
 
     [YarnCommand("character")]
-    public void ChangeCharacterImage(string poseName)
+    public static void ChangeCharacterImage(string poseName)
     {
         string path = $"{characterArtPath}{poseName}";
         Sprite newSprite = Resources.Load<Sprite>(path);
@@ -261,7 +260,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            throw new Exception($"'{poseName}' sprite not found.\nPath tried: {path}");
+            Debug.LogError($"'{poseName}' sprite not found.\nTried Path: {path}");
         }
     }
     private IEnumerator PlayNextScene()
@@ -270,13 +269,12 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
-        // If door slider is clicked on, start next dialogue (they also have needed to finish their daily tasks)
-        // TODO: Select dialogue from story (just the next yarn node)
         tutorialText.text = "Click anywhere to continue.";
         currentTutorialText = tutorialText.text;
 
         characterObject.SetActive(true);
 
+        // TODO: Select dialogue from story (just the next yarn node)
         dialogueRunner.StartDialogue("Start");
     }
 
@@ -333,11 +331,6 @@ public class LevelManager : MonoBehaviour
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
-    }
-
-    public int GetCurrentDay()
-    {
-        return day;
     }
 
     private void LevelManage()
