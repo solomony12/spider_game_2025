@@ -40,7 +40,7 @@ public class LevelManager : MonoBehaviour
     private TMP_Text tutorialText;
     private string toiletText = "Use the toilet.";
     private string foodText = "Eat the meal.";
-    private string talkText = "Talk to the guard (food slot).";
+    private string talkText = "Talk to the guard (observation slot).";
     private string bedText = "Go to bed.";
     public GameObject dayText;
     private string currentTutorialText;
@@ -310,11 +310,8 @@ public class LevelManager : MonoBehaviour
         food.GetComponent<MeshRenderer>().enabled = true;
         slop.GetComponent<MeshRenderer>().enabled = true;
 
-        dsAnimator.SetBool("isOpen", true);
-
-        yield return new WaitForSeconds(1f);
-
         foodAnimator.SetBool("isMealTime", true);
+        yield return new WaitForSeconds(1f);
         canUseFood = true;
 
     }
@@ -331,10 +328,6 @@ public class LevelManager : MonoBehaviour
     {
         canUseFood = false;
         foodAnimator.SetBool("isMealTime", false);
-
-        yield return new WaitForSeconds(1f);
-
-        dsAnimator.SetBool("isOpen", false);
 
         yield return new WaitForSeconds(1f);
 
