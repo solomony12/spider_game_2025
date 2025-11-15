@@ -5,6 +5,8 @@ using System.Collections;
 public class SpiderAI : MonoBehaviour
 {
     public enum SpiderPlane { Floor, Wall, Ceiling }
+    public enum AIState { Idle, Wander, Attack, Flee }
+    public AIState currentState = AIState.Idle;
 
     [Header("Plane Settings")]
     public SpiderPlane plane = SpiderPlane.Floor;
@@ -28,6 +30,8 @@ public class SpiderAI : MonoBehaviour
     [Header("Timing")]
     public float stuckCheckDelay = 2f;  // Delay before picking new target if stuck
     public float stuckThreshold = 0.05f; // Distance threshold to consider "stuck"
+    public float idleMin = 1f;
+    public float idleMax = 4f;
 
     private Rigidbody rb;
     private Vector3 targetPosition;
@@ -54,7 +58,7 @@ public class SpiderAI : MonoBehaviour
     void Start()
     {
         lastPosition = rb.position;
-        StartCoroutine(AIBehavior());
+        StartCoroutine(AIBehaviorManager());
     }
 
     void FixedUpdate()
@@ -114,41 +118,98 @@ public class SpiderAI : MonoBehaviour
         lastPosition = rb.position;
     }
 
-    IEnumerator AIBehavior()
+    // Manages the AI state
+    IEnumerator AIBehaviorManager()
     {
         while (true)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-            // Flee if player is too close
+            // Fleeing (top priority)
             if (distanceToPlayer < fleeDistance)
             {
-                Vector3 fleeDir = (transform.position - player.position).normalized;
-                fleeDir = Vector3.ProjectOnPlane(fleeDir, planeNormal);
-                targetPosition = GetSurfaceBoundedPosition(rb.position + fleeDir * wanderRadius);
-                isMoving = true;
-                yield return new WaitForSeconds(Random.Range(2f, 10f));
+                currentState = AIState.Flee;
+                yield return StartCoroutine(FleeBehavior());
             }
-            // Chance to charge player
+            // Attack player
             else if (distanceToPlayer < attackDistance && Random.value < attackChance)
             {
-                targetPosition = GetSurfaceBoundedPosition(player.position);
-                isMoving = true;
-                yield return new WaitForSeconds(Random.Range(2f, 10f));
+                currentState = AIState.Attack;
+                yield return StartCoroutine(AttackBehavior());
             }
+            // Wander/idle around
             else
             {
-                // Random wandering
-                if (!isMoving)
-                {
-                    Vector3 randomDir = Random.insideUnitSphere;
-                    randomDir = Vector3.ProjectOnPlane(randomDir, planeNormal);
-                    targetPosition = GetSurfaceBoundedPosition(rb.position + randomDir * wanderRadius);
-                    isMoving = true;
-                }
-                yield return new WaitForSeconds(Random.Range(2f, 10f));
+                currentState = AIState.Idle;
+                yield return StartCoroutine(IdleBehavior());
             }
 
+            yield return null;
+        }
+    }
+
+    // Fleeing
+    IEnumerator FleeBehavior()
+    {
+        while (Vector3.Distance(transform.position, player.position) < fleeDistance)
+        {
+            Vector3 fleeDir = (transform.position - player.position).normalized;
+            fleeDir = Vector3.ProjectOnPlane(fleeDir, planeNormal);
+            targetPosition = GetSurfaceBoundedPosition(rb.position + fleeDir * wanderRadius);
+            isMoving = true;
+
+            yield return null;
+        }
+    }
+
+    // Attacking
+    IEnumerator AttackBehavior()
+    {
+        targetPosition = GetSurfaceBoundedPosition(player.position);
+        isMoving = true;
+        yield return new WaitForSeconds(0.5f); // Small attack pause
+    }
+
+    // Idle
+    IEnumerator IdleBehavior()
+    {
+        // Random idle duration
+        float idleTime = Random.Range(idleMin, idleMax);
+        float elapsed = 0f;
+
+        while (elapsed < idleTime)
+        {
+            if (Vector3.Distance(transform.position, player.position) < fleeDistance)
+                yield break; // stop idle and flee immediately
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // After idling, start wandering
+        yield return StartCoroutine(WanderBehavior());
+    }
+
+    // Wander
+    IEnumerator WanderBehavior()
+    {
+        if (!isMoving)
+        {
+            Vector3 randomDir = Random.insideUnitSphere;
+            randomDir = Vector3.ProjectOnPlane(randomDir, planeNormal);
+            targetPosition = GetSurfaceBoundedPosition(rb.position + randomDir * wanderRadius);
+            isMoving = true;
+        }
+
+        // Break wandering into small steps to allow fleeing
+        float wanderTime = Random.Range(2f, 10f);
+        float elapsed = 0f;
+        while (elapsed < wanderTime)
+        {
+            if (Vector3.Distance(transform.position, player.position) < fleeDistance)
+                yield break; // flee immediately
+
+            elapsed += Time.deltaTime;
             yield return null;
         }
     }
