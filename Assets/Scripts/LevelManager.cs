@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Yarn;
+using Yarn.Unity;
 using static Unity.Collections.Unicode;
 
 public class LevelManager : MonoBehaviour
@@ -13,6 +15,7 @@ public class LevelManager : MonoBehaviour
 
     public Yarn.Unity.DialogueRunner dialogueRunner;
     public GameObject characterObject;
+    public string characterArtPath = "Art/Characters/"; 
 
     private int day = 0;
 
@@ -67,6 +70,22 @@ public class LevelManager : MonoBehaviour
 
                 spiderManager.SpawnClones(baseSpider, 1, spawnPos, Vector3.zero);
             }
+        }
+    }
+
+    [YarnCommand("character")]
+    public void ChangeCharacterImage(string poseName)
+    {
+        string path = $"{characterArtPath}{poseName}";
+        Sprite newSprite = Resources.Load<Sprite>(path);
+
+        if (newSprite != null)
+        {
+            characterObject.GetComponent<Image>().sprite = newSprite;
+        }
+        else
+        {
+            throw new Exception($"'{poseName}' sprite not found.\nPath tried: {path}");
         }
     }
 
