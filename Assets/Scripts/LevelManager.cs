@@ -296,6 +296,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator giveFood()
     {
         food.GetComponent<MeshRenderer>().enabled = true;
+        slop.GetComponent<MeshRenderer>().enabled = true;
 
         dsAnimator.SetBool("isOpen", true);
 
@@ -327,6 +328,7 @@ public class LevelManager : MonoBehaviour
 
         canTalkToGuard = true;
         food.GetComponent<MeshRenderer>().enabled = false;
+        slop.GetComponent<MeshRenderer>().enabled = true;
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;

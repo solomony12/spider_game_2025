@@ -11,6 +11,8 @@ public class SquishSpider : MonoBehaviour
 
     public Animator sporkAnimator;
 
+    public GameObject crushedSpiderBase;
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -34,18 +36,24 @@ public class SquishSpider : MonoBehaviour
                         {
                             // Check distance to player
                             float distance = Vector3.Distance(playerParent.transform.position, clickedObject.transform.position);
-                            float maxClickDistance = 3f;
+                            float maxClickDistance = 4.5f;
 
                             if (distance <= maxClickDistance)
                             {
+                                // Spawn crushed spider at the same position and rotation
+                                GameObject crushedSpider = Instantiate(
+                                    crushedSpiderBase,
+                                    clickedObject.transform.position,
+                                    clickedObject.transform.rotation
+                                );
+
+                                // Remove the original spider clone
                                 Destroy(clickedObject);
                                 clones.Remove(kvp.Key);
+
                                 Debug.Log($"Squished spider clone ID {kvp.Key} of {baseSpider.name}");
                             }
-                            else
-                            {
-                                Debug.Log("Too far to squish this spider.");
-                            }
+
 
                             return;
                         }
