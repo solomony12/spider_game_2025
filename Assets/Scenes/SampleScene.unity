@@ -3277,6 +3277,7 @@ MonoBehaviour:
   dayText: {fileID: 1496263012}
   spork: {fileID: 1135175341}
   lightingController: {fileID: 410087043}
+  roomShrinker: {fileID: 1334625356}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0
@@ -3496,6 +3497,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1334625355}
+  - component: {fileID: 1334625356}
   m_Layer: 0
   m_Name: PrisonCell
   m_TagString: Untagged
@@ -3530,6 +3532,29 @@ Transform:
   - {fileID: 1171559004}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1334625356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334625354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a7ccf2edd80da41b51115f2c140050, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShrinkingRoom
+  wall1: {fileID: 1380835062}
+  wall2: {fileID: 565431890}
+  wall3: {fileID: 1537768041}
+  wall4: {fileID: 412173816}
+  toilet: {fileID: 534566148}
+  bed: {fileID: 717288673}
+  table: {fileID: 1590867828}
+  shrinkAmount: 0.02
+  shrinkDuration: 3
+  minRoomWidth: 6
+  minRoomLength: 9
 --- !u!1001 &1372558676
 PrefabInstance:
   m_ObjectHideFlags: 0

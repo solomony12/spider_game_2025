@@ -58,6 +58,7 @@ public class LevelManager : MonoBehaviour
     public GameObject spork;
 
     public DynamicLightingController lightingController;
+    public ShrinkingRoom roomShrinker;
 
     void Awake()
     {
@@ -107,6 +108,11 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
+        /*if (Input.GetKeyDown(KeyCode.Space))
+        {
+            roomShrinker.ShrinkRoom();
+        }*/
+
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         bool hovering = false;
