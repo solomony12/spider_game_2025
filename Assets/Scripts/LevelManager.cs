@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour
     public GameObject food;
     public GameObject toilet;
     public GameObject slop;
-    private float maxClickDistance = 5f;
+    private float maxClickDistance = 3f;
 
     public Animator dsAnimator;
     public Animator foodAnimator;
@@ -40,12 +40,15 @@ public class LevelManager : MonoBehaviour
     private string toiletText = "Use the toilet.";
     private string foodText = "Eat the meal.";
     private string talkText = "Talk to the guard.";
+    private string bedText = "Go to bed.";
     public GameObject dayText;
+    private string currentTutorialText;
 
     private bool wPressed = false;
     private bool aPressed = false;
     private bool sPressed = false;
     private bool dPressed = false;
+    private bool dayOneTutorialFinished = false;
 
     private bool canUseToilet = false;
     private bool canUseBed = false;
@@ -68,6 +71,7 @@ public class LevelManager : MonoBehaviour
         tutorialTextObject.SetActive(true); // ALWAYS TRUE
         tutorialText = tutorialTextObject.GetComponent<TMP_Text>();
         tutorialText.text = "WASD to move. | Mouse to look around.";
+        currentTutorialText = tutorialText.text;
         LevelManage();
     }
 
@@ -79,18 +83,66 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        /*
-        // If door slider is clicked on, start next dialogue (they also have needed to finish their daily tasks)
-        if ()
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool hovering = false;
+
+        // Hovering over for tutorial
+        if (Physics.Raycast(ray, out hit))
         {
-            // TODO: Select dialogue from story (just the next yarn node)
-            dialogueRunner.StartDialogue("Start");
+            float dist;
+
+            switch (hit.collider.tag)
+            {
+                case "DoorSlider":
+                    dist = Vector3.Distance(playerParent.transform.position, doorSlider.transform.position);
+                    //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance && canTalkToGuard)
+                    {
+                        tutorialText.text = "Press E to talk.";
+                        hovering = true;
+                    }
+                    break;
+
+                case "Bed":
+                    dist = Vector3.Distance(playerParent.transform.position, bed.transform.position);
+                    //Debug.Log("Bed: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance && canUseBed)
+                    {
+                        tutorialText.text = "Press E to sleep.";
+                        hovering = true;
+                    }
+                    break;
+
+                case "Food":
+                    dist = Vector3.Distance(playerParent.transform.position, food.transform.position);
+                    //Debug.Log("Food: dist: " + dist + ", max: " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance && canUseFood)
+                    {
+                        tutorialText.text = "Press E to eat.";
+                        hovering = true;
+                    }
+                    break;
+
+                case "Toilet":
+                    dist = Vector3.Distance(playerParent.transform.position, toilet.transform.position);
+                    //Debug.Log("Toilet: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance && canUseToilet)
+                    {
+                        tutorialText.text = "Press E to use the toilet.";
+                        hovering = true;
+                    }
+                    break;
+            }
         }
-        */
+        if (!hovering)
+        {
+            tutorialText.text = currentTutorialText;
+        }
+
+        // E pressed
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
             {
@@ -103,6 +155,10 @@ public class LevelManager : MonoBehaviour
                         if (dist <= maxClickDistance && canTalkToGuard)
                         {
                             Debug.Log("door slider clicked");
+
+                            // If door slider is clicked on, start next dialogue (they also have needed to finish their daily tasks)
+                            // TODO: Select dialogue from story (just the next yarn node)
+                            dialogueRunner.StartDialogue("Start");
                         }
                         break;
 
@@ -148,7 +204,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // Update tutorial for Day 1
-        if (day == 1)
+        if (day == 1 && !dayOneTutorialFinished)
         {
             if (Input.GetKeyDown(KeyCode.W)) wPressed = true;
             if (Input.GetKeyDown(KeyCode.A)) aPressed = true;
@@ -159,7 +215,10 @@ public class LevelManager : MonoBehaviour
             if (wPressed && aPressed && sPressed && dPressed)
             {
                 tutorialText.text = toiletText;
+                currentTutorialText = tutorialText.text;
+
                 canUseToilet = true;
+                dayOneTutorialFinished = true;
             }
         }
 
@@ -204,8 +263,12 @@ public class LevelManager : MonoBehaviour
     {
         // TODO: Progress to the next day (restart everything like make new clones but keep the squished ones)
         // Clones, daily reset, next yarn?
-        Debug.Log("The end");
+        Debug.Log("End of Scene");
         characterObject.SetActive(false);
+        canTalkToGuard = false;
+
+        tutorialText.text = bedText;
+        currentTutorialText = tutorialText.text;
     }
 
     // Gives food to player via animation
@@ -216,17 +279,23 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         foodAnimator.SetBool("isMealTime", true);
+        canUseFood = true;
 
     }
 
     // Takes away food from player via animation
     private IEnumerator foodFinish()
     {
+        canUseFood=false;
         foodAnimator.SetBool("isMealTime", false);
 
         yield return new WaitForSeconds(1f);
 
         dsAnimator.SetBool("isOpen", false);
+        canTalkToGuard = true;
+
+        tutorialText.text = talkText;
+        currentTutorialText = tutorialText.text;
     }
 
     public int GetCurrentDay()

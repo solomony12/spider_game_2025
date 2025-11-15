@@ -1250,7 +1250,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -525017621
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &344106955
@@ -2321,7 +2321,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1590867829}
   m_SourcePrefab: {fileID: 100100000, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
 --- !u!1 &939719027
 GameObject:
@@ -2703,6 +2706,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 06f471e0aecec2e458f8cfeabcf45bee, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 06f471e0aecec2e458f8cfeabcf45bee, type: 3}
+      propertyPath: m_TagString
+      value: Toilet
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3105,6 +3112,7 @@ MonoBehaviour:
   bed: {fileID: 717288670}
   food: {fileID: 1465645996}
   toilet: {fileID: 534566145}
+  slop: {fileID: 0}
   dsAnimator: {fileID: 1518068046}
   foodAnimator: {fileID: 1465645997}
   mainCamera: {fileID: 330585545}
@@ -3712,6 +3720,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GJ_FoodTray
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a5d0b7a72234a0428d628bcb53cff34, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a5d0b7a72234a0428d628bcb53cff34, type: 3}
+      propertyPath: m_TagString
+      value: Food
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3719,6 +3735,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6a5d0b7a72234a0428d628bcb53cff34, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1465645997}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6a5d0b7a72234a0428d628bcb53cff34, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1465646000}
   m_SourcePrefab: {fileID: 100100000, guid: 6a5d0b7a72234a0428d628bcb53cff34, type: 3}
 --- !u!4 &1465645995 stripped
 Transform:
@@ -3752,6 +3771,28 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!64 &1465646000
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465645996}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4068373912626513877, guid: 6a5d0b7a72234a0428d628bcb53cff34, type: 3}
 --- !u!1 &1496263012
 GameObject:
   m_ObjectHideFlags: 0
@@ -4325,11 +4366,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576929618}
   m_CullTransparentMesh: 1
+--- !u!1 &1590867825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
+  m_PrefabInstance: {fileID: 874828639}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1590867828 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
   m_PrefabInstance: {fileID: 874828639}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1590867829
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590867825}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4068373912626513877, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
 --- !u!1 &1613667851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fd44ae51ac4e6f14db8cdd517ac5e4f8, type: 3}
@@ -5041,6 +5109,10 @@ PrefabInstance:
     - target: {fileID: 8150228081625468094, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_PlaneDistance
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8150228081625468094, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -525017621
       objectReference: {fileID: 0}
     - target: {fileID: 8309902628685535410, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: yarnProject
