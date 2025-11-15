@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SquishSpider : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class SquishSpider : MonoBehaviour
     public GameObject crushedSpiderBase;
 
     public static event Action OnSpiderSquished;
+
+    public AudioManager audioManager;
+    public AudioClip[] squishSounds;
 
     void Update()
     {
@@ -53,6 +57,10 @@ public class SquishSpider : MonoBehaviour
                                 // Remove the original spider clone
                                 Destroy(clickedObject);
                                 clones.Remove(kvp.Key);
+
+                                int index = UnityEngine.Random.Range(0, squishSounds.Length);
+                                AudioClip clip = squishSounds[index];
+                                audioManager.PlaySFX(clip);
 
                                 OnSpiderSquished?.Invoke();
 
