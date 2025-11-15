@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
     public GameObject bed;
     public GameObject food;
     public GameObject toilet;
+    public GameObject slop;
     private float maxClickDistance = 5f;
 
     public Animator dsAnimator;
@@ -162,24 +163,24 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        /*
-        // Test doors (temp (T Y))
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log("open sesame");
-            dsAnimator.SetBool("isOpen", true);
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            Debug.Log("close sesame");
-            dsAnimator.SetBool("isOpen", false);
-        }
-        */
-
         // enable bed // temp
         if (Input.GetKeyDown(KeyCode.P))
         {
             canUseBed = true;
+        }
+
+        // Give food // temp
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log("open sesame");
+            StartCoroutine(giveFood());
+        }
+
+        // take back food // temp
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Debug.Log("close sesame");
+            StartCoroutine(foodFinish());
         }
     }
 
@@ -212,7 +213,7 @@ public class LevelManager : MonoBehaviour
     {
         dsAnimator.SetBool("isOpen", true);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         foodAnimator.SetBool("isMealTime", true);
 
@@ -223,7 +224,7 @@ public class LevelManager : MonoBehaviour
     {
         foodAnimator.SetBool("isMealTime", false);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1f);
 
         dsAnimator.SetBool("isOpen", false);
     }
