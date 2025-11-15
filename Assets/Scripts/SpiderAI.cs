@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class SpiderAI : MonoBehaviour
 {
-    public enum SpiderPlane { Floor, Wall, Ceiling }
+    public enum SpiderPlane { Floor, WallX, WallZ, Ceiling }
     public enum AIState { Idle, Wander, Attack, Flee }
     public AIState currentState = AIState.Idle;
 
@@ -51,7 +51,8 @@ public class SpiderAI : MonoBehaviour
         {
             case SpiderPlane.Floor: planeNormal = Vector3.up; break;
             case SpiderPlane.Ceiling: planeNormal = Vector3.down; break;
-            case SpiderPlane.Wall: planeNormal = Vector3.right; break;
+            case SpiderPlane.WallX: planeNormal = Vector3.right; break;
+            case SpiderPlane.WallZ: planeNormal = Vector3.forward; break;
         }
     }
 
