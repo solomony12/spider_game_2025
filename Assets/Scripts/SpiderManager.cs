@@ -34,10 +34,10 @@ public class SpiderManager : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             Vector3 position = startPosition + offset * i;
-            GameObject clone = Instantiate(baseSpider, position, Quaternion.identity);
+            GameObject clone = Instantiate(baseSpider, position, baseSpider.transform.rotation);
 
             // Different size spiders
-            float minScale = 0.08f;
+            float minScale = 0.3f;
             float maxScale = 1.6f;
             float randomScale = Random.Range(minScale, maxScale);
             clone.transform.localScale = baseSpider.transform.localScale * randomScale;
