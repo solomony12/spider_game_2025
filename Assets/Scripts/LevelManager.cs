@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Yarn;
 using static Unity.Collections.Unicode;
 
@@ -11,6 +12,7 @@ public class LevelManager : MonoBehaviour
     public Vector3 startPosition = Vector3.zero;
 
     public Yarn.Unity.DialogueRunner dialogueRunner;
+    public GameObject characterObject;
 
     private int day = 0;
 
@@ -22,7 +24,14 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        characterObject.SetActive(false);
+        StartDialogue(); // TODO: temp
+    }
+
+    private void StartDialogue()
+    {
         dialogueRunner.StartDialogue("MainStory");
+        characterObject.SetActive(true);
     }
 
     void Update()
@@ -66,6 +75,7 @@ public class LevelManager : MonoBehaviour
         // TODO: Progress to the next day (restart everything like make new clones but keep the squished ones)
         // Clones, daily reset, next yarn?
         Debug.Log("The end");
+        characterObject.SetActive(false);
     }
 
     public int GetCurrentDay()
