@@ -33,7 +33,7 @@ public class SpiderAI : MonoBehaviour
     public float idleMin = 1f;
     public float idleMax = 4f;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
     private Vector3 targetPosition;
     private bool isMoving = false;
 
