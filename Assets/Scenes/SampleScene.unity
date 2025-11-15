@@ -1498,7 +1498,7 @@ MonoBehaviour:
   eveningColor: {r: 1, g: 0.45, b: 0.3, a: 1}
   nightColor: {r: 0.1, g: 0.1, b: 0.25, a: 1}
   transitionDuration: 2
-  maxSunIntensity: 1.2
+  maxSunIntensity: 0.8
   skyboxMinExposure: 0.8
   skyboxMaxExposure: 1.3
   morningSkybox: {fileID: 2100000, guid: 2662bc056e1a33143a6198981fb3cc0f, type: 2}
@@ -4485,7 +4485,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -750}
+  m_AnchoredPosition: {x: 500, y: -675}
   m_SizeDelta: {x: 300, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1576929620

@@ -284,7 +284,7 @@ public class LevelManager : MonoBehaviour
         characterObject.SetActive(false);
         canTalkToGuard = false;
 
-        lightingController.AdvancePhase();
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
 
         StartCoroutine(WrapUpTalking());
     }
@@ -334,7 +334,7 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
 
-        lightingController.AdvancePhase();
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Evening);
     }
 
     private void LevelManage()
@@ -427,7 +427,7 @@ public class LevelManager : MonoBehaviour
 
     private void UseToiletFinish()
     {
-        lightingController.AdvancePhase();
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Noon);
 
         canUseToilet = false;
 
