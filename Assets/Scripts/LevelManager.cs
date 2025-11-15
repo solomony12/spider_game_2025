@@ -46,7 +46,6 @@ public class LevelManager : MonoBehaviour
     private bool wPressed = false;
     private bool aPressed = false;
     private bool sPressed = false;
-    private bool dPressed = false;
     private bool dayOneTutorialFinished = false;
 
     private bool canUseToilet = false;
@@ -234,10 +233,9 @@ public class LevelManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.W)) wPressed = true;
             if (Input.GetKeyDown(KeyCode.A)) aPressed = true;
             if (Input.GetKeyDown(KeyCode.S)) sPressed = true;
-            if (Input.GetKeyDown(KeyCode.D)) dPressed = true;
 
             // Check if all have been pressed at least once
-            if (wPressed && aPressed && sPressed && dPressed)
+            if (wPressed && aPressed && sPressed)
             {
                 tutorialText.text = toiletText;
                 currentTutorialText = tutorialText.text;
@@ -313,6 +311,7 @@ public class LevelManager : MonoBehaviour
     private void EatFood()
     {
         // TODO: eat
+        slop.GetComponent<MeshRenderer>().enabled = false;
 
         StartCoroutine(foodFinish());
     }
@@ -327,7 +326,6 @@ public class LevelManager : MonoBehaviour
 
         canTalkToGuard = true;
         food.GetComponent<MeshRenderer>().enabled = false;
-        slop.GetComponent<MeshRenderer>().enabled = false;
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
