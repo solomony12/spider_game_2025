@@ -39,7 +39,7 @@ public class SquishSpider : MonoBehaviour
                         {
                             // Check distance to player
                             float distance = Vector3.Distance(playerParent.transform.position, clickedObject.transform.position);
-                            float maxClickDistance = 4.5f;
+                            float maxClickDistance = 5f;
 
                             if (distance <= maxClickDistance)
                             {
