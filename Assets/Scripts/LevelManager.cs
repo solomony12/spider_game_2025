@@ -106,6 +106,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
+    
+    public VisibilityChecker visibilityChecker;
 
     void Awake()
     {
@@ -199,6 +201,7 @@ public class LevelManager : MonoBehaviour
         foodAnimator.SetBool("isMealTime", false);
         brownWaterAnimator.ResetTrigger("FlowBrownWater");
         brownWaterAnimator.Play("BrownWaterLow", 0, 0f);
+        visibilityChecker.ResetHead();
 
         // Environment
         RenderSettings.fog = false;
@@ -715,6 +718,17 @@ public class LevelManager : MonoBehaviour
                 webs[webActivateIndex++].SetActive(true); // web 0 show
                 DailySetup();
                 break;
+            case 6:
+                CloneSpiders(1);
+
+                tutorialText.text = "...";
+                currentTutorialText = tutorialText.text;
+
+                visibilityChecker.ShowHead();
+                canUseToilet = false;
+                notDoTaskText.SetActive(false);
+
+                break;
             case 7:
                 webs[webActivateIndex++].SetActive(true); // web 1 show
                 DailySetup();
@@ -817,6 +831,14 @@ public class LevelManager : MonoBehaviour
         currentTutorialText = tutorialText.text;
 
         StartCoroutine(giveFood());
+    }
+
+    public void HideHead()
+    {
+        tutorialText.text = toiletText;
+        currentTutorialText = tutorialText.text;
+
+        SetAction(ActionType.Toilet);
     }
 
     public int getCurrentDay()
