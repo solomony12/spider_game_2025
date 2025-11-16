@@ -4,6 +4,7 @@ public class BouncyBallSpawner : MonoBehaviour
 {
     [Header("Ball Settings")]
     public GameObject ballPrefab;
+    public GameObject spider;
     public float throwForce = 10f;
     public float spawnDistance = 2f;
 
@@ -36,8 +37,16 @@ public class BouncyBallSpawner : MonoBehaviour
 
         Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
 
-        // Instantiate ball
-        spawnedBall = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
+        // Instantiate ball (15% chance of spider)
+        int spiderChance = Random.Range(1, 100);
+        if (spiderChance > 15)
+        {
+            spawnedBall = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
+        }
+        else
+        {
+            spawnedBall = Instantiate(spider, spawnPos, Quaternion.identity);
+        }
 
         // Ensure it has a Rigidbody
         Rigidbody rb = spawnedBall.GetComponent<Rigidbody>();
