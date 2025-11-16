@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -15,6 +16,15 @@ public class LevelManager : MonoBehaviour
 
     [Header("Spawn Settings")]
     public Vector3 startPosition = Vector3.zero;
+
+    public enum ActionType
+    {
+        Toilet,
+        Food,
+        SpiderKill,
+        TalkGuard,
+        Bed
+    }
 
     public Yarn.Unity.DialogueRunner dialogueRunner;
     public static GameObject characterObject;
@@ -43,6 +53,8 @@ public class LevelManager : MonoBehaviour
     private string waitText = "Free time.";
     public GameObject dayText;
     private string currentTutorialText;
+    public GameObject headerText;
+    public GameObject blackScreen;
 
     private bool wPressed = false;
     private bool dPressed = false;
@@ -89,6 +101,7 @@ public class LevelManager : MonoBehaviour
     private int bathroomSkips = 0;
     private int foodSkips = 0;
     private int spiderKillSkips = 0;
+    public Animator brownWaterAnimator;
 
     void Awake()
     {
@@ -111,7 +124,14 @@ public class LevelManager : MonoBehaviour
         currentTutorialText = tutorialText.text;
         spork.GetComponent<MeshRenderer>().enabled = false;
         notDoTaskText.SetActive(false);
+        headerText.SetActive(false);
+        blackScreen.SetActive(false);
 
+        if (FadeController.Instance == null)
+        {
+            Debug.Log("ERROR: FadeController not found!!!");
+            return;
+        }
 
         foreach (GameObject web in webs)
         {
@@ -131,6 +151,36 @@ public class LevelManager : MonoBehaviour
         SquishSpider.OnSpiderSquished -= HandleSpiderSquished;
     }
 
+    public void SetAction(ActionType action)
+    {
+        // Reset all
+        canUseToilet = false;
+        canUseFood = false;
+        canKillSpidersTask = false;
+        canTalkToGuard = false;
+        canUseBed = false;
+
+        // Set the selected one
+        switch (action)
+        {
+            case ActionType.Toilet:
+                canUseToilet = true;
+                break;
+            case ActionType.Food:
+                canUseFood = true;
+                break;
+            case ActionType.SpiderKill:
+                canKillSpidersTask = true;
+                break;
+            case ActionType.TalkGuard:
+                canTalkToGuard = true;
+                break;
+            case ActionType.Bed:
+                canUseBed = true;
+                break;
+        }
+    }
+
     // Day 3 Tutorial
     void HandleSpiderSquished()
     {
@@ -142,7 +192,7 @@ public class LevelManager : MonoBehaviour
             tutorialText.text = toiletText;
             currentTutorialText = tutorialText.text;
 
-            canUseToilet = true;
+            SetAction(ActionType.Toilet);
             dayOneTutorialFinished = true;
         }
     }
@@ -238,11 +288,12 @@ public class LevelManager : MonoBehaviour
                             Debug.Log("bed clicked");
 
                             // Check for possible ending
-                            CheckThreshold();
+                            bool nextDay = CheckThreshold();
 
                             // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
-                            LevelManage();
+                            if (nextDay)
+                                LevelManage();
                         }
                         break;
 
@@ -285,7 +336,7 @@ public class LevelManager : MonoBehaviour
                 tutorialText.text = toiletText;
                 currentTutorialText = tutorialText.text;
 
-                canUseToilet = true;
+                SetAction(ActionType.Toilet);
                 dayOneTutorialFinished = true;
             }
         }
@@ -304,7 +355,7 @@ public class LevelManager : MonoBehaviour
                 tutorialText.text = toiletText;
                 currentTutorialText = tutorialText.text;
 
-                canUseToilet = true;
+                SetAction(ActionType.Toilet);
                 dayTwoTutorialFinished = true;
             }
         }
@@ -408,7 +459,7 @@ public class LevelManager : MonoBehaviour
 
         tutorialText.text = bedText;
         currentTutorialText = tutorialText.text;
-        canUseBed = true;
+        SetAction(ActionType.Bed);
     }
 
     // Gives food to player via animation
@@ -421,7 +472,7 @@ public class LevelManager : MonoBehaviour
         audioManager.PlaySFX(trayScrapeSound);
         yield return new WaitForSeconds(1f);
 
-        canUseFood = true;
+        SetAction(ActionType.Food);
         if (day > 4)
         {
             notDoTaskText.SetActive(true);
@@ -476,7 +527,7 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "Kill " + spidersToKill + " spiders.";
         currentTutorialText = tutorialText.text;
 
-        canKillSpidersTask = true;
+        SetAction(ActionType.SpiderKill);
         if (day > 4)
         {
             notDoTaskText.SetActive(true);
@@ -516,7 +567,7 @@ public class LevelManager : MonoBehaviour
         }
 
 
-        canTalkToGuard = true;
+        SetAction(ActionType.TalkGuard);
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
@@ -531,11 +582,7 @@ public class LevelManager : MonoBehaviour
         canTalkToGuard = false;
         canUseBed = false;
 
-        // Reset Player
-        playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
-        playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
-        // Reset camera
-        playerMovement.ResetCameraRotation();
+        ResetPlayerAndCamera();
 
         // Increase time slightly
         delayTimeMin = Math.Min(delayTimeMin + 0.1f, delayTimeEndMin);
@@ -556,7 +603,7 @@ public class LevelManager : MonoBehaviour
 
         canUseBed = false;
 
-        canUseToilet = true;
+        SetAction(ActionType.Toilet);
         if (day > 4)
         {
             notDoTaskText.SetActive(true);
@@ -595,7 +642,7 @@ public class LevelManager : MonoBehaviour
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
                 notDoTaskText.SetActive(false);
-                canKillSpidersTask = true;
+                SetAction(ActionType.SpiderKill);
                 break;
             case 4:
                 webs[webActivateIndex++].SetActive(true); // web 0 show
@@ -618,6 +665,15 @@ public class LevelManager : MonoBehaviour
                 break;
         }
         
+    }
+
+    private void ResetPlayerAndCamera()
+    {
+        // Reset Player
+        playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
+        playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+        // Reset camera
+        playerMovement.ResetCameraRotation();
     }
 
     private void DailySetup()
@@ -662,6 +718,13 @@ public class LevelManager : MonoBehaviour
         dayText.SetActive(false);
     }
 
+    private void ShowText(string text)
+    {
+        headerText.SetActive(true);
+        headerText.GetComponent<TMP_Text>().text = text;
+        blackScreen.SetActive(true);
+    }
+
     private void UseToiletStart()
     {
         // TODO: use toilet
@@ -694,24 +757,63 @@ public class LevelManager : MonoBehaviour
         return day;
     }
 
-    private void CheckThreshold()
+    private bool CheckThreshold()
     {
-        if (bathroomSkips > 1) // 5
+        if (bathroomSkips >= 1) // 5
         {
-            Debug.Log("Constipation Ending");
-            return;
+            StartCoroutine(BathroomEnding());
+            return false;
         }
 
-        if (foodSkips > 1) // 8
+        else if (foodSkips >= 1) // 8
         {
             Debug.Log("Starvation Ending");
-            return;
+            return false;
         }
 
-        if (spiderKillSkips > 1) // 10
+        else if (spiderKillSkips >= 1) // 10
         {
             Debug.Log("Spider Ending");
-            return;
+            return false;
         }
+
+        return true;
+    }
+
+    private IEnumerator BathroomEnding()
+    {
+        // Game over (seem like it's the next day)
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+
+        tutorialText.text = "You shouldn't have held it in.";
+        currentTutorialText = tutorialText.text;
+
+        // but you can't do anything (except ball and spork)
+        yield return new WaitForSeconds(3f);
+
+        // brown water fills up the room slowly (and spiders get pushed away)
+        brownWaterAnimator.SetTrigger("FlowBrownWater");
+
+        yield return new WaitForSeconds(6.333f);
+
+        // Introduce fog as murky
+        RenderSettings.fog = true;
+        RenderSettings.fogColor = new Color32(0x3D, 0x22, 0x0E, 0xFF);
+        RenderSettings.fogMode = FogMode.ExponentialSquared;
+        RenderSettings.fogDensity = 0.4f;
+
+        yield return new WaitForSeconds(4.666f);
+
+        // fade to black
+        FadeController.Instance.FadeToBlack();
+
+        yield return new WaitForSeconds(2f);
+        // show Constipation ending text
+        ShowText("Ending 1/4: Constipation");
+        audioManager.PlaySFX(dayBoomSound, 4f);
+
+        Debug.Log("Constipation Ending");
     }
 }

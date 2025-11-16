@@ -8,6 +8,8 @@ public class FadeController : MonoBehaviour
 
     public static FadeController Instance;
 
+    private bool isEnding = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,7 +31,18 @@ public class FadeController : MonoBehaviour
 
     public void OnFadeComplete()
     {
+        if (isEnding)
+        {
+            return;
+        }
+
         SceneManager.LoadScene(nextScene);
         animator.SetTrigger("FadeOut");
+    }
+
+    public void FadeToBlack()
+    {
+        isEnding = true;
+        animator.SetTrigger("FadeIn");
     }
 }
