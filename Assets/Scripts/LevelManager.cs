@@ -559,6 +559,7 @@ public class LevelManager : MonoBehaviour
 
         // TODO: Select dialogue from story (just the next yarn node)
         int dialogueDay = -1;
+        hasDialogueDay = false;
 
         for (int i = 0; i < specialDaysList.Length; i++)
         {
@@ -619,11 +620,6 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
             waiting = false;
         }
-        else
-        {
-            if (dialogueHead.activeSelf)
-                dialogueHead.SetActive(false);
-        }
 
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
 
@@ -631,6 +627,9 @@ public class LevelManager : MonoBehaviour
         audioManager.PlaySFX(doorSlideSound);
 
         yield return new WaitForSeconds(1.5f);
+
+        if (dialogueHead.activeSelf)
+            dialogueHead.SetActive(false);
 
         tutorialText.text = bedText;
         currentTutorialText = tutorialText.text;
