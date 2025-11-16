@@ -582,7 +582,7 @@ public class LevelManager : MonoBehaviour
         spiderManager.HideBaseSpiders();
     }
 
-    public void ShowDay(int number)
+    private void ShowDay(int number)
     {
         dayText.SetActive(true);
         dayText.GetComponent<TMP_Text>().text = "Day " + number.ToString();
@@ -620,5 +620,10 @@ public class LevelManager : MonoBehaviour
         currentTutorialText = tutorialText.text;
 
         StartCoroutine(giveFood());
+    }
+
+    public int getCurrentDay()
+    {
+        return day;
     }
 }

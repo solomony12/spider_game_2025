@@ -5992,6 +5992,7 @@ MonoBehaviour:
   spider: {fileID: 909443576704001576}
   throwForce: 10
   spawnDistance: 2
+  levelManager: {fileID: 1207498580}
 --- !u!1 &1871006371
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,9 +10,11 @@ public class BouncyBallSpawner : MonoBehaviour
 
     private GameObject spawnedBall;
 
+    public LevelManager levelManager;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && levelManager.getCurrentDay() > 1)
         {
             if (spawnedBall == null)
             {
