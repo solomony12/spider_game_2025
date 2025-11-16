@@ -9,6 +9,9 @@ public class VisibilityChecker : MonoBehaviour
     private bool showingHead = false;
 
     public LevelManager levelManager;
+    public AudioManager audioManager;
+    public AudioClip scary1;
+
     private void Start()
     {
         target.SetActive(false);
@@ -32,6 +35,7 @@ public class VisibilityChecker : MonoBehaviour
         {
             animator.SetTrigger("SpottedHead");
             showingHead = false;
+            audioManager.PlaySFX(scary1);
             levelManager.HideHead();
         }
     }
@@ -41,7 +45,7 @@ public class VisibilityChecker : MonoBehaviour
         showingHead = false;
         target.SetActive(false);
         animator.ResetTrigger("SpottedHead");
-        animator.Play("HeadOut", 0, 0f);
+        animator.Play("HeadOut");
     }
 
     public void ShowHead()

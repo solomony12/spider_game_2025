@@ -358,7 +358,16 @@ public class LevelManager : MonoBehaviour
                             Debug.Log("bed clicked");
 
                             // Check for possible ending
-                            bool nextDay = CheckThreshold();
+                            bool nextDay = true;
+                            try
+                            {
+                                nextDay = CheckThreshold();
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.Log("ERROR: " + e);
+                            }
+                            
 
                             // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
@@ -652,14 +661,20 @@ public class LevelManager : MonoBehaviour
         canTalkToGuard = false;
         canUseBed = false;
 
+        day++;
+        Debug.Log($"Day {day} begins!");
+
+        if (day >= 30)
+        {
+            StartCoroutine(ResidentPrisonerEnding());
+            return;
+        }
+
         ResetPlayerAndCamera();
 
         // Increase time slightly
         delayTimeMin = Math.Min(delayTimeMin + 0.1f, delayTimeEndMin);
         delayTimeMax = Math.Min(delayTimeMax + 0.1f, delayTimeEndMax);
-
-        day++;
-        Debug.Log($"Day {day} begins!");
 
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
         audioManager.PlaySFX(dayBoomSound, 4f);
@@ -718,7 +733,11 @@ public class LevelManager : MonoBehaviour
                 webs[webActivateIndex++].SetActive(true); // web 0 show
                 DailySetup();
                 break;
-            case 6:
+            case 7:
+                webs[webActivateIndex++].SetActive(true); // web 1 show
+                DailySetup();
+                break;
+            case 9:
                 CloneSpiders(1);
 
                 tutorialText.text = "...";
@@ -728,10 +747,6 @@ public class LevelManager : MonoBehaviour
                 canUseToilet = false;
                 notDoTaskText.SetActive(false);
 
-                break;
-            case 7:
-                webs[webActivateIndex++].SetActive(true); // web 1 show
-                DailySetup();
                 break;
             case 10:
                 webs[webActivateIndex++].SetActive(true); // web 2 show
@@ -848,25 +863,25 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (bathroomSkips >= 1) // 5
+        if (bathroomSkips >= 5) // 5
         {
             StartCoroutine(BathroomEnding());
             return false;
         }
 
-        else if (foodSkips >= 1) // 8
+        else if (foodSkips >= 8) // 8
         {
             StartCoroutine(StarvationEnding());
             return false;
         }
 
-        else if (spiderKillSkips >= 1) // 10
+        else if (spiderKillSkips >= 10) // 10
         {
             Debug.Log("Spider Ending");
             return false;
         }
-
-        return true;
+        else
+            return true;
     }
 
     private IEnumerator BathroomEnding()
@@ -922,6 +937,23 @@ public class LevelManager : MonoBehaviour
 
         StartCoroutine(EndingHelper("Ending 2/4: Starvation"));
         Debug.Log("Starvation Ending");
+    }
+
+    private IEnumerator ResidentPrisonerEnding()
+    {
+        spork.SetActive(false);
+
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        ShowDay(day);
+
+        tutorialText.text = "What was the outside world like?";
+        currentTutorialText = tutorialText.text;
+
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(EndingHelper("Ending 4/4: Resident Prisoner"));
+        Debug.Log("Resident Prisoner Ending");
     }
 
     private IEnumerator EndingHelper(string text)

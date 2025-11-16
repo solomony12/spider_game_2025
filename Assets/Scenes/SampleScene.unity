@@ -6798,6 +6798,8 @@ MonoBehaviour:
   offset: {x: 0.1, y: 0.1}
   animator: {fileID: 2007377129}
   levelManager: {fileID: 1207498580}
+  audioManager: {fileID: 1040677894}
+  scary1: {fileID: 8300000, guid: b347835c99eec284abc809972575e6b9, type: 3}
 --- !u!1 &1871006371
 GameObject:
   m_ObjectHideFlags: 0
