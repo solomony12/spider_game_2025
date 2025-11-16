@@ -113,32 +113,84 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        characterObject.SetActive(false);
-        day = 0;
-        dayOneTutorialFinished = false;
-        stillSpider.SetActive(true);
-        smackSpiderText.SetActive(false);
-        tutorialTextObject.SetActive(true); // ALWAYS TRUE
         tutorialText = tutorialTextObject.GetComponent<TMP_Text>();
-        tutorialText.text = "WASD to move. | Mouse to look around.";
-        currentTutorialText = tutorialText.text;
-        spork.GetComponent<MeshRenderer>().enabled = false;
-        notDoTaskText.SetActive(false);
-        headerText.SetActive(false);
-        blackScreen.SetActive(false);
-
+        ResetGame();
+        characterObject.SetActive(false);
+        
         if (FadeController.Instance == null)
         {
             Debug.Log("ERROR: FadeController not found!!!");
             return;
         }
 
-        foreach (GameObject web in webs)
-        {
-            web.SetActive(false);
-        }
-
         LevelManage();
+    }
+
+    private void PlayAgain()
+    {
+        ResetGame();
+        LevelManage();
+    }
+
+    public void ResetGame()
+    {
+        // Day / counters
+        day = 0;
+        delayTimeMin = delayTimeStartMin;
+        delayTimeMax = delayTimeStartMax;
+
+        // Tutorial flags
+        dayOneTutorialFinished = false;
+        dayTwoTutorialFinished = false;
+        wPressed = false;
+        dPressed = false;
+        spacePressedTimes = 0;
+
+        // Actions
+        canUseToilet = false;
+        canUseBed = false;
+        canUseFood = false;
+        canTalkToGuard = false;
+        canKillSpidersTask = false;
+
+        // Spider counters
+        spidersToKill = 1;
+        spidersKilledToday = 0;
+        bathroomSkips = 0;
+        foodSkips = 0;
+        spiderKillSkips = 0;
+        webActivateIndex = 0;
+
+        // UI
+        tutorialText.text = "WASD to move. | Mouse to look around.";
+        currentTutorialText = tutorialText.text;
+        tutorialTextObject.SetActive(true);
+        notDoTaskText.SetActive(false);
+        smackSpiderText.SetActive(false);
+        headerText.SetActive(false);
+        blackScreen.SetActive(false);
+
+        // Player / Camera
+        ResetPlayerAndCamera();
+        spork.GetComponent<MeshRenderer>().enabled = false;
+
+        // Spider manager
+        spiderManager.DestroyAllClones();
+        spiderManager.HideBaseSpiders();
+        stillSpider.SetActive(true);
+
+        // Animators
+        dsAnimator.SetBool("isOpen", false);
+        foodAnimator.SetBool("isMealTime", false);
+        brownWaterAnimator.ResetTrigger("FlowBrownWater");
+
+        // Environment
+        RenderSettings.fog = false;
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
+
+        // Deactivate webs
+        foreach (GameObject web in webs)
+            web.SetActive(false);
     }
 
     void OnEnable()
@@ -193,7 +245,6 @@ public class LevelManager : MonoBehaviour
             currentTutorialText = tutorialText.text;
 
             SetAction(ActionType.Toilet);
-            dayOneTutorialFinished = true;
         }
     }
 
@@ -759,7 +810,7 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (bathroomSkips >= 1) // 5
+        if (bathroomSkips >= 5) // 5
         {
             StartCoroutine(BathroomEnding());
             return false;
@@ -767,7 +818,7 @@ public class LevelManager : MonoBehaviour
 
         else if (foodSkips >= 1) // 8
         {
-            Debug.Log("Starvation Ending");
+            StartCoroutine(StarvationEnding());
             return false;
         }
 
@@ -790,7 +841,7 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "You shouldn't have held it in.";
         currentTutorialText = tutorialText.text;
 
-        // but you can't do anything (except ball and spork)
+        // but you can't do anything (except ball)
         yield return new WaitForSeconds(3f);
 
         // brown water fills up the room slowly (and spiders get pushed away)
@@ -815,5 +866,37 @@ public class LevelManager : MonoBehaviour
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         Debug.Log("Constipation Ending");
+    }
+
+    private IEnumerator StarvationEnding()
+    {
+        // Game over (seem like it's the next day)
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+
+        tutorialText.text = "Your stomach yearns for food.";
+        currentTutorialText = tutorialText.text;
+
+        // Introduce fog as tired
+        RenderSettings.fog = true;
+        RenderSettings.fogColor = Color.gray;
+        RenderSettings.fogMode = FogMode.ExponentialSquared;
+        RenderSettings.fogDensity = 0.25f;
+
+        // but you can't do anything (except ball)
+        yield return new WaitForSeconds(3f);
+
+        // TODO:
+
+        // fade to black
+        FadeController.Instance.FadeToBlack();
+
+        yield return new WaitForSeconds(2f);
+        // show ending text
+        ShowText("Ending 2/4: Starvation");
+        audioManager.PlaySFX(dayBoomSound, 4f);
+
+        Debug.Log("Starvation Ending");
     }
 }
