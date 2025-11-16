@@ -74,6 +74,9 @@ public class LevelManager : MonoBehaviour
 
     public PlayerMovement playerMovement;
 
+    public GameObject[] webs;
+    private int webActivateIndex = 0;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -83,7 +86,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         characterObject.SetActive(false);
-        day = 1;
+        day = 0;
         dayOneTutorialFinished = false;
         stillSpider.SetActive(true);
         smackSpiderText.SetActive(false);
@@ -92,6 +95,12 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "WASD to move. | Mouse to look around.";
         currentTutorialText = tutorialText.text;
         spork.GetComponent<MeshRenderer>().enabled = false;
+
+        foreach (GameObject web in webs)
+        {
+            web.SetActive(false);
+        }
+
         LevelManage();
     }
 
@@ -210,16 +219,8 @@ public class LevelManager : MonoBehaviour
                         {
                             Debug.Log("bed clicked");
 
-                            // Reset Player
-                            playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
-                            playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
-                            // Reset camera
-                            playerMovement.ResetCameraRotation();
-
                             // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
-                            day++;
-                            Debug.Log($"Day {day} begins!");
                             LevelManage();
                         }
                         break;
@@ -285,6 +286,12 @@ public class LevelManager : MonoBehaviour
                 canUseToilet = true;
                 dayTwoTutorialFinished = true;
             }
+        }
+
+        // TEMP DELETE TODO
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            LevelManage();
         }
     }
 
@@ -401,6 +408,15 @@ public class LevelManager : MonoBehaviour
 
     private void LevelManage()
     {
+        // Reset Player
+        playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
+        playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+        // Reset camera
+        playerMovement.ResetCameraRotation();
+
+        day++;
+        Debug.Log($"Day {day} begins!");
+
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
         audioManager.PlaySFX(dayBoomSound, 4f);
 
@@ -444,15 +460,36 @@ public class LevelManager : MonoBehaviour
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
                 break;
+            case 4:
+                webs[webActivateIndex++].SetActive(true); // web 0 show
+                DailySetup();
+                break;
+            case 7:
+                webs[webActivateIndex++].SetActive(true); // web 1 show
+                DailySetup();
+                break;
+            case 10:
+                webs[webActivateIndex++].SetActive(true); // web 2 show
+                DailySetup();
+                break;
+            case 13:
+                webs[webActivateIndex++].SetActive(true); // web 3 show
+                DailySetup();
+                break;
             default:
-                int totalLiveSpiders = spiderManager.numberOfLiveSpiders();
-                int totalNeeded = (day - 2) * 6; // -2 since first two days are no-spawn days
-                int amountToSpawn = totalNeeded - totalLiveSpiders;
-                int setsOfSix = amountToSpawn / 6;
-                CloneSpiders(setsOfSix);
+                DailySetup();
                 break;
         }
         
+    }
+
+    private void DailySetup()
+    {
+        int totalLiveSpiders = spiderManager.numberOfLiveSpiders();
+        int totalNeeded = (day - 2) * 6; // -2 since first two days are no-spawn days
+        int amountToSpawn = totalNeeded - totalLiveSpiders;
+        int setsOfSix = amountToSpawn / 6;
+        CloneSpiders(setsOfSix);
     }
 
     /// <summary>
