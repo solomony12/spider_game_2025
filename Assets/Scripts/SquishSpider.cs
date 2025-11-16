@@ -22,6 +22,14 @@ public class SquishSpider : MonoBehaviour
     public AudioClip[] squishSounds;
     public AudioClip missSound;
 
+    public SporkBloodiness sporkBloodiness;
+    private int spidersKilled;
+
+    private void Start()
+    {
+        spidersKilled = 0;
+    }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -69,6 +77,8 @@ public class SquishSpider : MonoBehaviour
                                 int index = UnityEngine.Random.Range(0, squishSounds.Length);
                                 AudioClip clip = squishSounds[index];
                                 audioManager.PlaySFX(clip, 0.75f);
+                                spidersKilled++;
+                                CheckBloodLevels();
 
                                 OnSpiderSquished?.Invoke();
 
@@ -86,5 +96,30 @@ public class SquishSpider : MonoBehaviour
                 audioManager.PlaySFX(missSound);
             }
         }
+    }
+
+    private void CheckBloodLevels()
+    {
+        if (spidersKilled < 5)
+        {
+            sporkBloodiness.SelectMaterial(0);
+        }
+        else if (spidersKilled >= 5 && spidersKilled < 20)
+        {
+            sporkBloodiness.SelectMaterial(1);
+        }
+        else if (spidersKilled >= 20 && spidersKilled < 30)
+        {
+            sporkBloodiness.SelectMaterial(2);
+        }
+        else
+        {
+            sporkBloodiness.SelectMaterial(3);
+        }
+    }
+
+    public int getSpidersKilled()
+    {
+        return spidersKilled;
     }
 }

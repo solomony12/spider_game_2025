@@ -277,6 +277,7 @@ public class LevelManager : MonoBehaviour
     }
     private IEnumerator PlayNextScene()
     {
+        canTalkToGuard = false;
         dsAnimator.SetBool("isOpen", true);
         audioManager.PlaySFX(doorSlideSound);
 

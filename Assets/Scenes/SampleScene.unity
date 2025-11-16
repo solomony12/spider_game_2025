@@ -3317,6 +3317,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1135175347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135175341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5bde074f50b892448ab53af1e002972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SporkBloodiness
+  targetObject: {fileID: 1135175341}
+  baseMaterials:
+  - {fileID: 2100000, guid: 88c15f4e4e482204aa1cd8df34dd93c2, type: 2}
+  - {fileID: 2100000, guid: 22966bd374bf8a643ad4edab85681d38, type: 2}
+  - {fileID: 2100000, guid: 9f9ec7578c5977a4ca7a2bc137ba7b63, type: 2}
+  - {fileID: 2100000, guid: dd1cb76cb58e002498df6dfaa14daf6c, type: 2}
+  baseMaps:
+  - {fileID: 2800000, guid: 115836b9b0e32094e97478236fc5be22, type: 3}
+  - {fileID: 2800000, guid: 2b39a55f8e35c814497994d76fbb2c51, type: 3}
+  - {fileID: 2800000, guid: 55781da8c329678429989d81f2889c01, type: 3}
+  - {fileID: 2800000, guid: 59d6f544c4eac3a488b73c3afb6b8ad1, type: 3}
+  extraTextures:
+  - {fileID: 2800000, guid: 1f49183d1f6b7754aba9ed50ac4b3471, type: 3}
+  - {fileID: 2800000, guid: 191ccd20c95951a4fb43a3790e81151d, type: 3}
+  - {fileID: 2800000, guid: a41902959d348ea488be5ba571cbc277, type: 3}
+  - {fileID: 2800000, guid: 1cdbd13d94691f34a84ba18d28ed731a, type: 3}
 --- !u!1001 &1153410196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5380,6 +5408,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dd3940c9cba132b4dbbed15c78e5ebb9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1135175346}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dd3940c9cba132b4dbbed15c78e5ebb9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1135175347}
   m_SourcePrefab: {fileID: 100100000, guid: dd3940c9cba132b4dbbed15c78e5ebb9, type: 3}
 --- !u!1 &1814168985
 GameObject:
@@ -5566,6 +5597,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fc937f97ad8b26f4b88a28e155f9f9b5, type: 3}
   - {fileID: 8300000, guid: 651020b054753654d86c89de641bf229, type: 3}
   missSound: {fileID: 8300000, guid: fc03a87d9ca147c4a92786ed3cfb32ae, type: 3}
+  sporkBloodiness: {fileID: 1135175347}
 --- !u!1 &1913992591
 GameObject:
   m_ObjectHideFlags: 0
