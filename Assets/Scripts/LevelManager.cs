@@ -64,6 +64,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip trayScrapeSound;
     public AudioClip doorSlideSound;
     public AudioClip toiletFlushSound;
+    public AudioClip dayBoomSound;
 
     void Awake()
     {
@@ -355,6 +356,7 @@ public class LevelManager : MonoBehaviour
     private void LevelManage()
     {
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
+        audioManager.PlaySFX(dayBoomSound, 2f);
 
         if (day != 1 && day != 3)
         {

@@ -5,7 +5,7 @@ public class MenuScript : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        FadeController.Instance.FadeToScene("SampleScene");
     }
 
     public void QuitGame()

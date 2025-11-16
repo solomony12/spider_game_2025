@@ -3556,6 +3556,7 @@ MonoBehaviour:
   trayScrapeSound: {fileID: 8300000, guid: 76369978c9ca2664e86861fcc2509ba8, type: 3}
   doorSlideSound: {fileID: 8300000, guid: 3532f001ee147b243ae5c60fb5a14c3b, type: 3}
   toiletFlushSound: {fileID: 8300000, guid: 765dbd433f3a53e43bc20131fb76e4da, type: 3}
+  dayBoomSound: {fileID: 8300000, guid: fbc1b2aaeb05d9d40afa353b5b8ffe85, type: 3}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0
