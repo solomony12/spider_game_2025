@@ -85,6 +85,11 @@ public class LevelManager : MonoBehaviour
     public GameObject[] webs;
     private int webActivateIndex = 0;
 
+    public GameObject notDoTaskText;
+    private int bathroomSkips = 0;
+    private int foodSkips = 0;
+    private int spiderKillSkips = 0;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -105,7 +110,9 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "WASD to move. | Mouse to look around.";
         currentTutorialText = tutorialText.text;
         spork.GetComponent<MeshRenderer>().enabled = false;
- 
+        notDoTaskText.SetActive(false);
+
+
         foreach (GameObject web in webs)
         {
             web.SetActive(false);
@@ -376,6 +383,11 @@ public class LevelManager : MonoBehaviour
         food.GetComponent<MeshRenderer>().enabled = true;
         slop.GetComponent<MeshRenderer>().enabled = true;
 
+        if (day > 4)
+        {
+            notDoTaskText.SetActive(true);
+        }
+
         foodAnimator.SetBool("isMealTime", true);
         audioManager.PlaySFX(trayScrapeSound);
         yield return new WaitForSeconds(1f);
@@ -388,6 +400,7 @@ public class LevelManager : MonoBehaviour
         // TODO: eat
         audioManager.PlaySFX(eatSound);
         slop.GetComponent<MeshRenderer>().enabled = false;
+        notDoTaskText.SetActive(false);
 
         StartCoroutine(foodFinish());
     }
@@ -423,6 +436,11 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
+        if (day > 4)
+        {
+            notDoTaskText.SetActive(true);
+        }
+
         spidersKilledToday = 0;
         spidersToKill = Math.Min(6, day-3); // no more than 6 a day;
 
@@ -440,6 +458,7 @@ public class LevelManager : MonoBehaviour
             if (spidersKilledToday >= spidersToKill)
             {
                 canKillSpidersTask = false;
+                notDoTaskText.SetActive(false);
                 StartCoroutine(FinishKillingSpidersTask());
             }
         }
@@ -490,10 +509,11 @@ public class LevelManager : MonoBehaviour
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
         audioManager.PlaySFX(dayBoomSound, 4f);
 
-        if (day > 3)
+        if (day > 4)
         {
             tutorialText.text = toiletText;
             currentTutorialText = tutorialText.text;
+            notDoTaskText.SetActive(true);
         }
 
         canUseBed = false;
@@ -506,6 +526,7 @@ public class LevelManager : MonoBehaviour
             case 1:
                 // No clone spiders since new game
                 canUseToilet = false;
+                notDoTaskText.SetActive(false);
                 spiderManager.DestroyAllClones();
                 spiderManager.HideBaseSpiders();
                 stillSpider.SetActive(true);
@@ -514,6 +535,7 @@ public class LevelManager : MonoBehaviour
             case 2:
                 // Show only 3 base spiders
                 stillSpider.SetActive(false);
+                notDoTaskText.SetActive(false);
                 spiderManager.HideBaseSpiders();
                 spiderManager.ShowThreeBaseSpiders();
                 tutorialText.text = "[Space] to throw ball. | [Space] to retrieve it.";
@@ -529,6 +551,7 @@ public class LevelManager : MonoBehaviour
                 tutorialText.text = "Kill a spider.";
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
+                notDoTaskText.SetActive(false);
                 canKillSpidersTask = true;
                 break;
             case 4:
@@ -605,6 +628,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator UseToiletFinish()
     {
+        notDoTaskText.SetActive(false);
         canUseToilet = false;
 
         // delay a bit

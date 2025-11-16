@@ -39,9 +39,9 @@ public class BouncyBallSpawner : MonoBehaviour
 
         Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
 
-        // Instantiate ball (15% chance of spider)
+        // Instantiate ball (5% chance of spider)
         int spiderChance = Random.Range(1, 100);
-        if (spiderChance > 15)
+        if (spiderChance > 5)
         {
             spawnedBall = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
         }
