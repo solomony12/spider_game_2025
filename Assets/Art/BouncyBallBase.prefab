@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3696570407229660547}
   - component: {fileID: 67894683066647749}
   - component: {fileID: 1698854314506212491}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BouncyBallBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
