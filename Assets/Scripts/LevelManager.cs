@@ -526,6 +526,11 @@ public class LevelManager : MonoBehaviour
 
     private void LevelManage()
     {
+        canUseFood = false;
+        canKillSpidersTask = false;
+        canTalkToGuard = false;
+        canUseBed = false;
+
         // Reset Player
         playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
         playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
