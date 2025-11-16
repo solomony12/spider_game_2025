@@ -845,8 +845,19 @@ public class LevelManager : MonoBehaviour
     private void ResetPlayerAndCamera()
     {
         // Reset Player
+        // Disable the CharacterController temporarily
+        CharacterController cc = playerParent.GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = false;
+
+        // Teleport player
         playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
         playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+
+        // Re-enable CharacterController
+        if (cc != null)
+            cc.enabled = true;
+
         // Reset camera
         playerMovement.ResetCameraRotation();
     }
