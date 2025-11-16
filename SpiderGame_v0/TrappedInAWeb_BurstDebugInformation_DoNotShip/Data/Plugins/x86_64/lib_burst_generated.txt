@@ -10,7 +10,7 @@ Library: C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\BurstOutput\Data\Plugi
 --float-precision=Standard
 --target-framework=NetFramework
 --float-mode=Fast
---linker-options=PdbAltPath="SpiderGame2025_Data/Plugins/x86_64/lib_burst_generated.pdb"
+--linker-options=PdbAltPath="TrappedInAWeb_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\Burst
 --key-folder=C:/Users/Solom/OneDrive/Documents/SolomonStuff/Unity/6000.2.5f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
@@ -31,7 +31,7 @@ Library: C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\BurstOutput\Data\Plugi
 --float-precision=Standard
 --target-framework=NetFramework
 --float-mode=Fast
---linker-options=PdbAltPath="SpiderGame2025_Data/Plugins/x86_64/lib_burst_generated.pdb"
+--linker-options=PdbAltPath="TrappedInAWeb_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\Burst
 --key-folder=C:/Users/Solom/OneDrive/Documents/SolomonStuff/Unity/6000.2.5f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
@@ -50,7 +50,7 @@ Library: C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\BurstOutput\Data\Plugi
 --dump=Function
 --float-precision=Standard
 --target-framework=NetFramework
---linker-options=PdbAltPath="SpiderGame2025_Data/Plugins/x86_64/lib_burst_generated.pdb"
+--linker-options=PdbAltPath="TrappedInAWeb_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\Burst
 --key-folder=C:/Users/Solom/OneDrive/Documents/SolomonStuff/Unity/6000.2.5f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
@@ -161,7 +161,7 @@ Library: C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\BurstOutput\Data\Plugi
 --dump=Function
 --float-precision=Standard
 --target-framework=NetFramework
---linker-options=PdbAltPath="SpiderGame2025_Data/Plugins/x86_64/lib_burst_generated.pdb"
+--linker-options=PdbAltPath="TrappedInAWeb_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\Solom\UnityProjects\SpiderGame2025\Temp\Burst
 --key-folder=C:/Users/Solom/OneDrive/Documents/SolomonStuff/Unity/6000.2.5f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport

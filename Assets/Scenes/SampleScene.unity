@@ -2541,7 +2541,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 40ba504a71ec58344a5be42af507ceeb, type: 2}
+      objectReference: {fileID: 2100000, guid: 703d2081da1fe5a4e8fd365e958fcb7a, type: 2}
     - target: {fileID: 919132149155446097, guid: e3b386c001ea3e14a972d56cbf6c0749, type: 3}
       propertyPath: m_Name
       value: GJ_Table02
@@ -4580,7 +4580,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b2708f4df7424c42912ad498efdb88d, type: 2}
+      objectReference: {fileID: 2100000, guid: 2ffc630b1c17dc545ae9d7033b0134ff, type: 2}
     - target: {fileID: 919132149155446097, guid: 3b1d95e7dc061714899a1c2844cedcbd, type: 3}
       propertyPath: m_Name
       value: GJ_DoorSlider
@@ -5667,7 +5667,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fcb5365aa889161468047db611030b3d, type: 2}
+  - {fileID: 2100000, guid: bd58cf9ce1d308d40a55b585042984ca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
