@@ -356,7 +356,7 @@ public class LevelManager : MonoBehaviour
     private void LevelManage()
     {
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
-        audioManager.PlaySFX(dayBoomSound, 2f);
+        audioManager.PlaySFX(dayBoomSound, 4f);
 
         if (day != 1 && day != 3)
         {
@@ -442,7 +442,7 @@ public class LevelManager : MonoBehaviour
     private void UseToiletStart()
     {
         // TODO: use toilet
-        audioManager.PlaySFX(toiletFlushSound);
+        audioManager.PlaySFX(toiletFlushSound, 0.8f);
         UseToiletFinish();
     }
 

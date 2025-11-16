@@ -14,6 +14,7 @@ public class SquishSpider : MonoBehaviour
     public Animator sporkAnimator;
 
     public GameObject crushedSpiderBase;
+    public GameObject splatterBase;
 
     public static event Action OnSpiderSquished;
 
@@ -54,6 +55,12 @@ public class SquishSpider : MonoBehaviour
                                     clickedObject.transform.position,
                                     clickedObject.transform.rotation
                                 );
+                                Quaternion splatterRotation = clickedObject.transform.rotation * Quaternion.Euler(90f, 0f, 0f);
+                                GameObject splatter = Instantiate(
+                                    splatterBase,
+                                    clickedObject.transform.position,
+                                    splatterRotation
+                                );
 
                                 // Remove the original spider clone
                                 Destroy(clickedObject);
@@ -61,7 +68,7 @@ public class SquishSpider : MonoBehaviour
 
                                 int index = UnityEngine.Random.Range(0, squishSounds.Length);
                                 AudioClip clip = squishSounds[index];
-                                audioManager.PlaySFX(clip);
+                                audioManager.PlaySFX(clip, 0.75f);
 
                                 OnSpiderSquished?.Invoke();
 
