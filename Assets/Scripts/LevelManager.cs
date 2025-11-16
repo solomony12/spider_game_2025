@@ -40,6 +40,7 @@ public class LevelManager : MonoBehaviour
     private string foodText = "Eat the meal.";
     private string talkText = "Talk to the guard (observation slot).";
     private string bedText = "Go to bed.";
+    private string waitText = "Free time.";
     public GameObject dayText;
     private string currentTutorialText;
 
@@ -48,12 +49,18 @@ public class LevelManager : MonoBehaviour
     private bool dPressed = false;
     private bool dayOneTutorialFinished = false;
 
+    private int spacePressedTimes = 0;
+    private bool dayTwoTutorialFinished = false;
+
     private bool canUseToilet = false;
     private bool canUseBed = false;
     private bool canUseFood = false;
     private bool canTalkToGuard = false;
+    private bool waiting = false;
 
     private int day;
+    private float delayTimeMin = 5f;
+    private float delayTimeMax = 10f;
 
     public GameObject spork;
 
@@ -124,7 +131,7 @@ public class LevelManager : MonoBehaviour
         bool hovering = false;
 
         // Hovering over for tutorial
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit) && !waiting)
         {
             float dist;
 
@@ -177,7 +184,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // E pressed // Press E
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && !waiting)
         {
 
             if (Physics.Raycast(ray, out hit))
@@ -258,6 +265,25 @@ public class LevelManager : MonoBehaviour
                 dayOneTutorialFinished = true;
             }
         }
+
+        // Update tutorial for Day 2 (ball)
+        if (day == 2 && !dayTwoTutorialFinished)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                spacePressedTimes++;
+            }
+
+            // Check if all have been pressed at least once
+            if (spacePressedTimes == 2)
+            {
+                tutorialText.text = toiletText;
+                currentTutorialText = tutorialText.text;
+
+                canUseToilet = true;
+                dayTwoTutorialFinished = true;
+            }
+        }
     }
 
     [YarnCommand("character")]
@@ -298,13 +324,20 @@ public class LevelManager : MonoBehaviour
         characterObject.SetActive(false);
         canTalkToGuard = false;
 
-        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
-
         StartCoroutine(WrapUpTalking());
     }
 
     private IEnumerator WrapUpTalking()
     {
+        // delay a bit
+        waiting = true;
+        tutorialText.text = waitText;
+        currentTutorialText = tutorialText.text;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
+        waiting = false;
+
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
+
         dsAnimator.SetBool("isOpen", false);
         audioManager.PlaySFX(doorSlideSound);
 
@@ -340,6 +373,14 @@ public class LevelManager : MonoBehaviour
     private IEnumerator foodFinish()
     {
         canUseFood = false;
+
+        // delay a bit
+        waiting = true;
+        tutorialText.text = waitText;
+        currentTutorialText = tutorialText.text;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
+        waiting = false;
+
         foodAnimator.SetBool("isMealTime", false);
         audioManager.PlaySFX(trayScrapeSound);
 
@@ -359,7 +400,7 @@ public class LevelManager : MonoBehaviour
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
         audioManager.PlaySFX(dayBoomSound, 4f);
 
-        if (day != 1 && day != 3)
+        if (day > 3)
         {
             tutorialText.text = toiletText;
             currentTutorialText = tutorialText.text;
@@ -385,6 +426,9 @@ public class LevelManager : MonoBehaviour
                 stillSpider.SetActive(false);
                 spiderManager.HideBaseSpiders();
                 spiderManager.ShowThreeBaseSpiders();
+                tutorialText.text = "[Space] to throw ball. | [Space] to retrieve it.";
+                currentTutorialText = tutorialText.text;
+                canUseToilet = false;
                 break;
 
             case 3:
@@ -444,14 +488,21 @@ public class LevelManager : MonoBehaviour
     {
         // TODO: use toilet
         audioManager.PlaySFX(toiletFlushSound, 0.8f);
-        UseToiletFinish();
+        StartCoroutine(UseToiletFinish());
     }
 
-    private void UseToiletFinish()
+    private IEnumerator UseToiletFinish()
     {
-        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Noon);
-
         canUseToilet = false;
+
+        // delay a bit
+        waiting = true;
+        tutorialText.text = waitText;
+        currentTutorialText = tutorialText.text;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
+        waiting = false;
+
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Noon);
 
         tutorialText.text = foodText;
         currentTutorialText = tutorialText.text;
