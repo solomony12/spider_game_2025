@@ -96,6 +96,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip toiletFlushSound;
     public AudioClip dayBoomSound;
     public AudioClip eatSound;
+    public AudioClip scarySound;
 
     public PlayerMovement playerMovement;
 
@@ -110,6 +111,8 @@ public class LevelManager : MonoBehaviour
     private bool isSpiderEnding = false;
     private bool isEscapeEnding = false;
     public GameObject fakeDoor;
+    public GameObject headSpider;
+    public Animator headSpiderAnimator;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -198,9 +201,11 @@ public class LevelManager : MonoBehaviour
         isSpiderEnding = false;
         isEscapeEnding = false;
         fakeDoor.SetActive(false);
+        headSpider.SetActive(false);
 
         // Player / Camera
         ResetPlayerAndCamera();
+        spork.SetActive(true);
         spork.GetComponent<MeshRenderer>().enabled = false;
 
         // Spider manager
@@ -212,7 +217,9 @@ public class LevelManager : MonoBehaviour
         dsAnimator.SetBool("isOpen", false);
         foodAnimator.SetBool("isMealTime", false);
         brownWaterAnimator.ResetTrigger("FlowBrownWater");
-        brownWaterAnimator.Play("BrownWaterLow", 0, 0f);
+        brownWaterAnimator.Play("BrownWaterLow");
+        headSpiderAnimator.ResetTrigger("LaunchSpider");
+        headSpiderAnimator.Play("HeadSpiderIdle");
         visibilityChecker.ResetHead();
 
         // Environment
@@ -557,7 +564,7 @@ public class LevelManager : MonoBehaviour
         // TODO: [VN] use if needed in the future
         //characterObject.SetActive(true);
 
-        // TODO: Select dialogue from story (just the next yarn node)
+        // Select dialogue from story (just the next yarn node)
         int dialogueDay = -1;
         hasDialogueDay = false;
 
@@ -989,7 +996,7 @@ public class LevelManager : MonoBehaviour
             return false;
         }
 
-        else if (spiderKillSkips >= 10) // 10
+        else if (spiderKillSkips >= 1) // 10
         {
             isSpiderEnding = true;
             SpidersEndingPart1();
@@ -1067,6 +1074,8 @@ public class LevelManager : MonoBehaviour
 
     private void LeaveRoomSpider()
     {
+        headSpider.SetActive(true);
+
         // Disable the CharacterController temporarily
         CharacterController cc = playerParent.GetComponent<CharacterController>();
         if (cc != null)
@@ -1091,13 +1100,17 @@ public class LevelManager : MonoBehaviour
     {
 
         // but you can't do anything (except ball)
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4.72f);
 
-        // TODO: SPIDERS ATTACK FROM BOTH SIDES
+        // SPIDERS ATTACK
+        headSpiderAnimator.SetTrigger("LaunchSpider");
+        audioManager.PlaySFX(scarySound);
+
+        yield return new WaitForSeconds(0.24f);
 
         // SUDDEN BLACKNESS
         // show ending text
-        ShowText("Ending 3/5: Spiders");
+        ShowText("Ending 5/5: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
@@ -1164,7 +1177,7 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except ball)
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper("Ending 5/5: Good Behavior"));
+        StartCoroutine(EndingHelper("Ending 3/5: Good Behavior"));
 
         Debug.Log("Good Behavior Ending");
     }
