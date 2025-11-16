@@ -996,7 +996,7 @@ public class LevelManager : MonoBehaviour
             return false;
         }
 
-        else if (spiderKillSkips >= 1) // 10
+        else if (spiderKillSkips >= 10) // 10
         {
             isSpiderEnding = true;
             SpidersEndingPart1();
