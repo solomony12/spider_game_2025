@@ -1,6 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
+﻿using UnityEngine;
 
 public class DynamicLightingController : MonoBehaviour
 {
@@ -10,11 +8,13 @@ public class DynamicLightingController : MonoBehaviour
     public Color eveningColor = new Color(1f, 0.45f, 0.3f);
     public Color nightColor = new Color(0.1f, 0.1f, 0.25f);
 
-    public float transitionDuration = 5f;
+    public float transitionDuration = 4f;
 
+    private Color startColor;
+    private float startIntensity;
     private Color targetColor;
     private float targetIntensity;
-    private float t = 1f;
+    private float t = 0f;
     private bool isTransitioning = false;
 
     public float maxSunIntensity = 1.2f;
@@ -38,17 +38,18 @@ public class DynamicLightingController : MonoBehaviour
     {
         if (isTransitioning)
         {
-            t += Time.deltaTime * transitionDuration;
-            directionalLight.intensity = Mathf.Lerp(directionalLight.intensity, targetIntensity, t);
-            directionalLight.color = Color.Lerp(directionalLight.color, targetColor, t);
+            t += Time.deltaTime / transitionDuration;
+            t = Mathf.Clamp01(t);
 
-            UpdateSkyboxExposure();
+            directionalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
+            directionalLight.color = Color.Lerp(startColor, targetColor, t);
+
+            //UpdateSkyboxExposure();
 
             if (t >= 1f)
                 isTransitioning = false;
         }
     }
-
 
     public void AdvancePhase()
     {
@@ -69,7 +70,7 @@ public class DynamicLightingController : MonoBehaviour
             case TimePhase.Noon:
                 RenderSettings.skybox = noonSkybox;
                 targetColor = noonColor;
-                targetIntensity = 1.2f;
+                targetIntensity = 1.0f;
                 break;
 
             case TimePhase.Evening:
@@ -93,26 +94,24 @@ public class DynamicLightingController : MonoBehaviour
             t = 1f;
             isTransitioning = false;
 
-            UpdateSkyboxExposure();
+            //UpdateSkyboxExposure();
         }
         else
         {
+            startColor = directionalLight.color;
+            startIntensity = directionalLight.intensity;
             t = 0f;
             isTransitioning = true;
         }
 
         // Re-sample skybox for ambient lighting
-        DynamicGI.UpdateEnvironment();
+        //DynamicGI.UpdateEnvironment();
     }
 
     private void UpdateSkyboxExposure()
     {
-        // Normalize intensity (0~1)
         float normalized = Mathf.Clamp01(directionalLight.intensity / maxSunIntensity);
-
-        // Smoothly map intensity into skybox exposure
         float exposure = Mathf.Lerp(skyboxMinExposure, skyboxMaxExposure, normalized);
-
         RenderSettings.skybox.SetFloat("_Exposure", exposure);
     }
 }
