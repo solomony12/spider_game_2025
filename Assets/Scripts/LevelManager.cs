@@ -107,6 +107,7 @@ public class LevelManager : MonoBehaviour
     private int spiderKillSkips = 0;
     public Animator brownWaterAnimator;
     private bool isSpiderEnding = false;
+    private bool isEscapeEnding = false;
     public GameObject fakeDoor;
 
     public GameObject playAgainButton;
@@ -194,6 +195,7 @@ public class LevelManager : MonoBehaviour
         FadeController.Instance.ResetEndingBool();
         dialogueHead.SetActive(false);
         isSpiderEnding = false;
+        isEscapeEnding = false;
         fakeDoor.SetActive(false);
 
         // Player / Camera
@@ -336,8 +338,8 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        // Spider ending hovering
-        if (isSpiderEnding && Physics.Raycast(ray, out hit))
+        // Spider/escape ending hovering
+        if ((isSpiderEnding || isEscapeEnding) && Physics.Raycast(ray, out hit))
         {
             float dist;
 
@@ -425,8 +427,8 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        // Spider ending leave room 
-        if (isSpiderEnding && Input.GetKeyDown(KeyCode.E) && Physics.Raycast(ray, out hit))
+        // Spider/escape ending leave room 
+        if ((isSpiderEnding || isEscapeEnding) && Input.GetKeyDown(KeyCode.E) && Physics.Raycast(ray, out hit))
         {
             float dist;
 
@@ -439,7 +441,14 @@ public class LevelManager : MonoBehaviour
                     {
                         Debug.Log("Leave Room");
 
-                        LeaveRoom();
+                        if (isSpiderEnding)
+                        {
+                            LeaveRoomSpider();
+                        }
+                        else if (isEscapeEnding)
+                        {
+                            LeaveRoomEscape();
+                        }
                     }
                     break;
             }
@@ -745,7 +754,15 @@ public class LevelManager : MonoBehaviour
 
         if (day >= 30)
         {
-            StartCoroutine(ResidentPrisonerEnding());
+            if (spiderKillSkips == 0 && foodSkips == 0 && bathroomSkips == 0)
+            {
+                isEscapeEnding = true;
+                EscapeEndingPart1();
+            }
+            else
+            {
+                StartCoroutine(ResidentPrisonerEnding());
+            }
             return;
         }
 
@@ -1001,7 +1018,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.666f);
 
-        StartCoroutine(EndingHelper("Ending 1/4: Constipation"));
+        StartCoroutine(EndingHelper("Ending 1/5: Constipation"));
         Debug.Log("Constipation Ending");
     }
 
@@ -1026,7 +1043,7 @@ public class LevelManager : MonoBehaviour
 
         // TODO:
 
-        StartCoroutine(EndingHelper("Ending 2/4: Starvation"));
+        StartCoroutine(EndingHelper("Ending 2/5: Starvation"));
         Debug.Log("Starvation Ending");
     }
 
@@ -1037,11 +1054,11 @@ public class LevelManager : MonoBehaviour
         audioManager.PlaySFX(dayBoomSound, 4f);
         spork.SetActive(false);
 
-        tutorialText.text = "The door was unlocked?";
+        tutorialText.text = "The door is unlocked?";
         currentTutorialText = tutorialText.text;
     }
 
-    private void LeaveRoom()
+    private void LeaveRoomSpider()
     {
         // Disable the CharacterController temporarily
         CharacterController cc = playerParent.GetComponent<CharacterController>();
@@ -1073,7 +1090,7 @@ public class LevelManager : MonoBehaviour
 
         // SUDDEN BLACKNESS
         // show ending text
-        ShowText("Ending 3/4: Spiders");
+        ShowText("Ending 3/5: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
@@ -1097,8 +1114,52 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        StartCoroutine(EndingHelper("Ending 4/4: Resident Prisoner"));
+        StartCoroutine(EndingHelper("Ending 4/5: Resident Prisoner"));
         Debug.Log("Resident Prisoner Ending");
+    }
+
+    private void EscapeEndingPart1()
+    {
+        // Game over (seem like it's the next day)
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+
+        tutorialText.text = "The door is unlocked?";
+        currentTutorialText = tutorialText.text;
+    }
+
+    private void LeaveRoomEscape()
+    {
+        // Disable the CharacterController temporarily
+        CharacterController cc = playerParent.GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = false;
+
+        // Teleport player
+        playerParent.transform.position = new Vector3(7.07f, 3.84f, -1.4f);
+
+        // Re-enable CharacterController
+        if (cc != null)
+            cc.enabled = true;
+
+        fakeDoor.SetActive(true);
+
+        tutorialText.text = "...";
+        currentTutorialText = tutorialText.text;
+
+        StartCoroutine(EscapeEndingPart2());
+    }
+
+    private IEnumerator EscapeEndingPart2()
+    {
+
+        // but you can't do anything (except ball)
+        yield return new WaitForSeconds(5f);
+
+        StartCoroutine(EndingHelper("Ending 5/5: Good Behavior"));
+
+        Debug.Log("Good Behavior Ending");
     }
 
     private IEnumerator EndingHelper(string text)
