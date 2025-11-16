@@ -314,7 +314,8 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "Click anywhere to continue.";
         currentTutorialText = tutorialText.text;
 
-        characterObject.SetActive(true);
+        // TODO: [VN] use if needed in the future
+        //characterObject.SetActive(true);
 
         // TODO: Select dialogue from story (just the next yarn node)
         dialogueRunner.StartDialogue("Start");
@@ -323,7 +324,8 @@ public class LevelManager : MonoBehaviour
     void OnDialogueFinished()
     {
         Debug.Log("End of Scene");
-        characterObject.SetActive(false);
+        // TODO: [VN] use if needed in the future
+        //characterObject.SetActive(false);
         canTalkToGuard = false;
 
         StartCoroutine(WrapUpTalking());
