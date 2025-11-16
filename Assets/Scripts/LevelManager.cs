@@ -237,6 +237,9 @@ public class LevelManager : MonoBehaviour
                         {
                             Debug.Log("bed clicked");
 
+                            // Check for possible ending
+                            CheckThreshold();
+
                             // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
                             LevelManage();
@@ -303,6 +306,37 @@ public class LevelManager : MonoBehaviour
 
                 canUseToilet = true;
                 dayTwoTutorialFinished = true;
+            }
+        }
+
+        // Press P to skip task
+        if (Input.GetKeyDown(KeyCode.P) && notDoTaskText.activeSelf)
+        {
+            if (canUseToilet)
+            {
+                bathroomSkips++;
+                StartCoroutine(UseToiletFinish());
+            }
+            else if (canUseFood)
+            {
+                foodSkips++;
+                StartCoroutine(foodFinish());
+            }
+            else if (canKillSpidersTask)
+            {
+                spiderKillSkips++;
+                canKillSpidersTask = false;
+                StartCoroutine(FinishKillingSpidersTask());
+            }
+            else
+            {
+                Debug.Log("ERROR: They skipped a task that is not skippable or the canUse/Kill bool is put in the wrong place.");
+            }
+
+            // Make sure text is disabled
+            if (notDoTaskText.activeSelf)
+            {
+                notDoTaskText.SetActive(false);
             }
         }
 
@@ -383,15 +417,15 @@ public class LevelManager : MonoBehaviour
         food.GetComponent<MeshRenderer>().enabled = true;
         slop.GetComponent<MeshRenderer>().enabled = true;
 
+        foodAnimator.SetBool("isMealTime", true);
+        audioManager.PlaySFX(trayScrapeSound);
+        yield return new WaitForSeconds(1f);
+
+        canUseFood = true;
         if (day > 4)
         {
             notDoTaskText.SetActive(true);
         }
-
-        foodAnimator.SetBool("isMealTime", true);
-        audioManager.PlaySFX(trayScrapeSound);
-        yield return new WaitForSeconds(1f);
-        canUseFood = true;
 
     }
 
@@ -436,18 +470,17 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        if (day > 4)
-        {
-            notDoTaskText.SetActive(true);
-        }
-
         spidersKilledToday = 0;
-        spidersToKill = Math.Min(6, day-3); // no more than 6 a day;
+        spidersToKill = Math.Min(10, 1 + (day - 1) / 3); // no more than 10 a day;
 
         tutorialText.text = "Kill " + spidersToKill + " spiders.";
         currentTutorialText = tutorialText.text;
 
         canKillSpidersTask = true;
+        if (day > 4)
+        {
+            notDoTaskText.SetActive(true);
+        }
     }
 
     public void SpiderTaskCounter()
@@ -509,15 +542,20 @@ public class LevelManager : MonoBehaviour
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
         audioManager.PlaySFX(dayBoomSound, 4f);
 
-        if (day > 4)
+        // End of tutorial
+        if (day > 3)
         {
             tutorialText.text = toiletText;
             currentTutorialText = tutorialText.text;
-            notDoTaskText.SetActive(true);
         }
 
         canUseBed = false;
+
         canUseToilet = true;
+        if (day > 4)
+        {
+            notDoTaskText.SetActive(true);
+        }
 
         ShowDay(day);
 
@@ -649,5 +687,26 @@ public class LevelManager : MonoBehaviour
     public int getCurrentDay()
     {
         return day;
+    }
+
+    private void CheckThreshold()
+    {
+        if (bathroomSkips > 1) // 5
+        {
+            Debug.Log("Constipation Ending");
+            return;
+        }
+
+        if (foodSkips > 1) // 8
+        {
+            Debug.Log("Starvation Ending");
+            return;
+        }
+
+        if (spiderKillSkips > 1) // 10
+        {
+            Debug.Log("Spider Ending");
+            return;
+        }
     }
 }
