@@ -535,11 +535,12 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        /*
         // TEMP DELETE TODO
         if (Input.GetKeyDown(KeyCode.M))
         {
             LevelManage();
-        }
+        }*/
     }
 
     [YarnCommand("character")]
