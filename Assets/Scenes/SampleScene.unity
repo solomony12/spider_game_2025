@@ -3309,6 +3309,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1af631464f932b04b9c80787022bf611, type: 3}
+--- !u!1 &975763004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1af631464f932b04b9c80787022bf611, type: 3}
+  m_PrefabInstance: {fileID: 975763003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1040677892
 GameObject:
   m_ObjectHideFlags: 0
@@ -4329,6 +4334,7 @@ MonoBehaviour:
   playAgainButton: {fileID: 146580102}
   mainMenuButton: {fileID: 2119696314}
   visibilityChecker: {fileID: 1814168994}
+  dialogueHead: {fileID: 975763004}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0

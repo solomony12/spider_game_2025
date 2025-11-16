@@ -74,6 +74,8 @@ public class LevelManager : MonoBehaviour
     private bool waiting = false;
 
     private int day;
+    int[] specialDaysList = { }; // TODO: List days!!!
+
     private float delayTimeStartMin = 3f; // start off at 3f
     private float delayTimeStartMax = 5f; // start off at 5f
     private float delayTimeEndMin = 5f; // end at 5f
@@ -108,6 +110,7 @@ public class LevelManager : MonoBehaviour
     public GameObject mainMenuButton;
     
     public VisibilityChecker visibilityChecker;
+    public GameObject dialogueHead;
 
     void Awake()
     {
@@ -186,6 +189,7 @@ public class LevelManager : MonoBehaviour
         mainMenuButton.SetActive(false);
         playAgainButton.SetActive(false);
         FadeController.Instance.ResetEndingBool();
+        dialogueHead.SetActive(false);
 
         // Player / Camera
         ResetPlayerAndCamera();
@@ -495,6 +499,33 @@ public class LevelManager : MonoBehaviour
     private IEnumerator PlayNextScene()
     {
         canTalkToGuard = false;
+
+        // TODO: [VN] use if needed in the future
+        //characterObject.SetActive(true);
+
+        // TODO: Select dialogue from story (just the next yarn node)
+        int dialogueDay = -1;
+        bool hasDialogueDay = false;
+
+        for (int i = 0; i < specialDaysList.Length; i++)
+        {
+            if (specialDaysList[i] == day)
+            {
+                dialogueDay = day;
+                hasDialogueDay = true;
+                break;
+            }
+        }
+
+        if (hasDialogueDay)
+        {
+            dialogueHead.SetActive(true);
+        }
+        else
+        {
+            dialogueHead.SetActive(false);
+        }
+
         dsAnimator.SetBool("isOpen", true);
         audioManager.PlaySFX(doorSlideSound);
 
@@ -503,11 +534,15 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "Click anywhere to continue.";
         currentTutorialText = tutorialText.text;
 
-        // TODO: [VN] use if needed in the future
-        //characterObject.SetActive(true);
-
-        // TODO: Select dialogue from story (just the next yarn node)
-        dialogueRunner.StartDialogue("Start");
+        if (hasDialogueDay)
+        {
+            string dialogueNode = "day_" + day.ToString();
+            dialogueRunner.StartDialogue(dialogueNode);
+        }
+        else
+        {
+            dialogueRunner.StartDialogue("BaseDialogue");
+        }
     }
 
     void OnDialogueFinished()
