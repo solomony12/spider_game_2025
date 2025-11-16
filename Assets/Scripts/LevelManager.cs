@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Yarn;
 using Yarn.Unity;
+using static System.Net.Mime.MediaTypeNames;
 
 public class LevelManager : MonoBehaviour
 {
@@ -105,6 +106,8 @@ public class LevelManager : MonoBehaviour
     private int foodSkips = 0;
     private int spiderKillSkips = 0;
     public Animator brownWaterAnimator;
+    private bool isSpiderEnding = false;
+    public GameObject fakeDoor;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -190,6 +193,8 @@ public class LevelManager : MonoBehaviour
         playAgainButton.SetActive(false);
         FadeController.Instance.ResetEndingBool();
         dialogueHead.SetActive(false);
+        isSpiderEnding = false;
+        fakeDoor.SetActive(false);
 
         // Player / Camera
         ResetPlayerAndCamera();
@@ -330,6 +335,25 @@ public class LevelManager : MonoBehaviour
                     break;
             }
         }
+
+        // Spider ending hovering
+        if (isSpiderEnding && Physics.Raycast(ray, out hit))
+        {
+            float dist;
+
+            switch (hit.collider.tag)
+            {
+                case "DoorSlider":
+                    dist = Vector3.Distance(playerParent.transform.position, doorSlider.transform.position);
+                    //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance)
+                    {
+                        tutorialText.text = "Press E to leave.";
+                        hovering = true;
+                    }
+                    break;
+            }
+        }
         if (!hovering)
         {
             tutorialText.text = currentTutorialText;
@@ -398,6 +422,26 @@ public class LevelManager : MonoBehaviour
                         }
                         break;
                 }
+            }
+        }
+
+        // Spider ending leave room 
+        if (isSpiderEnding && Input.GetKeyDown(KeyCode.E) && Physics.Raycast(ray, out hit))
+        {
+            float dist;
+
+            switch (hit.collider.tag)
+            {
+                case "DoorSlider":
+                    dist = Vector3.Distance(playerParent.transform.position, doorSlider.transform.position);
+                    //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance)
+                    {
+                        Debug.Log("Leave Room");
+
+                        LeaveRoom();
+                    }
+                    break;
             }
         }
 
@@ -910,9 +954,10 @@ public class LevelManager : MonoBehaviour
             return false;
         }
 
-        else if (spiderKillSkips >= 10) // 10
+        else if (spiderKillSkips >= 1) // 10
         {
-            Debug.Log("Spider Ending");
+            isSpiderEnding = true;
+            SpidersEndingPart1();
             return false;
         }
         else
@@ -972,6 +1017,60 @@ public class LevelManager : MonoBehaviour
 
         StartCoroutine(EndingHelper("Ending 2/4: Starvation"));
         Debug.Log("Starvation Ending");
+    }
+
+    private void SpidersEndingPart1()
+    {
+        // Game over (seem like it's the next day)
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+
+        tutorialText.text = "The door was unlocked?";
+        currentTutorialText = tutorialText.text;
+    }
+
+    private void LeaveRoom()
+    {
+        // Disable the CharacterController temporarily
+        CharacterController cc = playerParent.GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = false;
+
+        // Teleport player
+        playerParent.transform.position = new Vector3(7.07f, 3.84f, -1.4f);
+
+        // Re-enable CharacterController
+        if (cc != null)
+            cc.enabled = true;
+
+        fakeDoor.SetActive(true);
+
+        tutorialText.text = "...";
+        currentTutorialText = tutorialText.text;
+
+        StartCoroutine(SpidersEndingPart2());
+    }
+
+    private IEnumerator SpidersEndingPart2()
+    {
+
+        // but you can't do anything (except ball)
+        yield return new WaitForSeconds(3f);
+
+        // TODO: SPIDERS ATTACK FROM BOTH SIDES
+
+        // SUDDEN BLACKNESS
+        // show ending text
+        ShowText("Ending 3/4: Spiders");
+        audioManager.PlaySFX(dayBoomSound, 4f);
+
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        mainMenuButton.SetActive(true);
+        playAgainButton.SetActive(true);
+
+        Debug.Log("Spiders Ending");
     }
 
     private IEnumerator ResidentPrisonerEnding()
