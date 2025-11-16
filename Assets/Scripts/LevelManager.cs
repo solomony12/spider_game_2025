@@ -73,9 +73,10 @@ public class LevelManager : MonoBehaviour
     private int spidersToKill = 1;
     private int spidersKilledToday = 0;
     private bool waiting = false;
+    bool hasDialogueDay = false;
 
     private int day;
-    int[] specialDaysList = { }; // TODO: List days!!!
+    int[] specialDaysList = { 4, 5, 8, 10, 12, 14, 17, 19, 21, 23, 25 };
 
     private float delayTimeStartMin = 3f; // start off at 3f
     private float delayTimeStartMax = 5f; // start off at 5f
@@ -558,7 +559,6 @@ public class LevelManager : MonoBehaviour
 
         // TODO: Select dialogue from story (just the next yarn node)
         int dialogueDay = -1;
-        bool hasDialogueDay = false;
 
         for (int i = 0; i < specialDaysList.Length; i++)
         {
@@ -611,11 +611,19 @@ public class LevelManager : MonoBehaviour
     private IEnumerator WrapUpTalking()
     {
         // delay a bit
-        waiting = true;
-        tutorialText.text = waitText;
-        currentTutorialText = tutorialText.text;
-        yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
-        waiting = false;
+        if (!hasDialogueDay)
+        {
+            waiting = true;
+            tutorialText.text = waitText;
+            currentTutorialText = tutorialText.text;
+            yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
+            waiting = false;
+        }
+        else
+        {
+            if (dialogueHead.activeSelf)
+                dialogueHead.SetActive(false);
+        }
 
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
 
@@ -982,7 +990,7 @@ public class LevelManager : MonoBehaviour
             return false;
         }
 
-        else if (spiderKillSkips >= 1) // 10
+        else if (spiderKillSkips >= 10) // 10
         {
             isSpiderEnding = true;
             SpidersEndingPart1();
