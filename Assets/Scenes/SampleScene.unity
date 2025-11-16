@@ -3945,6 +3945,7 @@ MonoBehaviour:
   doorSlideSound: {fileID: 8300000, guid: 3532f001ee147b243ae5c60fb5a14c3b, type: 3}
   toiletFlushSound: {fileID: 8300000, guid: 765dbd433f3a53e43bc20131fb76e4da, type: 3}
   dayBoomSound: {fileID: 8300000, guid: fbc1b2aaeb05d9d40afa353b5b8ffe85, type: 3}
+  eatSound: {fileID: 8300000, guid: 52f3c90923e8e424faeff621da866f6b, type: 3}
   playerMovement: {fileID: 1814168987}
   webs:
   - {fileID: 1157656651}

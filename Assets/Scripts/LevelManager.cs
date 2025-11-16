@@ -71,6 +71,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip doorSlideSound;
     public AudioClip toiletFlushSound;
     public AudioClip dayBoomSound;
+    public AudioClip eatSound;
 
     public PlayerMovement playerMovement;
 
@@ -375,6 +376,7 @@ public class LevelManager : MonoBehaviour
     private void EatFood()
     {
         // TODO: eat
+        audioManager.PlaySFX(eatSound);
         slop.GetComponent<MeshRenderer>().enabled = false;
 
         StartCoroutine(foodFinish());
