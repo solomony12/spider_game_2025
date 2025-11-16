@@ -4693,6 +4693,8 @@ MonoBehaviour:
   dayBoomSound: {fileID: 8300000, guid: fbc1b2aaeb05d9d40afa353b5b8ffe85, type: 3}
   eatSound: {fileID: 8300000, guid: 52f3c90923e8e424faeff621da866f6b, type: 3}
   scarySound: {fileID: 8300000, guid: b347835c99eec284abc809972575e6b9, type: 3}
+  hummingSound: {fileID: 8300000, guid: 24ecf0a2532873447822b1b6ffab03b2, type: 3}
+  hallwaySound: {fileID: 8300000, guid: 119f89b51413c5245ac06c23509ee262, type: 3}
   playerMovement: {fileID: 1814168987}
   webs:
   - {fileID: 1157656651}

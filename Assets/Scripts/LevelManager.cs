@@ -97,6 +97,8 @@ public class LevelManager : MonoBehaviour
     public AudioClip dayBoomSound;
     public AudioClip eatSound;
     public AudioClip scarySound;
+    public AudioClip hummingSound;
+    public AudioClip hallwaySound;
 
     public PlayerMovement playerMovement;
 
@@ -202,6 +204,9 @@ public class LevelManager : MonoBehaviour
         isEscapeEnding = false;
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
+
+        // Music
+        audioManager.PlayMusic(hummingSound, 0.798f);
 
         // Player / Camera
         ResetPlayerAndCamera();
@@ -1075,6 +1080,7 @@ public class LevelManager : MonoBehaviour
 
     private void LeaveRoomSpider()
     {
+        audioManager.PlayMusic(hallwaySound, 0.698f);
         headSpider.SetActive(true);
 
         // Disable the CharacterController temporarily
@@ -1152,6 +1158,8 @@ public class LevelManager : MonoBehaviour
 
     private void LeaveRoomEscape()
     {
+        audioManager.PlayMusic(hallwaySound, 0.698f);
+
         // Disable the CharacterController temporarily
         CharacterController cc = playerParent.GetComponent<CharacterController>();
         if (cc != null)
