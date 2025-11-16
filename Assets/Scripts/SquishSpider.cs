@@ -19,6 +19,7 @@ public class SquishSpider : MonoBehaviour
 
     public AudioManager audioManager;
     public AudioClip[] squishSounds;
+    public AudioClip missSound;
 
     void Update()
     {
@@ -73,7 +74,10 @@ public class SquishSpider : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                audioManager.PlaySFX(missSound);
+            }
         }
-
     }
 }

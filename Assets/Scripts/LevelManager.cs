@@ -60,6 +60,11 @@ public class LevelManager : MonoBehaviour
     public DynamicLightingController lightingController;
     public ShrinkingRoom roomShrinker;
 
+    public AudioManager audioManager;
+    public AudioClip trayScrapeSound;
+    public AudioClip doorSlideSound;
+    public AudioClip toiletFlushSound;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -272,6 +277,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator PlayNextScene()
     {
         dsAnimator.SetBool("isOpen", true);
+        audioManager.PlaySFX(doorSlideSound);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -298,6 +304,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator WrapUpTalking()
     {
         dsAnimator.SetBool("isOpen", false);
+        audioManager.PlaySFX(doorSlideSound);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -313,6 +320,7 @@ public class LevelManager : MonoBehaviour
         slop.GetComponent<MeshRenderer>().enabled = true;
 
         foodAnimator.SetBool("isMealTime", true);
+        audioManager.PlaySFX(trayScrapeSound);
         yield return new WaitForSeconds(1f);
         canUseFood = true;
 
@@ -331,6 +339,7 @@ public class LevelManager : MonoBehaviour
     {
         canUseFood = false;
         foodAnimator.SetBool("isMealTime", false);
+        audioManager.PlaySFX(trayScrapeSound);
 
         yield return new WaitForSeconds(1f);
 
@@ -431,7 +440,7 @@ public class LevelManager : MonoBehaviour
     private void UseToiletStart()
     {
         // TODO: use toilet
-
+        audioManager.PlaySFX(toiletFlushSound);
         UseToiletFinish();
     }
 
