@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Yarn;
@@ -103,6 +104,9 @@ public class LevelManager : MonoBehaviour
     private int spiderKillSkips = 0;
     public Animator brownWaterAnimator;
 
+    public GameObject playAgainButton;
+    public GameObject mainMenuButton;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -126,10 +130,16 @@ public class LevelManager : MonoBehaviour
         LevelManage();
     }
 
-    private void PlayAgain()
+    public void PlayAgain()
     {
         ResetGame();
         LevelManage();
+    }
+
+    public void ReturnToMain()
+    {
+        FadeController.Instance.ResetEndingBool();
+        SceneManager.LoadScene("TitleScene");
     }
 
     public void ResetGame()
@@ -169,6 +179,11 @@ public class LevelManager : MonoBehaviour
         smackSpiderText.SetActive(false);
         headerText.SetActive(false);
         blackScreen.SetActive(false);
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
+        mainMenuButton.SetActive(false);
+        playAgainButton.SetActive(false);
+        FadeController.Instance.ResetEndingBool();
 
         // Player / Camera
         ResetPlayerAndCamera();
@@ -183,6 +198,7 @@ public class LevelManager : MonoBehaviour
         dsAnimator.SetBool("isOpen", false);
         foodAnimator.SetBool("isMealTime", false);
         brownWaterAnimator.ResetTrigger("FlowBrownWater");
+        brownWaterAnimator.Play("BrownWaterLow", 0, 0f);
 
         // Environment
         RenderSettings.fog = false;
@@ -810,7 +826,7 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (bathroomSkips >= 5) // 5
+        if (bathroomSkips >= 1) // 5
         {
             StartCoroutine(BathroomEnding());
             return false;
@@ -857,14 +873,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.666f);
 
-        // fade to black
-        FadeController.Instance.FadeToBlack();
-
-        yield return new WaitForSeconds(2f);
-        // show Constipation ending text
-        ShowText("Ending 1/4: Constipation");
-        audioManager.PlaySFX(dayBoomSound, 4f);
-
+        StartCoroutine(EndingHelper("Ending 1/4: Constipation"));
         Debug.Log("Constipation Ending");
     }
 
@@ -889,14 +898,24 @@ public class LevelManager : MonoBehaviour
 
         // TODO:
 
+        StartCoroutine(EndingHelper("Ending 2/4: Starvation"));
+        Debug.Log("Starvation Ending");
+    }
+
+    private IEnumerator EndingHelper(string text)
+    {
         // fade to black
         FadeController.Instance.FadeToBlack();
 
         yield return new WaitForSeconds(2f);
         // show ending text
-        ShowText("Ending 2/4: Starvation");
+        ShowText(text);
         audioManager.PlaySFX(dayBoomSound, 4f);
 
-        Debug.Log("Starvation Ending");
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        mainMenuButton.SetActive(true);
+        playAgainButton.SetActive(true);
+
     }
 }

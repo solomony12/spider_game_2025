@@ -45,4 +45,9 @@ public class FadeController : MonoBehaviour
         isEnding = true;
         animator.SetTrigger("FadeIn");
     }
+
+    public void ResetEndingBool()
+    {
+        isEnding = false;
+    }
 }
