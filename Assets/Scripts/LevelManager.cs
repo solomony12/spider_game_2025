@@ -45,7 +45,6 @@ public class LevelManager : MonoBehaviour
     private string currentTutorialText;
 
     private bool wPressed = false;
-    private bool aPressed = false;
     private bool dPressed = false;
     private bool dayOneTutorialFinished = false;
 
@@ -72,6 +71,8 @@ public class LevelManager : MonoBehaviour
     public AudioClip doorSlideSound;
     public AudioClip toiletFlushSound;
     public AudioClip dayBoomSound;
+
+    public PlayerMovement playerMovement;
 
     void Awake()
     {
@@ -212,6 +213,8 @@ public class LevelManager : MonoBehaviour
                             // Reset Player
                             playerParent.transform.position = new Vector3(-1.63f, 3.84f, 0.07f);
                             playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+                            // Reset camera
+                            playerMovement.ResetCameraRotation();
 
                             // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
@@ -252,11 +255,10 @@ public class LevelManager : MonoBehaviour
         if (day == 1 && !dayOneTutorialFinished)
         {
             if (Input.GetKeyDown(KeyCode.W)) wPressed = true;
-            if (Input.GetKeyDown(KeyCode.A)) aPressed = true;
             if (Input.GetKeyDown(KeyCode.D)) dPressed = true;
 
             // Check if all have been pressed at least once
-            if (wPressed && aPressed && dPressed)
+            if (wPressed && dPressed)
             {
                 tutorialText.text = toiletText;
                 currentTutorialText = tutorialText.text;

@@ -3585,6 +3585,7 @@ MonoBehaviour:
   doorSlideSound: {fileID: 8300000, guid: 3532f001ee147b243ae5c60fb5a14c3b, type: 3}
   toiletFlushSound: {fileID: 8300000, guid: 765dbd433f3a53e43bc20131fb76e4da, type: 3}
   dayBoomSound: {fileID: 8300000, guid: fbc1b2aaeb05d9d40afa353b5b8ffe85, type: 3}
+  playerMovement: {fileID: 1814168987}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0
@@ -6383,8 +6384,8 @@ SceneRoots:
   - {fileID: 772142406}
   - {fileID: 1924505995}
   - {fileID: 344106955}
-  - {fileID: 1207498581}
   - {fileID: 1913992594}
   - {fileID: 1392882286}
   - {fileID: 1355355897653159667}
   - {fileID: 909443576704001575}
+  - {fileID: 1207498581}

@@ -60,4 +60,15 @@ public class PlayerMovement : MonoBehaviour
         playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
     }
+
+    public void ResetCameraRotation(float pitch = -0f, float yaw = 90f)
+    {
+        // Reset player yaw
+        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
+        // Reset camera pitch
+        xRotation = pitch;
+        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+    }
+
 }
