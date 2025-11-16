@@ -5807,7 +5807,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5975,6 +5975,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 651020b054753654d86c89de641bf229, type: 3}
   missSound: {fileID: 8300000, guid: fc03a87d9ca147c4a92786ed3cfb32ae, type: 3}
   sporkBloodiness: {fileID: 1135175347}
+  levelManager: {fileID: 1207498580}
 --- !u!114 &1814168993
 MonoBehaviour:
   m_ObjectHideFlags: 0

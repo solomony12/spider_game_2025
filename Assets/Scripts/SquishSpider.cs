@@ -25,6 +25,8 @@ public class SquishSpider : MonoBehaviour
     public SporkBloodiness sporkBloodiness;
     private int spidersKilled;
 
+    public LevelManager levelManager;
+
     private void Start()
     {
         spidersKilled = 0;
@@ -55,7 +57,7 @@ public class SquishSpider : MonoBehaviour
                             float distance = Vector3.Distance(playerParent.transform.position, clickedObject.transform.position);
                             float maxClickDistance = 5f;
 
-                            if (distance <= maxClickDistance)
+                            if (distance <= maxClickDistance && levelManager.getIsSpiderTaskOn())
                             {
                                 // Spawn crushed spider at the same position and rotation
                                 GameObject crushedSpider = Instantiate(
@@ -78,11 +80,16 @@ public class SquishSpider : MonoBehaviour
                                 AudioClip clip = squishSounds[index];
                                 audioManager.PlaySFX(clip, 0.4f);
                                 spidersKilled++;
+                                levelManager.SpiderTaskCounter();
                                 CheckBloodLevels();
 
                                 OnSpiderSquished?.Invoke();
 
                                 Debug.Log($"Squished spider clone ID {kvp.Key} of {baseSpider.name}");
+                            }
+                            else
+                            {
+                                audioManager.PlaySFX(missSound);
                             }
 
 

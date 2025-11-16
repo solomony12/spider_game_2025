@@ -55,11 +55,18 @@ public class LevelManager : MonoBehaviour
     private bool canUseBed = false;
     private bool canUseFood = false;
     private bool canTalkToGuard = false;
+    private bool canKillSpidersTask = false;
+    private int spidersToKill = 1;
+    private int spidersKilledToday = 0;
     private bool waiting = false;
 
     private int day;
-    private float delayTimeMin = 5f;
-    private float delayTimeMax = 10f;
+    private float delayTimeStartMin = 3f; // start off at 3f
+    private float delayTimeStartMax = 5f; // start off at 5f
+    private float delayTimeEndMin = 5f; // end at 5f
+    private float delayTimeEndMax = 8f; // end at 8f
+    private float delayTimeMin;
+    private float delayTimeMax;
 
     public GameObject spork;
 
@@ -82,6 +89,8 @@ public class LevelManager : MonoBehaviour
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
         characterObject = GameObject.FindWithTag("VN_Char");
+        delayTimeMin = delayTimeStartMin;
+        delayTimeMax = delayTimeStartMax;
     }
 
     private void Start()
@@ -96,7 +105,7 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "WASD to move. | Mouse to look around.";
         currentTutorialText = tutorialText.text;
         spork.GetComponent<MeshRenderer>().enabled = false;
-
+ 
         foreach (GameObject web in webs)
         {
             web.SetActive(false);
@@ -120,6 +129,7 @@ public class LevelManager : MonoBehaviour
     {
         if (day == 3 && smackSpiderText.activeSelf)
         {
+            canKillSpidersTask = false;
             smackSpiderText.SetActive(false);
 
             tutorialText.text = toiletText;
@@ -399,8 +409,62 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        canTalkToGuard = true;
         food.GetComponent<MeshRenderer>().enabled = false;
+
+        KillSpidersTask();
+    }
+
+    private void KillSpidersTask()
+    {
+        // Not this task until day 4
+        if (day < 4)
+        {
+            StartCoroutine(FinishKillingSpidersTask());
+            return;
+        }
+
+        spidersKilledToday = 0;
+        spidersToKill = Math.Min(6, day-3); // no more than 6 a day;
+
+        tutorialText.text = "Kill " + spidersToKill + " spiders.";
+        currentTutorialText = tutorialText.text;
+
+        canKillSpidersTask = true;
+    }
+
+    public void SpiderTaskCounter()
+    {
+        if (canKillSpidersTask && !waiting)
+        {
+            spidersKilledToday++;
+            if (spidersKilledToday >= spidersToKill)
+            {
+                canKillSpidersTask = false;
+                StartCoroutine(FinishKillingSpidersTask());
+            }
+        }
+    }
+
+    public bool getIsSpiderTaskOn()
+    {
+        return canKillSpidersTask;
+    }
+
+    private IEnumerator FinishKillingSpidersTask()
+    {
+        // start on day 4
+        if (day >= 4)
+        {
+            // delay a bit
+            waiting = true;
+            tutorialText.text = waitText;
+            currentTutorialText = tutorialText.text;
+            yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
+            waiting = false;
+        }
+
+
+        canTalkToGuard = true;
 
         tutorialText.text = talkText;
         currentTutorialText = tutorialText.text;
@@ -415,6 +479,10 @@ public class LevelManager : MonoBehaviour
         playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
         // Reset camera
         playerMovement.ResetCameraRotation();
+
+        // Increase time slightly
+        delayTimeMin = Math.Min(delayTimeMin + 0.1f, delayTimeEndMin);
+        delayTimeMax = Math.Min(delayTimeMax + 0.1f, delayTimeEndMax);
 
         day++;
         Debug.Log($"Day {day} begins!");
@@ -461,6 +529,7 @@ public class LevelManager : MonoBehaviour
                 tutorialText.text = "Kill a spider.";
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
+                canKillSpidersTask = true;
                 break;
             case 4:
                 webs[webActivateIndex++].SetActive(true); // web 0 show
