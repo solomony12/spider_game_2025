@@ -545,7 +545,8 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             LevelManage();
-        }*/
+        }
+        */
     }
 
     [YarnCommand("character")]
