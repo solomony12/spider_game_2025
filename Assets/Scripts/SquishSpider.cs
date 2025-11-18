@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -26,6 +27,9 @@ public class SquishSpider : MonoBehaviour
     private int spidersKilled;
 
     public LevelManager levelManager;
+
+    private List<GameObject> crushedSpiders = new List<GameObject>();
+    private List<GameObject> splatterList = new List<GameObject>();
 
     private void Start()
     {
@@ -71,6 +75,9 @@ public class SquishSpider : MonoBehaviour
                                     clickedObject.transform.position,
                                     splatterRotation
                                 );
+
+                                crushedSpiders.Add(crushedSpider);
+                                splatterList.Add(splatter);
 
                                 // Remove the original spider clone
                                 Destroy(clickedObject);
@@ -133,5 +140,20 @@ public class SquishSpider : MonoBehaviour
     public int getSpidersKilled()
     {
         return spidersKilled;
+    }
+
+    public void ClearCrushedSpiders()
+    {
+        foreach (GameObject spider in crushedSpiders)
+        {
+            Destroy(spider);
+        }
+        crushedSpiders.Clear();
+
+        foreach (GameObject splatter in splatterList)
+        {
+            Destroy(splatter);
+        }
+        splatterList.Clear();
     }
 }

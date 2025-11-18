@@ -220,6 +220,7 @@ public class LevelManager : MonoBehaviour
         spiderManager.DestroyAllClones();
         spiderManager.HideBaseSpiders();
         stillSpider.SetActive(true);
+        squishSpiderScript.ClearCrushedSpiders();
 
         // Animators
         dsAnimator.SetBool("isOpen", false);
@@ -544,8 +545,8 @@ public class LevelManager : MonoBehaviour
         }
 
         
-        /*// TEMP DELETE TODO
-        if (Input.GetKeyDown(KeyCode.M))
+        // TEMP DELETE TODO
+        /*if (Input.GetKeyDown(KeyCode.M))
         {
             LevelManage();
         }
