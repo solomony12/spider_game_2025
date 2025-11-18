@@ -555,10 +555,18 @@ public class LevelManager : MonoBehaviour
         {
             LevelManage();
         }
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             isSpiderEnding = true;
             SpidersEndingPart1();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            StartCoroutine(BathroomEnding());
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            StartCoroutine(StarvationEnding());
         }
 #endif
 
