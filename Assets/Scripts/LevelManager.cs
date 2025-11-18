@@ -122,6 +122,8 @@ public class LevelManager : MonoBehaviour
     public VisibilityChecker visibilityChecker;
     public GameObject dialogueHead;
 
+    public SquishSpider squishSpiderScript;
+
     void Awake()
     {
         dialogueRunner.onDialogueComplete.AddListener(OnDialogueFinished);
@@ -204,6 +206,7 @@ public class LevelManager : MonoBehaviour
         isEscapeEnding = false;
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
+        squishSpiderScript.ResetSporkMaterial();
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -540,13 +543,18 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        /*
-        // TEMP DELETE TODO
+        
+        /*// TEMP DELETE TODO
         if (Input.GetKeyDown(KeyCode.M))
         {
             LevelManage();
         }
-        */
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            isSpiderEnding = true;
+            SpidersEndingPart1();
+        }*/
+        
     }
 
     [YarnCommand("character")]

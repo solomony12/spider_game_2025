@@ -4710,6 +4710,7 @@ MonoBehaviour:
   mainMenuButton: {fileID: 2119696314}
   visibilityChecker: {fileID: 1814168994}
   dialogueHead: {fileID: 975763004}
+  squishSpiderScript: {fileID: 1814168992}
 --- !u!4 &1207498581
 Transform:
   m_ObjectHideFlags: 0

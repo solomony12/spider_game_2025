@@ -125,6 +125,11 @@ public class SquishSpider : MonoBehaviour
         }
     }
 
+    public void ResetSporkMaterial()
+    {
+        sporkBloodiness.SelectMaterial(0);
+    }
+
     public int getSpidersKilled()
     {
         return spidersKilled;
