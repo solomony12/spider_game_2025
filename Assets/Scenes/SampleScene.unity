@@ -1646,7 +1646,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1661,7 +1661,7 @@ Canvas:
   m_GameObject: {fileID: 344106951}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 330585545}
   m_PlaneDistance: 1
   m_PixelPerfect: 0
@@ -7485,6 +7485,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355361765340444347, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2958262985454349539, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -7598,8 +7654,12 @@ PrefabInstance:
       value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 3443573992243610163, guid: 52571f68872914e24837210513edea1d, type: 3}
-      propertyPath: m_MatchWidthOrHeight
+      propertyPath: m_PresetInfoIsWorld
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3443573992243610163, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7262066351540048079, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_Name
@@ -7679,7 +7739,7 @@ PrefabInstance:
       objectReference: {fileID: 330585545}
     - target: {fileID: 8150228081625468094, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_RenderMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8150228081625468094, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_PlaneDistance
