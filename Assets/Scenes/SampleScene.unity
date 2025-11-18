@@ -7145,9 +7145,10 @@ GameObject:
   - component: {fileID: 1814168992}
   - component: {fileID: 1814168993}
   - component: {fileID: 1814168994}
+  - component: {fileID: 1814168995}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7353,6 +7354,19 @@ MonoBehaviour:
   levelManager: {fileID: 1207498580}
   audioManager: {fileID: 1040677894}
   scary1: {fileID: 8300000, guid: b347835c99eec284abc809972575e6b9, type: 3}
+--- !u!114 &1814168995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814168985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 144a87a70a950be4781f83ff6907384f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPush
+  pushForce: 3
 --- !u!1 &1871006371
 GameObject:
   m_ObjectHideFlags: 0
