@@ -55,7 +55,7 @@ public class SquishSpider : MonoBehaviour
 
                     foreach (var kvp in clones)
                     {
-                        if (kvp.Value == clickedObject)
+                        if (kvp.Value == clickedObject && levelManager.PlaySporkSounds())
                         {
                             // Check distance to player
                             float distance = Vector3.Distance(playerParent.transform.position, clickedObject.transform.position);

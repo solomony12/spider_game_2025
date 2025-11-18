@@ -86,6 +86,7 @@ public class LevelManager : MonoBehaviour
     private float delayTimeMax;
 
     public GameObject spork;
+    private bool sporkIsVisible = false;
 
     public DynamicLightingController lightingController;
     public ShrinkingRoom roomShrinker;
@@ -208,7 +209,6 @@ public class LevelManager : MonoBehaviour
         isEscapeEnding = false;
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
-        squishSpiderScript.ResetSporkMaterial();
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -217,6 +217,8 @@ public class LevelManager : MonoBehaviour
         ResetPlayerAndCamera();
         spork.SetActive(true);
         spork.GetComponent<MeshRenderer>().enabled = false;
+        squishSpiderScript.ResetSporkMaterial();
+        sporkIsVisible = false;
 
         // Spider manager
         spiderManager.DestroyAllClones();
@@ -863,6 +865,7 @@ public class LevelManager : MonoBehaviour
                 CloneSpiders(1); // 6 total
                 smackSpiderText.SetActive(true);
                 spork.GetComponent<MeshRenderer>().enabled = true;
+                sporkIsVisible = true;
                 tutorialText.text = "Kill a spider.";
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
@@ -1042,6 +1045,7 @@ public class LevelManager : MonoBehaviour
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
         spork.SetActive(false);
+        sporkIsVisible = false;
 
         tutorialText.text = "You shouldn't have held it in.";
         currentTutorialText = tutorialText.text;
@@ -1072,6 +1076,7 @@ public class LevelManager : MonoBehaviour
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
         spork.SetActive(false);
+        sporkIsVisible = false;
 
         tutorialText.text = "Your stomach yearns for food.";
         currentTutorialText = tutorialText.text;
@@ -1097,6 +1102,7 @@ public class LevelManager : MonoBehaviour
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
         spork.SetActive(false);
+        sporkIsVisible = false;
 
         tutorialText.text = "The door is unlocked?";
         currentTutorialText = tutorialText.text;
@@ -1155,6 +1161,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator ResidentPrisonerEnding()
     {
         spork.SetActive(false);
+        sporkIsVisible = false;
 
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
@@ -1175,6 +1182,7 @@ public class LevelManager : MonoBehaviour
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
         spork.SetActive(false);
+        sporkIsVisible = false;
 
         tutorialText.text = "The door is unlocked?";
         currentTutorialText = tutorialText.text;
@@ -1230,5 +1238,10 @@ public class LevelManager : MonoBehaviour
         mainMenuButton.SetActive(true);
         playAgainButton.SetActive(true);
 
+    }
+
+    public bool PlaySporkSounds()
+    {
+        return sporkIsVisible;
     }
 }
