@@ -115,6 +115,7 @@ public class LevelManager : MonoBehaviour
     public GameObject fakeDoor;
     public GameObject headSpider;
     public Animator headSpiderAnimator;
+    private bool interactWithSlider = true;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -179,6 +180,7 @@ public class LevelManager : MonoBehaviour
         canUseFood = false;
         canTalkToGuard = false;
         canKillSpidersTask = false;
+        interactWithSlider = true;
 
         // Spider counters
         spidersToKill = 1;
@@ -356,7 +358,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // Spider/escape ending hovering
-        if ((isSpiderEnding || isEscapeEnding) && Physics.Raycast(ray, out hit))
+        if ((isSpiderEnding || isEscapeEnding) && Physics.Raycast(ray, out hit) && interactWithSlider)
         {
             float dist;
 
@@ -445,7 +447,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // Spider/escape ending leave room 
-        if ((isSpiderEnding || isEscapeEnding) && Input.GetKeyDown(KeyCode.E) && Physics.Raycast(ray, out hit))
+        if ((isSpiderEnding || isEscapeEnding) && Input.GetKeyDown(KeyCode.E) && Physics.Raycast(ray, out hit) && interactWithSlider)
         {
             float dist;
 
@@ -460,10 +462,12 @@ public class LevelManager : MonoBehaviour
 
                         if (isSpiderEnding)
                         {
+                            interactWithSlider = false;
                             LeaveRoomSpider();
                         }
                         else if (isEscapeEnding)
                         {
+                            interactWithSlider = false;
                             LeaveRoomEscape();
                         }
                     }
@@ -544,9 +548,10 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        
+
+#if UNITY_EDITOR
         // TEMP DELETE TODO
-        /*if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             LevelManage();
         }
@@ -554,8 +559,9 @@ public class LevelManager : MonoBehaviour
         {
             isSpiderEnding = true;
             SpidersEndingPart1();
-        }*/
-        
+        }
+#endif
+
     }
 
     [YarnCommand("character")]
