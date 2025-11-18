@@ -8,7 +8,7 @@ public class BouncyBallSpawner : MonoBehaviour
     public float throwForce = 10f;
     public float spawnDistance = 2f;
 
-    private GameObject spawnedBall;
+    private static GameObject spawnedBall;
 
     public LevelManager levelManager;
 
@@ -74,7 +74,7 @@ public class BouncyBallSpawner : MonoBehaviour
         rb.linearVelocity = cam.transform.forward * throwForce;
     }
 
-    void DestroyBall()
+    public static void DestroyBall()
     {
         if (spawnedBall != null)
         {

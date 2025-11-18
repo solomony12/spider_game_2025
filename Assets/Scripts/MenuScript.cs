@@ -3,19 +3,25 @@ using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour
 {
+    private bool canPlay = true;
 
-    private bool notStarting = true;
-
-    private void Start()
+    private void OnEnable()
     {
-        notStarting = true;
+        canPlay = true;
     }
+
     public void PlayGame()
     {
-        if (notStarting)
+        if (canPlay)
         {
-            notStarting = false;
+            FadeController.Instance.ResetTriggers();
+            canPlay = false;
             FadeController.Instance.FadeToScene("SampleScene");
+            Debug.Log("PlayGame triggered.");
+        }
+        else
+        {
+            Debug.Log("PlayGame already triggered. Ignoring.");
         }
     }
 

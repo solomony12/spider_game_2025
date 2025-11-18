@@ -161,11 +161,16 @@ public class LevelManager : MonoBehaviour
         notStarting = true;
     }
 
+    // Main Menu
     public void ReturnToMain()
     {
         if (notStarting)
         {
+            ResetGame();
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
             FadeController.Instance.ResetEndingBool();
+            FadeController.Instance.ResetTriggers();
             SceneManager.LoadScene("TitleScene");
         }
         notStarting = true;
@@ -208,6 +213,7 @@ public class LevelManager : MonoBehaviour
         notDoTaskText.SetActive(false);
         smackSpiderText.SetActive(false);
         headerText.SetActive(false);
+        blackScreen.GetComponent<UnityEngine.UI.Image>().color = new Color(0f, 0f, 0f, 1f);
         blackScreen.SetActive(false);
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
@@ -229,6 +235,7 @@ public class LevelManager : MonoBehaviour
         spork.GetComponent<MeshRenderer>().enabled = false;
         squishSpiderScript.ResetSporkMaterial();
         sporkIsVisible = false;
+        BouncyBallSpawner.DestroyBall();
 
         // Spider manager
         spiderManager.DestroyAllClones();
@@ -248,6 +255,7 @@ public class LevelManager : MonoBehaviour
         // Environment
         RenderSettings.fog = false;
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Morning);
+        Time.timeScale = 1f;
 
         // Deactivate webs
         foreach (GameObject web in webs)
@@ -560,10 +568,15 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ShowMenu();
+        }
+
 
 #if UNITY_EDITOR
-        // TEMP DELETE TODO
-        if (Input.GetKeyDown(KeyCode.M))
+            // TEMP DELETE TODO
+            if (Input.GetKeyDown(KeyCode.M))
         {
             LevelManage();
         }
@@ -1263,5 +1276,29 @@ public class LevelManager : MonoBehaviour
     public bool PlaySporkSounds()
     {
         return sporkIsVisible;
+    }
+
+    private void ShowMenu()
+    {
+        blackScreen.SetActive(!blackScreen.activeSelf);
+        playAgainButton.SetActive(!playAgainButton.activeSelf);
+        mainMenuButton.SetActive(!mainMenuButton.activeSelf);
+
+        if (playAgainButton.activeSelf)
+        {
+            blackScreen.GetComponent<UnityEngine.UI.Image>().color = new Color(0f, 0f, 0f, 0.5f);
+            Time.timeScale = 0f;
+            ShowText("Paused");
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+        }
+        else
+        {
+            blackScreen.GetComponent<UnityEngine.UI.Image>().color = new Color(0f, 0f, 0f, 1f);
+            Time.timeScale = 1f;
+            headerText.SetActive(false);
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = false;
+        }
     }
 }

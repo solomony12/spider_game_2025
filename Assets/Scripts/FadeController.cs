@@ -25,6 +25,7 @@ public class FadeController : MonoBehaviour
 
     public void FadeToScene(string sceneName)
     {
+        Debug.Log("hello there");
         nextScene = sceneName;
         animator.SetTrigger("FadeIn");
     }
@@ -49,5 +50,12 @@ public class FadeController : MonoBehaviour
     public void ResetEndingBool()
     {
         isEnding = false;
+    }
+
+    public void ResetTriggers()
+    {
+        animator.Play("Clear");
+        animator.ResetTrigger("FadeIn");
+        animator.SetTrigger("FadeOut");
     }
 }
