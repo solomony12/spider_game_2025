@@ -731,6 +731,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         food.GetComponent<MeshRenderer>().enabled = false;
+        slop.GetComponent<MeshRenderer>().enabled = false;
 
         KillSpidersTask();
     }
