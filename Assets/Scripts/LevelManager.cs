@@ -639,6 +639,9 @@ public class LevelManager : MonoBehaviour
 
         if (hasDialogueDay)
         {
+            spork.SetActive(false);
+            sporkIsVisible = false;
+
             string dialogueNode = "day_" + day.ToString();
             dialogueRunner.StartDialogue(dialogueNode);
         }
@@ -654,6 +657,12 @@ public class LevelManager : MonoBehaviour
         // TODO: [VN] use if needed in the future
         //characterObject.SetActive(false);
         canTalkToGuard = false;
+
+        if (!spork.activeSelf)
+        {
+            spork.SetActive(true);
+            sporkIsVisible = true;
+        }
 
         StartCoroutine(WrapUpTalking());
     }
