@@ -4,7 +4,7 @@ public class VisibilityChecker : MonoBehaviour
 {
     public Camera mainCamera;
     public GameObject target; // Head
-    public Vector2 offset = new Vector2(0.15f, 0.15f); // Offset as fraction of screen (15% margin)
+    public Vector2 offset = new Vector2(0.30f, 0.30f); // Offset as fraction of screen (30% margin)
     public Animator animator;
     private bool showingHead = false;
 
