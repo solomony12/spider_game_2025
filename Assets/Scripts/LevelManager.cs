@@ -120,6 +120,7 @@ public class LevelManager : MonoBehaviour
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
+    private bool notStarting = true;
     
     public VisibilityChecker visibilityChecker;
     public GameObject dialogueHead;
@@ -151,14 +152,23 @@ public class LevelManager : MonoBehaviour
 
     public void PlayAgain()
     {
-        ResetGame();
-        LevelManage();
+        if (notStarting)
+        {
+            notStarting = false;
+            ResetGame();
+            LevelManage();
+        }
+        notStarting = true;
     }
 
     public void ReturnToMain()
     {
-        FadeController.Instance.ResetEndingBool();
-        SceneManager.LoadScene("TitleScene");
+        if (notStarting)
+        {
+            FadeController.Instance.ResetEndingBool();
+            SceneManager.LoadScene("TitleScene");
+        }
+        notStarting = true;
     }
 
     public void ResetGame()
