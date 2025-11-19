@@ -108,6 +108,7 @@ public class LevelManager : MonoBehaviour
     public GameObject[] webs;
     private int webActivateIndex = 0;
 
+    // Endings stuff
     public GameObject notDoTaskText;
     private int bathroomSkips = 0;
     private int foodSkips = 0;
@@ -119,11 +120,15 @@ public class LevelManager : MonoBehaviour
     public GameObject headSpider;
     public Animator headSpiderAnimator;
     private bool interactWithSlider = true;
+    private bool stayedInBedConsecutively = false;
+    private int stayedInBedCount = 0;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     private bool notStarting = true;
-    
+    private bool gameReachedEnding = false;
+
+
     public VisibilityChecker visibilityChecker;
     public GameObject dialogueHead;
 
@@ -181,6 +186,8 @@ public class LevelManager : MonoBehaviour
 
     public void ResetGame()
     {
+        StopAllCoroutines();
+
         // Day / counters
         day = 0;
         delayTimeMin = delayTimeStartMin;
@@ -232,6 +239,7 @@ public class LevelManager : MonoBehaviour
         isEscapeEnding = false;
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
+        gameReachedEnding = false;
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -243,6 +251,10 @@ public class LevelManager : MonoBehaviour
         squishSpiderScript.ResetSporkMaterial();
         sporkIsVisible = false;
         BouncyBallSpawner.DestroyBall();
+        CharacterController cc = playerParent.GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = true;
+        playerParent.GetComponent<CapsuleCollider>().enabled = true;
 
         // Spider manager
         spiderManager.DestroyAllClones();
@@ -252,11 +264,17 @@ public class LevelManager : MonoBehaviour
 
         // Animators
         dsAnimator.SetBool("isOpen", false);
+        dsAnimator.Rebind();
+        dsAnimator.Update(0f);
         foodAnimator.SetBool("isMealTime", false);
+        foodAnimator.Rebind();
+        foodAnimator.Update(0f);
         brownWaterAnimator.ResetTrigger("FlowBrownWater");
-        brownWaterAnimator.Play("BrownWaterLow");
+        brownWaterAnimator.Rebind();
+        brownWaterAnimator.Update(0f);
         headSpiderAnimator.ResetTrigger("LaunchSpider");
-        headSpiderAnimator.Play("HeadSpiderIdle");
+        headSpiderAnimator.Rebind();
+        headSpiderAnimator.Update(0f);
         visibilityChecker.ResetHead();
 
         // Environment
@@ -267,7 +285,11 @@ public class LevelManager : MonoBehaviour
         // Deactivate webs
         foreach (GameObject web in webs)
             web.SetActive(false);
-    }
+
+        // Bedridden Ending
+        stayedInBedConsecutively = false;
+        stayedInBedCount = 0;
+}
 
     void OnEnable()
     {
@@ -286,7 +308,8 @@ public class LevelManager : MonoBehaviour
         canUseFood = false;
         canKillSpidersTask = false;
         canTalkToGuard = false;
-        canUseBed = false;
+        if (day <= 4 || toiletFirstUsed)
+            canUseBed = false;
 
         // Set the selected one
         switch (action)
@@ -355,7 +378,7 @@ public class LevelManager : MonoBehaviour
                 case "Bed":
                     dist = Vector3.Distance(playerParent.transform.position, bed.transform.position);
                     //Debug.Log("Bed: dist: " + dist + ", max " + (maxClickDistance).ToString());
-                    if (dist <= maxClickDistance && canUseBed)
+                    if (dist <= maxClickDistance && canUseBed && !toiletFirstUsed)
                     {
                         tutorialText.text = "Press E to sleep.";
                         hovering = true;
@@ -437,6 +460,8 @@ public class LevelManager : MonoBehaviour
                             bool nextDay = true;
                             try
                             {
+                                stayedInBedConsecutively = true;
+                                stayedInBedCount++;
                                 nextDay = CheckThreshold();
                             }
                             catch (Exception e)
@@ -576,7 +601,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // Esc to show pause menu
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameReachedEnding)
         {
             ShowMenu();
         }
@@ -596,6 +621,7 @@ public class LevelManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
+            gameReachedEnding = true;
             isSpiderEnding = true;
             SpidersEndingPart1();
         }
@@ -708,6 +734,8 @@ public class LevelManager : MonoBehaviour
 
         tutorialText.text = bedText;
         currentTutorialText = tutorialText.text;
+
+        toiletFirstUsed = false;
         SetAction(ActionType.Bed);
     }
 
@@ -833,7 +861,14 @@ public class LevelManager : MonoBehaviour
         canUseFood = false;
         canKillSpidersTask = false;
         canTalkToGuard = false;
-        canUseBed = false;
+        if (day <= 4)
+        {
+            canUseBed = false;
+        }
+        else
+        {
+            canUseBed = true;
+        }
 
         if (dayUpdate == -1)
         {
@@ -849,11 +884,13 @@ public class LevelManager : MonoBehaviour
         {
             if (spiderKillSkips == 0 && foodSkips == 0 && bathroomSkips == 0)
             {
+                gameReachedEnding = true;
                 isEscapeEnding = true;
                 EscapeEndingPart1();
             }
             else
             {
+                gameReachedEnding = true;
                 StartCoroutine(ResidentPrisonerEnding());
             }
             return;
@@ -874,8 +911,6 @@ public class LevelManager : MonoBehaviour
             tutorialText.text = toiletText;
             currentTutorialText = tutorialText.text;
         }
-
-        canUseBed = false;
 
         SetAction(ActionType.Toilet);
         if (day > 4)
@@ -935,6 +970,10 @@ public class LevelManager : MonoBehaviour
                 {
                     smackSpiderText.SetActive(false);
                 }
+                DailySetup();
+                break;
+            case 5:
+                canUseBed = true;
                 DailySetup();
                 break;
             case 7:
@@ -1038,9 +1077,12 @@ public class LevelManager : MonoBehaviour
 
     private void UseToiletStart()
     {
+        stayedInBedConsecutively = false;
+        stayedInBedCount = 0;
+
         // TODO: use toilet
         audioManager.PlaySFX(toiletFlushSound, 0.8f);
-        if (day == 1 && !toiletFirstUsed)
+        if (!toiletFirstUsed)
         {
             toiletFirstUsed = true;
             smackSpiderText.SetActive(false);
@@ -1083,20 +1125,30 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (bathroomSkips >= 5) // 5
+        if (stayedInBedConsecutively && stayedInBedCount >= 7)
         {
+            gameReachedEnding = true;
+            StartCoroutine(BedriddenEnding());
+            return false;
+        }
+
+        else if (bathroomSkips >= 5) // 5
+        {
+            gameReachedEnding = true;
             StartCoroutine(BathroomEnding());
             return false;
         }
 
         else if (foodSkips >= 8) // 8
         {
+            gameReachedEnding = true;
             StartCoroutine(StarvationEnding());
             return false;
         }
 
         else if (spiderKillSkips >= 10) // 10
         {
+            gameReachedEnding = true;
             isSpiderEnding = true;
             SpidersEndingPart1();
             return false;
@@ -1132,7 +1184,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.666f);
 
-        StartCoroutine(EndingHelper("Ending 1/5: Constipation"));
+        StartCoroutine(EndingHelper("Ending 3/6: Constipation"));
         Debug.Log("Constipation Ending");
     }
 
@@ -1158,7 +1210,7 @@ public class LevelManager : MonoBehaviour
 
         // TODO:
 
-        StartCoroutine(EndingHelper("Ending 2/5: Starvation"));
+        StartCoroutine(EndingHelper("Ending 5/6: Starvation"));
         Debug.Log("Starvation Ending");
     }
 
@@ -1213,7 +1265,7 @@ public class LevelManager : MonoBehaviour
 
         // SUDDEN BLACKNESS
         // show ending text
-        ShowText("Ending 5/5: Spiders");
+        ShowText("True Ending 6/6: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
@@ -1238,7 +1290,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        StartCoroutine(EndingHelper("Ending 4/5: Resident Prisoner"));
+        StartCoroutine(EndingHelper("Ending 1/6: Resident Prisoner"));
         Debug.Log("Resident Prisoner Ending");
     }
 
@@ -1284,13 +1336,48 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except ball)
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper("Ending 3/5: Good Behavior"));
+        StartCoroutine(EndingHelper("Ending 2/6: Good Behavior"));
 
         Debug.Log("Good Behavior Ending");
     }
 
+    private IEnumerator BedriddenEnding()
+    {
+        // Game over
+        canUseBed = false;
+
+        CharacterController cc = playerParent.GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = false;
+        playerParent.GetComponent<CapsuleCollider>().enabled = false;
+        // Set Player to bed position
+        playerParent.transform.position = new Vector3(-3.71f, 1.23f, -3.42f);
+        playerParent.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+        playerMovement.ResetCameraRotation();
+
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+        sporkIsVisible = false;
+
+        tutorialText.text = "You don't want to get up.";
+        currentTutorialText = tutorialText.text;
+
+        // but you can't do anything (except look around)
+        yield return new WaitForSeconds(5f);
+
+        StartCoroutine(EndingHelper("Ending 4/6: Bedridden"));
+        Debug.Log("Bedridden Ending");
+    }
+
     private IEnumerator EndingHelper(string text)
     {
+        gameReachedEnding = true;
+
+        if (notDoTaskText.activeSelf)
+        {
+            notDoTaskText.SetActive(false);
+        }
+
         // fade to black
         FadeController.Instance.FadeToBlack();
 
@@ -1314,6 +1401,9 @@ public class LevelManager : MonoBehaviour
 
     private void ShowMenu()
     {
+        if (gameReachedEnding)
+            return;
+
         blackScreen.SetActive(!blackScreen.activeSelf);
         playAgainButton.SetActive(!playAgainButton.activeSelf);
         mainMenuButton.SetActive(!mainMenuButton.activeSelf);

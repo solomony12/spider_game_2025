@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -31,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!controller.enabled)
+            return;
+
         Move();
         Look();
     }
@@ -47,7 +51,14 @@ public class PlayerMovement : MonoBehaviour
         // Gravity
         velocity.y += gravity * Time.deltaTime;
 
-        controller.Move(velocity * Time.deltaTime);
+        try
+        {
+            controller.Move(velocity * Time.deltaTime);
+        }
+        catch (Exception e)
+        {
+            // This is expected ONLY for Bedridden Ending
+        }
     }
 
     void Look()
