@@ -104,6 +104,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip scarySound;
     public AudioClip hummingSound;
     public AudioClip hallwaySound;
+    public AudioClip bubblingSound;
 
     public PlayerMovement playerMovement;
 
@@ -1216,6 +1217,8 @@ public class LevelManager : MonoBehaviour
 
         // but you can't do anything (except ball)
         yield return new WaitForSeconds(3f);
+
+        audioManager.PlaySFX(bubblingSound);
 
         // brown water fills up the room slowly (and spiders get pushed away)
         brownWaterAnimator.SetTrigger("FlowBrownWater");

@@ -4695,6 +4695,7 @@ MonoBehaviour:
   scarySound: {fileID: 8300000, guid: b347835c99eec284abc809972575e6b9, type: 3}
   hummingSound: {fileID: 8300000, guid: 24ecf0a2532873447822b1b6ffab03b2, type: 3}
   hallwaySound: {fileID: 8300000, guid: 119f89b51413c5245ac06c23509ee262, type: 3}
+  bubblingSound: {fileID: 8300000, guid: 3b33a943f41e9014c9e029180f0c4484, type: 3}
   playerMovement: {fileID: 1814168987}
   webs:
   - {fileID: 1157656651}
