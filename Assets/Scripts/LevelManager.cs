@@ -682,16 +682,6 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator WrapUpTalking()
     {
-        // delay a bit
-        if (!hasDialogueDay)
-        {
-            waiting = true;
-            tutorialText.text = waitText;
-            currentTutorialText = tutorialText.text;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
-            waiting = false;
-        }
-
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
 
         dsAnimator.SetBool("isOpen", false);
