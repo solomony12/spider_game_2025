@@ -37,3 +37,4 @@ Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
 # Versions
 - Version 1.1 was made within 48 hours for a Game Jam. (11/16/25)
 - Version 1.2 -- Bug Fixes (11/18/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1117815/trapped-within-a-web-version-12-bug-fixes)
+- Version 1.2.1 -- Updates, Bug Fixes, New Endings (11/19/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1118036/trapped-within-a-web-version-121-updates-bug-fixes-new-endings)
