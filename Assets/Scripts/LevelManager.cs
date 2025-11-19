@@ -186,7 +186,9 @@ public class LevelManager : MonoBehaviour
 
     public void ResetGame()
     {
+        CancelInvoke();
         StopAllCoroutines();
+        waiting = false;
 
         // Day / counters
         day = 0;
