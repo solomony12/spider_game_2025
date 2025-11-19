@@ -1,4 +1,4 @@
-# Trapped Within a Web
+### Trapped Within a Web
 
 You wake up in a cramped, silent cell. No memories, no answers, just cold concrete and the faint hum of something watching. Each day, a metal door slides open and a voice orders you through the same routines: eat, sleep, repeat. The room never changes…
 
@@ -6,7 +6,7 @@ But the spiders do.
 
 
 
-Credits:
+# Credits:
 
 Soli (iveseanyori): Programming, Design, Animation
 
@@ -14,7 +14,7 @@ Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
 
 
 
-Controls: (tutorial in-game)
+# Controls: (tutorial in-game)
 
 - WASD for movement
 
@@ -30,9 +30,9 @@ Controls: (tutorial in-game)
 
 
 
-Can you get all the endings?
+*Can you get all the endings?*
 
 
 
-- Version 1.1 was made within 48 hours for a Game Jam. (11/16/25)
-- Version 1.2 -- 11/19/25
+# - Version 1.1 was made within 48 hours for a Game Jam. (11/16/25)
+- Version 1.2 -- 11/18/25
