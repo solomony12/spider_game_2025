@@ -129,6 +129,7 @@ public class LevelManager : MonoBehaviour
     public GameObject mainMenuButton;
     private bool notStarting = true;
     private bool gameReachedEnding = false;
+    private bool isInDialogue = false;
 
 
     public VisibilityChecker visibilityChecker;
@@ -244,6 +245,7 @@ public class LevelManager : MonoBehaviour
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
         gameReachedEnding = false;
+        isInDialogue = false;
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -450,6 +452,7 @@ public class LevelManager : MonoBehaviour
                         {
                             Debug.Log("door slider clicked");
 
+                            isInDialogue = true;
                             StartCoroutine(PlayNextScene());
                         }
                         break;
@@ -624,7 +627,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // Esc to show pause menu
-        if (Input.GetKeyDown(KeyCode.Escape) && !gameReachedEnding)
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameReachedEnding && !isInDialogue)
         {
             ShowMenu();
         }
@@ -632,6 +635,7 @@ public class LevelManager : MonoBehaviour
         // Can skip tutorial
         if (gameIsBeingReplayed && day == 1 && Input.GetKeyDown(KeyCode.V) && !toiletFirstUsed)
         {
+            stillSpider.SetActive(false);
             spork.GetComponent<MeshRenderer>().enabled = true;
             sporkIsVisible = true;
             LevelManage(4);
@@ -763,6 +767,8 @@ public class LevelManager : MonoBehaviour
         audioManager.PlaySFX(doorSlideSound);
 
         yield return new WaitForSeconds(1.5f);
+
+        isInDialogue = false;
 
         if (dialogueHead.activeSelf)
             dialogueHead.SetActive(false);
