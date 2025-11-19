@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
 
     [Header("Mouse Look Settings")]
-    public float mouseSensitivity = 250f;
+    public float mouseSensitivity = 175f;
     public Transform playerCamera;
 
     private CharacterController controller;
