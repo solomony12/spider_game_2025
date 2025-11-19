@@ -619,21 +619,31 @@ public class LevelManager : MonoBehaviour
             // TEMP DELETE TODO
             if (Input.GetKeyDown(KeyCode.M))
         {
+            StopAllCoroutines();
+            CancelInvoke();
+            waiting = false;
             LevelManage();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            gameReachedEnding = true;
+            StartCoroutine(BathroomEnding());
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            gameReachedEnding = true;
+            StartCoroutine(BedriddenEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             gameReachedEnding = true;
+            StartCoroutine(StarvationEnding());
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            gameReachedEnding = true;
             isSpiderEnding = true;
             SpidersEndingPart1();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartCoroutine(BathroomEnding());
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            StartCoroutine(StarvationEnding());
         }
 #endif
 
