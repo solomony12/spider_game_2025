@@ -1164,6 +1164,11 @@ public class LevelManager : MonoBehaviour
         return day;
     }
 
+    public bool getGameReachedEndingBool()
+    {
+        return gameReachedEnding;
+    }
+
     private bool CheckThreshold()
     {
         if (stayedInBedConsecutively && stayedInBedCount >= 7)

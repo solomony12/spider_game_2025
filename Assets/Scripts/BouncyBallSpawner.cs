@@ -14,7 +14,7 @@ public class BouncyBallSpawner : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && levelManager.getCurrentDay() > 1)
+        if (Input.GetKeyDown(KeyCode.Space) && levelManager.getCurrentDay() > 1 && !levelManager.getGameReachedEndingBool())
         {
             if (spawnedBall == null)
             {
