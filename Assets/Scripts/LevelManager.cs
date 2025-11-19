@@ -730,12 +730,15 @@ public class LevelManager : MonoBehaviour
     {
         canUseFood = false;
 
-        // delay a bit
-        waiting = true;
-        tutorialText.text = waitText;
-        currentTutorialText = tutorialText.text;
-        yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
-        waiting = false;
+        // delay a bit (before spiders)
+        if (day < 4)
+        {
+            waiting = true;
+            tutorialText.text = waitText;
+            currentTutorialText = tutorialText.text;
+            yield return new WaitForSeconds(UnityEngine.Random.Range(delayTimeMin, delayTimeMax));
+            waiting = false;
+        }
 
         foodAnimator.SetBool("isMealTime", false);
         audioManager.PlaySFX(trayScrapeSound);
