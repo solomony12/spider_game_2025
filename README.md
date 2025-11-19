@@ -1,1 +1,38 @@
-# spider_game_2025
+# Trapped Within a Web
+
+You wake up in a cramped, silent cell. No memories, no answers, just cold concrete and the faint hum of something watching. Each day, a metal door slides open and a voice orders you through the same routines: eat, sleep, repeat. The room never changes…
+
+But the spiders do.
+
+
+
+Credits:
+
+Soli (iveseanyori): Programming, Design, Animation
+
+Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
+
+
+
+Controls: (tutorial in-game)
+
+- WASD for movement
+
+- Mouse for looking around
+
+- Left Mouse Click for using spork / progressing dialogue
+
+- Space to throw/retrieve ball
+
+- E to interact
+
+- Esc for pause menu
+
+
+
+Can you get all the endings?
+
+
+
+- Version 1.1 was made within 48 hours for a Game Jam. (11/16/25)
+- Version 1.2 -- 11/19/25
