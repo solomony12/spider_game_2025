@@ -19,6 +19,8 @@ public class LevelManager : MonoBehaviour
     [Header("Spawn Settings")]
     public Vector3 startPosition = Vector3.zero;
 
+    private const string totalEndings = "6"; // We don't include Ending 0
+
     public enum ActionType
     {
         Toilet,
@@ -569,6 +571,25 @@ public class LevelManager : MonoBehaviour
                 SetAction(ActionType.Toilet);
                 dayTwoTutorialFinished = true;
             }
+        }
+
+        // Ending 0 - ??? (clipped out of map
+        if (playerParent.transform.position.y < -20f)
+        {
+            StopAllCoroutines();
+            CancelInvoke();
+
+            // SUDDEN BLACKNESS
+            // show ending text
+            ShowText($"Ending 0/{totalEndings}: ???");
+            audioManager.PlaySFX(dayBoomSound, 4f);
+
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+            mainMenuButton.SetActive(true);
+            playAgainButton.SetActive(true);
+
+            Debug.Log("??? Ending");
         }
 
         // Press P to skip task
@@ -1196,7 +1217,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.666f);
 
-        StartCoroutine(EndingHelper("Ending 3/6: Constipation"));
+        StartCoroutine(EndingHelper($"Ending 3/{totalEndings}: Constipation"));
         Debug.Log("Constipation Ending");
     }
 
@@ -1222,7 +1243,7 @@ public class LevelManager : MonoBehaviour
 
         // TODO:
 
-        StartCoroutine(EndingHelper("Ending 5/6: Starvation"));
+        StartCoroutine(EndingHelper($"Ending 5/{totalEndings}: Starvation"));
         Debug.Log("Starvation Ending");
     }
 
@@ -1277,7 +1298,7 @@ public class LevelManager : MonoBehaviour
 
         // SUDDEN BLACKNESS
         // show ending text
-        ShowText("True Ending 6/6: Spiders");
+        ShowText($"True Ending {totalEndings}/{totalEndings}: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
@@ -1302,7 +1323,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        StartCoroutine(EndingHelper("Ending 1/6: Resident Prisoner"));
+        StartCoroutine(EndingHelper($"Ending 1/{totalEndings}: Resident Prisoner"));
         Debug.Log("Resident Prisoner Ending");
     }
 
@@ -1348,7 +1369,7 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except ball)
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper("Ending 2/6: Good Behavior"));
+        StartCoroutine(EndingHelper($"Ending 2/{totalEndings}: Good Behavior"));
 
         Debug.Log("Good Behavior Ending");
     }
@@ -1377,7 +1398,7 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except look around)
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper("Ending 4/6: Bedridden"));
+        StartCoroutine(EndingHelper($"Ending 4/{totalEndings}: Bedridden"));
         Debug.Log("Bedridden Ending");
     }
 
