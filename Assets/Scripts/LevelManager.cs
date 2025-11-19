@@ -87,6 +87,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject spork;
     private bool sporkIsVisible = false;
+    private static bool gameIsBeingReplayed = false; // DO NOT EVER SET FALSE ANYWHERE ELSE
+    private bool toiletFirstUsed = false;
 
     public DynamicLightingController lightingController;
     public ShrinkingRoom roomShrinker;
@@ -147,7 +149,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        LevelManage();
+        LevelManage(1);
     }
 
     public void PlayAgain()
@@ -155,8 +157,9 @@ public class LevelManager : MonoBehaviour
         if (notStarting)
         {
             notStarting = false;
+            gameIsBeingReplayed = true;
             ResetGame();
-            LevelManage();
+            LevelManage(1);
         }
         notStarting = true;
     }
@@ -197,6 +200,7 @@ public class LevelManager : MonoBehaviour
         canTalkToGuard = false;
         canKillSpidersTask = false;
         interactWithSlider = true;
+        toiletFirstUsed = false;
 
         // Spider counters
         spidersToKill = 1;
@@ -211,7 +215,10 @@ public class LevelManager : MonoBehaviour
         currentTutorialText = tutorialText.text;
         tutorialTextObject.SetActive(true);
         notDoTaskText.SetActive(false);
-        smackSpiderText.SetActive(false);
+        if (!gameIsBeingReplayed)
+        {
+            smackSpiderText.SetActive(false);
+        }
         headerText.SetActive(false);
         blackScreen.GetComponent<UnityEngine.UI.Image>().color = new Color(0f, 0f, 0f, 1f);
         blackScreen.SetActive(false);
@@ -568,9 +575,16 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        // Esc to show pause menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ShowMenu();
+        }
+
+        // Can skip tutorial
+        if (gameIsBeingReplayed && day == 1 && Input.GetKeyDown(KeyCode.V) && !toiletFirstUsed)
+        {
+            LevelManage(4);
         }
 
 
@@ -814,14 +828,21 @@ public class LevelManager : MonoBehaviour
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Evening);
     }
 
-    private void LevelManage()
+    private void LevelManage(int dayUpdate = -1)
     {
         canUseFood = false;
         canKillSpidersTask = false;
         canTalkToGuard = false;
         canUseBed = false;
 
-        day++;
+        if (dayUpdate == -1)
+        {
+            day++;
+        }
+        else
+        {
+            day = dayUpdate;
+        }
         Debug.Log($"Day {day} begins!");
 
         if (day >= 30)
@@ -873,6 +894,11 @@ public class LevelManager : MonoBehaviour
                 spiderManager.DestroyAllClones();
                 spiderManager.HideBaseSpiders();
                 stillSpider.SetActive(true);
+                if (gameIsBeingReplayed)
+                {
+                    smackSpiderText.SetActive(true);
+                    smackSpiderText.GetComponent<TMP_Text>().text = "Press V to skip tutorial (advance to Day 4)";
+                }
                 break;
 
             case 2:
@@ -884,12 +910,17 @@ public class LevelManager : MonoBehaviour
                 tutorialText.text = "[Space] to throw ball. | [Space] to retrieve it.";
                 currentTutorialText = tutorialText.text;
                 canUseToilet = false;
+                if (smackSpiderText.activeSelf)
+                {
+                    smackSpiderText.SetActive(false);
+                }
                 break;
 
             case 3:
                 // Show one clone each of all 6 base spiders
                 CloneSpiders(1); // 6 total
                 smackSpiderText.SetActive(true);
+                smackSpiderText.GetComponent<TMP_Text>().text = "Smack spiders (Left Click) to squish them.";
                 spork.GetComponent<MeshRenderer>().enabled = true;
                 sporkIsVisible = true;
                 tutorialText.text = "Kill a spider.";
@@ -900,6 +931,10 @@ public class LevelManager : MonoBehaviour
                 break;
             case 4:
                 webs[webActivateIndex++].SetActive(true); // web 0 show
+                if (smackSpiderText.activeSelf)
+                {
+                    smackSpiderText.SetActive(false);
+                }
                 DailySetup();
                 break;
             case 7:
@@ -1005,6 +1040,11 @@ public class LevelManager : MonoBehaviour
     {
         // TODO: use toilet
         audioManager.PlaySFX(toiletFlushSound, 0.8f);
+        if (day == 1 && !toiletFirstUsed)
+        {
+            toiletFirstUsed = true;
+            smackSpiderText.SetActive(false);
+        }
         StartCoroutine(UseToiletFinish());
     }
 
@@ -1261,6 +1301,7 @@ public class LevelManager : MonoBehaviour
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
+        gameIsBeingReplayed = true;
         mainMenuButton.SetActive(true);
         playAgainButton.SetActive(true);
 
