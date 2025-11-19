@@ -12,6 +12,8 @@ Soli (iveseanyori): Programming, Design, Animation
 
 Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
 
+Play Testers (since 1.2): Fuego Bagel
+
 
 
 # Controls: (tutorial in-game)
