@@ -632,6 +632,8 @@ public class LevelManager : MonoBehaviour
         // Can skip tutorial
         if (gameIsBeingReplayed && day == 1 && Input.GetKeyDown(KeyCode.V) && !toiletFirstUsed)
         {
+            spork.GetComponent<MeshRenderer>().enabled = true;
+            sporkIsVisible = true;
             LevelManage(4);
         }
 
