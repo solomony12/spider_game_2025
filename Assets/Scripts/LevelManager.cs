@@ -123,7 +123,7 @@ public class LevelManager : MonoBehaviour
     private bool isEscapeEnding = false;
     public GameObject fakeDoor;
     public GameObject headSpider;
-    public Animator headSpiderAnimator;
+    public MoveToCamera moveToCamera;
     private bool interactWithSlider = true;
     private bool stayedInBedConsecutively = false;
     private int stayedInBedCount = 0;
@@ -250,6 +250,8 @@ public class LevelManager : MonoBehaviour
         headSpider.SetActive(false);
         gameReachedEnding = false;
         isInDialogue = false;
+        food.GetComponent<MeshRenderer>().enabled = false;
+        slop.GetComponent<MeshRenderer>().enabled = false;
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -282,9 +284,7 @@ public class LevelManager : MonoBehaviour
         brownWaterAnimator.ResetTrigger("FlowBrownWater");
         brownWaterAnimator.Rebind();
         brownWaterAnimator.Update(0f);
-        headSpiderAnimator.ResetTrigger("LaunchSpider");
-        headSpiderAnimator.Rebind();
-        headSpiderAnimator.Update(0f);
+        moveToCamera.ResetPosition();
         visibilityChecker.ResetHead();
 
         // Environment
@@ -1310,11 +1310,12 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(4.72f);
 
         // SPIDER ATTACK
-        headSpiderAnimator.SetTrigger("LaunchSpider");
+        moveToCamera.MoveTowardCamera(0.25f);
         audioManager.PlaySFX(scarySound);
         audioManager.PlaySFX(echoScuttlingSound, 3f);
 
         yield return new WaitForSeconds(0.24f);
+        //moveToCamera.ResetPosition();
 
         // SUDDEN BLACKNESS
         // show ending text

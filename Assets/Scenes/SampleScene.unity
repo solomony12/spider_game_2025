@@ -4708,7 +4708,7 @@ MonoBehaviour:
   brownWaterAnimator: {fileID: 1387365197}
   fakeDoor: {fileID: 477355604}
   headSpider: {fileID: 1426380480}
-  headSpiderAnimator: {fileID: 1426380485}
+  moveToCamera: {fileID: 1426380486}
   playAgainButton: {fileID: 146580102}
   mainMenuButton: {fileID: 2119696314}
   visibilityChecker: {fileID: 1814168994}
@@ -5660,30 +5660,22 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.014, y: 0.01, z: 0.005317211}
+  m_Size: {x: 0.0062975166, y: 0.001950066, z: 0.005317211}
   m_Center: {x: 0, y: -0.00000797637, z: 0}
---- !u!95 &1426380485
-Animator:
-  serializedVersion: 7
+--- !u!114 &1426380486
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426380480}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e64a4bf5901fc43408e3fccc7dcc9d21, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be157af6692dbad4cab6f0b911aa57ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoveToCamera
+  camera: {fileID: 330585545}
+  self: {fileID: 1426380480}
 --- !u!1001 &1465645994
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8373,7 +8365,7 @@ PrefabInstance:
       addedObject: {fileID: 1426380481}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 367e7840e43fac04196a6c13e1f90f27, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1426380485}
+      addedObject: {fileID: 1426380486}
   m_SourcePrefab: {fileID: 100100000, guid: 367e7840e43fac04196a6c13e1f90f27, type: 3}
 --- !u!1 &2109810548
 GameObject:
