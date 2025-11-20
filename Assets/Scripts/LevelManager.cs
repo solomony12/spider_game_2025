@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class LevelManager : MonoBehaviour
     [Header("Spawn Settings")]
     public Vector3 startPosition = Vector3.zero;
 
-    private const string totalEndings = "7"; // We don't include Ending 0
+    private const string totalEndings = "8"; // We don't include Ending 0
 
     public enum ActionType
     {
@@ -122,6 +123,7 @@ public class LevelManager : MonoBehaviour
     public Animator brownWaterAnimator;
     private bool isSpiderEnding = false;
     private bool isEscapeEnding = false;
+    private bool isBallEnding = false;
     public GameObject fakeDoor;
     public GameObject headSpider;
     public MoveToCamera moveToCamera;
@@ -129,6 +131,7 @@ public class LevelManager : MonoBehaviour
     private bool stayedInBedConsecutively = false;
     private int stayedInBedCount = 0;
     public GameObject deadSpidersWall;
+    private List<GameObject> ballClones = new List<GameObject>();
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -141,6 +144,7 @@ public class LevelManager : MonoBehaviour
     public GameObject dialogueHead;
 
     public SquishSpider squishSpiderScript;
+    public BouncyBallSpawner bouncyBallSpawner;
 
     void Awake()
     {
@@ -155,7 +159,7 @@ public class LevelManager : MonoBehaviour
         tutorialText = tutorialTextObject.GetComponent<TMP_Text>();
         ResetGame();
         characterObject.SetActive(false);
-        
+
         if (FadeController.Instance == null)
         {
             Debug.Log("ERROR: FadeController not found!!!");
@@ -203,6 +207,7 @@ public class LevelManager : MonoBehaviour
         day = 0;
         delayTimeMin = delayTimeStartMin;
         delayTimeMax = delayTimeStartMax;
+        bouncyBallSpawner.ResetBallThrownCount();
 
         // Tutorial flags
         dayOneTutorialFinished = false;
@@ -249,6 +254,7 @@ public class LevelManager : MonoBehaviour
         dialogueHead.SetActive(false);
         isSpiderEnding = false;
         isEscapeEnding = false;
+        isBallEnding = false;
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
         gameReachedEnding = false;
@@ -256,6 +262,10 @@ public class LevelManager : MonoBehaviour
         food.GetComponent<MeshRenderer>().enabled = false;
         slop.GetComponent<MeshRenderer>().enabled = false;
         deadSpidersWall.SetActive(false);
+        foreach (GameObject ball in ballClones)
+        {
+            Destroy(ball);
+        }
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -266,7 +276,7 @@ public class LevelManager : MonoBehaviour
         spork.GetComponent<MeshRenderer>().enabled = false;
         squishSpiderScript.ResetSporkMaterial();
         sporkIsVisible = false;
-        BouncyBallSpawner.DestroyBall();
+        bouncyBallSpawner.DestroyBall();
         CharacterController cc = playerParent.GetComponent<CharacterController>();
         if (cc != null)
             cc.enabled = true;
@@ -303,16 +313,18 @@ public class LevelManager : MonoBehaviour
         // Bedridden Ending
         stayedInBedConsecutively = false;
         stayedInBedCount = 0;
-}
+    }
 
     void OnEnable()
     {
         SquishSpider.OnSpiderSquished += HandleSpiderSquished;
+        BouncyBallSpawner.OnBallEndingReached += HandleBallEnding;
     }
 
     void OnDisable()
     {
         SquishSpider.OnSpiderSquished -= HandleSpiderSquished;
+        BouncyBallSpawner.OnBallEndingReached -= HandleBallEnding;
     }
 
     public void SetAction(ActionType action)
@@ -483,7 +495,7 @@ public class LevelManager : MonoBehaviour
                             {
                                 Debug.Log("ERROR: " + e);
                             }
-                            
+
 
                             // Progress to the next day (restart everything like make new clones but keep the squished ones)
                             // Clones, daily reset, next yarn?
@@ -651,8 +663,8 @@ public class LevelManager : MonoBehaviour
 
 
 #if UNITY_EDITOR
-            // TEMP DELETE TODO
-            if (Input.GetKeyDown(KeyCode.M))
+        // TEMP DELETE TODO
+        if (Input.GetKeyDown(KeyCode.M))
         {
             StopAllCoroutines();
             CancelInvoke();
@@ -666,26 +678,26 @@ public class LevelManager : MonoBehaviour
             waiting = false;
             LevelManage(29);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             gameReachedEnding = true;
             StartCoroutine(ConstipationEnding());
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             gameReachedEnding = true;
             StartCoroutine(BedriddenEnding());
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             gameReachedEnding = true;
             StartCoroutine(StarvationEnding());
         }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
+        if (Input.GetKeyDown(KeyCode.Alpha7))
         {
             totalSpidersKilled = 100;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
+        if (Input.GetKeyDown(KeyCode.Alpha8))
         {
             gameReachedEnding = true;
             isSpiderEnding = true;
@@ -941,6 +953,9 @@ public class LevelManager : MonoBehaviour
         }
         Debug.Log($"Day {day} begins!");
 
+        // Check for Circus Clown Ending
+        bouncyBallSpawner.CheckBallThrownCount();
+
         if (day >= 30)
         {
             if (spiderKillSkips == 0 && foodSkips == 0 && bathroomSkips == 0)
@@ -1064,7 +1079,7 @@ public class LevelManager : MonoBehaviour
                 DailySetup();
                 break;
         }
-        
+
     }
 
     private void ResetPlayerAndCamera()
@@ -1189,6 +1204,11 @@ public class LevelManager : MonoBehaviour
         return gameReachedEnding;
     }
 
+    private void HandleBallEnding()
+    {
+        isBallEnding = true;
+    }
+
     private bool CheckThreshold()
     {
         if (totalSpidersKilled >= 50)
@@ -1226,6 +1246,12 @@ public class LevelManager : MonoBehaviour
             SpidersEndingPart1();
             return false;
         }
+        else if (isBallEnding)
+        {
+            gameReachedEnding = true;
+            StartCoroutine(CircusClownEnding());
+            return false;
+        }
         else
             return true;
     }
@@ -1245,9 +1271,9 @@ public class LevelManager : MonoBehaviour
         deadSpidersWall.SetActive(true);
 
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper($"Ending 6/{totalEndings}: Juggernaut"));
+        StartCoroutine(EndingHelper($"Ending 7/{totalEndings}: Juggernaut"));
         Debug.Log("Juggernaut Ending");
     }
 
@@ -1280,7 +1306,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.666f);
 
-        StartCoroutine(EndingHelper($"Ending 3/{totalEndings}: Constipation"));
+        StartCoroutine(EndingHelper($"Ending 4/{totalEndings}: Constipation"));
         Debug.Log("Constipation Ending");
     }
 
@@ -1301,12 +1327,12 @@ public class LevelManager : MonoBehaviour
         RenderSettings.fogMode = FogMode.ExponentialSquared;
         RenderSettings.fogDensity = 0.25f;
 
-        // but you can't do anything (except ball)
+        // but you can't do anything
         yield return new WaitForSeconds(3f);
 
         // TODO:
 
-        StartCoroutine(EndingHelper($"Ending 5/{totalEndings}: Starvation"));
+        StartCoroutine(EndingHelper($"Ending 6/{totalEndings}: Starvation"));
         Debug.Log("Starvation Ending");
     }
 
@@ -1350,7 +1376,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator SpidersEndingPart2()
     {
 
-        // but you can't do anything (except ball)
+        // but you can't do anything
         yield return new WaitForSeconds(4.72f);
 
         // SPIDER ATTACK
@@ -1431,7 +1457,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator EscapeEndingPart2()
     {
 
-        // but you can't do anything (except ball)
+        // but you can't do anything
         yield return new WaitForSeconds(5f);
 
         StartCoroutine(EndingHelper($"Ending 2/{totalEndings}: Good Behavior"));
@@ -1463,8 +1489,43 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except look around)
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper($"Ending 4/{totalEndings}: Bedridden"));
+        StartCoroutine(EndingHelper($"Ending 5/{totalEndings}: Bedridden"));
         Debug.Log("Bedridden Ending");
+    }
+
+    private IEnumerator CircusClownEnding()
+    {
+        // Game over (seem like it's the next day)
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+        sporkIsVisible = false;
+
+        tutorialText.text = "Juggling is quite fun.";
+        currentTutorialText = tutorialText.text;
+
+        // We don't want the player to move as it's possible to clip out and get Ending 0
+        CharacterController cc = playerParent.GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = false;
+
+        StartCoroutine(SpawnBalls());
+
+        // but you can't do anything
+        yield return new WaitForSeconds(5f);
+
+        StartCoroutine(EndingHelper($"Ending 3/{totalEndings}: Circus Clown"));
+        Debug.Log("Circus Clown Ending");
+    }
+
+    IEnumerator SpawnBalls()
+    {
+        while (isBallEnding)
+        {
+            GameObject ballClone = bouncyBallSpawner.SpawnBall(true);
+            ballClones.Add(ballClone);
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     private IEnumerator EndingHelper(string text)
@@ -1483,6 +1544,7 @@ public class LevelManager : MonoBehaviour
         // show ending text
         ShowText(text);
         audioManager.PlaySFX(dayBoomSound, 4f);
+        isBallEnding = false;
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;

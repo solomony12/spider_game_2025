@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BouncyBallSpawner : MonoBehaviour
@@ -8,9 +9,12 @@ public class BouncyBallSpawner : MonoBehaviour
     public float throwForce = 10f;
     public float spawnDistance = 2f;
 
-    private static GameObject spawnedBall;
+    private GameObject spawnedBall;
 
     public LevelManager levelManager;
+
+    public static event Action OnBallEndingReached;
+    private static int ballThrown = 0;
 
     void Update()
     {
@@ -18,7 +22,9 @@ public class BouncyBallSpawner : MonoBehaviour
         {
             if (spawnedBall == null)
             {
+                ballThrown++;
                 SpawnBall();
+                CheckBallThrownCount();
             }
             else
             {
@@ -27,21 +33,16 @@ public class BouncyBallSpawner : MonoBehaviour
         }
     }
 
-    void SpawnBall()
+    public GameObject SpawnBall(bool noSpider = false)
     {
         // Determine spawn position in front of camera
         Camera cam = Camera.main;
-        if (cam == null)
-        {
-            Debug.LogError("No Main Camera found!");
-            return;
-        }
 
         Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
 
         // Instantiate ball (5% chance of spider)
-        int spiderChance = Random.Range(1, 100);
-        if (spiderChance > 5)
+        int spiderChance = UnityEngine.Random.Range(1, 100);
+        if (noSpider || spiderChance > 5)
         {
             spawnedBall = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
         }
@@ -49,6 +50,7 @@ public class BouncyBallSpawner : MonoBehaviour
         {
             spawnedBall = Instantiate(spider, spawnPos, Quaternion.identity);
         }
+
 
         // Ensure it has a Rigidbody
         Rigidbody rb = spawnedBall.GetComponent<Rigidbody>();
@@ -72,14 +74,29 @@ public class BouncyBallSpawner : MonoBehaviour
 
         // Add initial velocity away from camera
         rb.linearVelocity = cam.transform.forward * throwForce;
+
+        return spawnedBall;
     }
 
-    public static void DestroyBall()
+    public void DestroyBall()
     {
         if (spawnedBall != null)
         {
             Destroy(spawnedBall);
             spawnedBall = null;
+        }
+    }
+
+    public void ResetBallThrownCount()
+    {
+        ballThrown = 0;
+    }
+
+    public void CheckBallThrownCount()
+    {
+        if (ballThrown >= 4 && levelManager.getCurrentDay() > 4)
+        {
+            OnBallEndingReached?.Invoke();
         }
     }
 }

@@ -32,11 +32,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        Look();
+
         if (!controller.enabled)
             return;
 
         Move();
-        Look();
     }
 
     void Move()
