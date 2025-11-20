@@ -1899,7 +1899,7 @@ GameObject:
   m_Component:
   - component: {fileID: 451023812}
   - component: {fileID: 451023813}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: T_SpiderWeb (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2571,7 +2571,7 @@ GameObject:
   m_Component:
   - component: {fileID: 712522124}
   - component: {fileID: 712522125}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: T_SpiderWeb (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2804,7 +2804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 738028615}
   - component: {fileID: 738028616}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: T_SpiderWeb (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4449,7 +4449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1157656652}
   - component: {fileID: 1157656653}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: T_SpiderWeb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7377,7 +7377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1871006372}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Webs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
