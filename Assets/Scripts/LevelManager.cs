@@ -1225,6 +1225,7 @@ public class LevelManager : MonoBehaviour
 
         if (spiderKillSkips >= 10)
         {
+            gameReachedEnding = true;
             isSpiderEnding = true;
             SpidersEndingPart1();
             return false;
