@@ -1211,49 +1211,44 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
+        gameReachedEnding = true;
+
         if (totalSpidersKilled >= 50)
         {
-            gameReachedEnding = true;
             StartCoroutine(JuggernautEnding());
-            return false;
         }
 
         else if (stayedInBedConsecutively && stayedInBedCount >= 7)
         {
-            gameReachedEnding = true;
             StartCoroutine(BedriddenEnding());
-            return false;
         }
 
         else if (bathroomSkips >= 5) // 5
         {
-            gameReachedEnding = true;
             StartCoroutine(ConstipationEnding());
-            return false;
         }
 
         else if (foodSkips >= 8) // 8
         {
-            gameReachedEnding = true;
             StartCoroutine(StarvationEnding());
-            return false;
         }
 
         else if (spiderKillSkips >= 10) // 10
         {
-            gameReachedEnding = true;
             isSpiderEnding = true;
             SpidersEndingPart1();
-            return false;
         }
         else if (isBallEnding)
         {
-            gameReachedEnding = true;
             StartCoroutine(CircusClownEnding());
-            return false;
         }
         else
+        {
+            gameReachedEnding = false;
             return true;
+        }
+
+        return false;
     }
 
     private IEnumerator JuggernautEnding()
