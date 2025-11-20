@@ -1211,43 +1211,36 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        gameReachedEnding = true;
-
         if (totalSpidersKilled >= 50)
-        {
-            StartCoroutine(JuggernautEnding());
-        }
+            return TriggerEnding(JuggernautEnding());
 
-        else if (stayedInBedConsecutively && stayedInBedCount >= 7)
-        {
-            StartCoroutine(BedriddenEnding());
-        }
+        if (stayedInBedConsecutively && stayedInBedCount >= 7)
+            return TriggerEnding(BedriddenEnding());
 
-        else if (bathroomSkips >= 5) // 5
-        {
-            StartCoroutine(ConstipationEnding());
-        }
+        if (bathroomSkips >= 5)
+            return TriggerEnding(ConstipationEnding());
 
-        else if (foodSkips >= 8) // 8
-        {
-            StartCoroutine(StarvationEnding());
-        }
+        if (foodSkips >= 8)
+            return TriggerEnding(StarvationEnding());
 
-        else if (spiderKillSkips >= 10) // 10
+        if (spiderKillSkips >= 10)
         {
             isSpiderEnding = true;
             SpidersEndingPart1();
-        }
-        else if (isBallEnding)
-        {
-            StartCoroutine(CircusClownEnding());
-        }
-        else
-        {
-            gameReachedEnding = false;
-            return true;
+            return false;
         }
 
+        if (isBallEnding)
+            return TriggerEnding(CircusClownEnding());
+
+        // No ending triggered
+        return true;
+    }
+
+    private bool TriggerEnding(IEnumerator coroutine)
+    {
+        gameReachedEnding = true;
+        StartCoroutine(coroutine);
         return false;
     }
 
