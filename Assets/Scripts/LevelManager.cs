@@ -105,6 +105,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip hummingSound;
     public AudioClip hallwaySound;
     public AudioClip bubblingSound;
+    public AudioClip scuttlingSound;
 
     public PlayerMovement playerMovement;
 
@@ -157,7 +158,7 @@ public class LevelManager : MonoBehaviour
             Debug.Log("ERROR: FadeController not found!!!");
             return;
         }
-
+        StartCoroutine(OccasionalSpiderScuttling());
         LevelManage(1);
     }
 
@@ -193,6 +194,7 @@ public class LevelManager : MonoBehaviour
         CancelInvoke();
         StopAllCoroutines();
         waiting = false;
+        StartCoroutine(OccasionalSpiderScuttling());
 
         // Day / counters
         day = 0;
@@ -1472,6 +1474,16 @@ public class LevelManager : MonoBehaviour
             headerText.SetActive(false);
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = false;
+        }
+    }
+
+    private IEnumerator OccasionalSpiderScuttling()
+    {
+        while (true)
+        {
+            float waitTime = UnityEngine.Random.Range(10f, 25f);
+            yield return new WaitForSeconds(waitTime);
+            audioManager.PlaySFX(scuttlingSound);
         }
     }
 }
