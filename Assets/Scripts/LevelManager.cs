@@ -106,6 +106,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip hallwaySound;
     public AudioClip bubblingSound;
     public AudioClip scuttlingSound;
+    public AudioClip echoScuttlingSound;
 
     public PlayerMovement playerMovement;
 
@@ -1308,9 +1309,10 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except ball)
         yield return new WaitForSeconds(4.72f);
 
-        // SPIDERS ATTACK
+        // SPIDER ATTACK
         headSpiderAnimator.SetTrigger("LaunchSpider");
         audioManager.PlaySFX(scarySound);
+        audioManager.PlaySFX(echoScuttlingSound, 3f);
 
         yield return new WaitForSeconds(0.24f);
 
@@ -1479,7 +1481,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator OccasionalSpiderScuttling()
     {
-        while (true)
+        while (!gameReachedEnding)
         {
             float waitTime = UnityEngine.Random.Range(10f, 25f);
             yield return new WaitForSeconds(waitTime);
