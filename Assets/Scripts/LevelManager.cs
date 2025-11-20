@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
     [Header("Spawn Settings")]
     public Vector3 startPosition = Vector3.zero;
 
-    private const string totalEndings = "6"; // We don't include Ending 0
+    private const string totalEndings = "7"; // We don't include Ending 0
 
     public enum ActionType
     {
@@ -74,6 +74,7 @@ public class LevelManager : MonoBehaviour
     private bool canKillSpidersTask = false;
     private int spidersToKill = 1;
     private int spidersKilledToday = 0;
+    private int totalSpidersKilled = 0;
     private bool waiting = false;
     bool hasDialogueDay = false;
 
@@ -127,6 +128,7 @@ public class LevelManager : MonoBehaviour
     private bool interactWithSlider = true;
     private bool stayedInBedConsecutively = false;
     private int stayedInBedCount = 0;
+    public GameObject deadSpidersWall;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -221,6 +223,7 @@ public class LevelManager : MonoBehaviour
         // Spider counters
         spidersToKill = 1;
         spidersKilledToday = 0;
+        totalSpidersKilled = 0;
         bathroomSkips = 0;
         foodSkips = 0;
         spiderKillSkips = 0;
@@ -252,6 +255,7 @@ public class LevelManager : MonoBehaviour
         isInDialogue = false;
         food.GetComponent<MeshRenderer>().enabled = false;
         slop.GetComponent<MeshRenderer>().enabled = false;
+        deadSpidersWall.SetActive(false);
 
         // Music
         audioManager.PlayMusic(hummingSound, 0.798f);
@@ -655,10 +659,17 @@ public class LevelManager : MonoBehaviour
             waiting = false;
             LevelManage();
         }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            StopAllCoroutines();
+            CancelInvoke();
+            waiting = false;
+            LevelManage(29);
+        }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             gameReachedEnding = true;
-            StartCoroutine(BathroomEnding());
+            StartCoroutine(ConstipationEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
@@ -671,6 +682,10 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(StarvationEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            totalSpidersKilled = 100;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
         {
             gameReachedEnding = true;
             isSpiderEnding = true;
@@ -867,6 +882,7 @@ public class LevelManager : MonoBehaviour
             spidersKilledToday++;
             if (spidersKilledToday >= spidersToKill)
             {
+                totalSpidersKilled += spidersKilledToday;
                 canKillSpidersTask = false;
                 notDoTaskText.SetActive(false);
                 StartCoroutine(FinishKillingSpidersTask());
@@ -1175,7 +1191,14 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (stayedInBedConsecutively && stayedInBedCount >= 7)
+        if (totalSpidersKilled >= 50)
+        {
+            gameReachedEnding = true;
+            StartCoroutine(JuggernautEnding());
+            return false;
+        }
+
+        else if (stayedInBedConsecutively && stayedInBedCount >= 7)
         {
             gameReachedEnding = true;
             StartCoroutine(BedriddenEnding());
@@ -1185,7 +1208,7 @@ public class LevelManager : MonoBehaviour
         else if (bathroomSkips >= 5) // 5
         {
             gameReachedEnding = true;
-            StartCoroutine(BathroomEnding());
+            StartCoroutine(ConstipationEnding());
             return false;
         }
 
@@ -1207,7 +1230,28 @@ public class LevelManager : MonoBehaviour
             return true;
     }
 
-    private IEnumerator BathroomEnding()
+    private IEnumerator JuggernautEnding()
+    {
+        // Game over
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+
+        tutorialText.text = "Spiders fear your very existence.";
+        currentTutorialText = tutorialText.text;
+
+        spiderManager.DestroyAllClones();
+        squishSpiderScript.ClearCrushedSpiders();
+        // Show wall of spiders
+        deadSpidersWall.SetActive(true);
+
+
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(EndingHelper($"Ending 6/{totalEndings}: Juggernaut"));
+        Debug.Log("Juggernaut Ending");
+    }
+
+    private IEnumerator ConstipationEnding()
     {
         // Game over (seem like it's the next day)
         ResetPlayerAndCamera();
