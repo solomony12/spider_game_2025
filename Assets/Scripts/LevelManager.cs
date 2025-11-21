@@ -174,7 +174,6 @@ public class LevelManager : MonoBehaviour
         if (notStarting)
         {
             notStarting = false;
-            gameIsBeingReplayed = true;
             ResetGame();
             LevelManage(1);
         }
