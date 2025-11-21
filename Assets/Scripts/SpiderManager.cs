@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SpiderManager : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class SpiderManager : MonoBehaviour
             int id = nextCloneID[baseSpider]++;
             spiderClones[baseSpider].Add(id, clone);
 
-            Debug.Log($"Spawned clone ID {id} of spider {baseSpider.name}");
+            //Debug.Log($"Spawned clone ID {id} of spider {baseSpider.name}");
         }
     }
 
@@ -119,6 +120,49 @@ public class SpiderManager : MonoBehaviour
 
     public int numberOfLiveSpiders()
     {
-        return spiderClones.Count;
+        int total = 0;
+
+        foreach (var entry in spiderClones.Values)
+        {
+            total += entry.Count;
+        }
+
+        return total;
     }
+
+    public void RemoveSpiderCloneFromList(GameObject clone)
+    {
+        // Find which outer key contains this clone
+        GameObject spiderKeyToRemove = null;
+        int cloneIdToRemove = -1;
+
+        foreach (var kvp in spiderClones)
+        {
+            foreach (var inner in kvp.Value)
+            {
+                if (inner.Value == clone)
+                {
+                    spiderKeyToRemove = kvp.Key;
+                    cloneIdToRemove = inner.Key;
+                    break;
+                }
+            }
+            if (spiderKeyToRemove != null)
+                break;
+        }
+
+        // If not found, nothing to remove
+        if (spiderKeyToRemove == null)
+            return;
+
+        // Remove the clone from the inner dictionary
+        spiderClones[spiderKeyToRemove].Remove(cloneIdToRemove);
+
+        // Remove the spider entry entirely
+        if (spiderClones[spiderKeyToRemove].Count == 0)
+        {
+            spiderClones.Remove(spiderKeyToRemove);
+        }
+    }
+
 }

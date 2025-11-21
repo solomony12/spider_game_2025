@@ -61,7 +61,7 @@ public class SquishSpider : MonoBehaviour
                             float distance = Vector3.Distance(playerParent.transform.position, clickedObject.transform.position);
                             float maxClickDistance = 5f;
 
-                            if (distance <= maxClickDistance && levelManager.getIsSpiderTaskOn())
+                            if (distance <= maxClickDistance)
                             {
                                 // Spawn crushed spider at the same position and rotation
                                 GameObject crushedSpider = Instantiate(
@@ -82,6 +82,7 @@ public class SquishSpider : MonoBehaviour
                                 // Remove the original spider clone
                                 Destroy(clickedObject);
                                 clones.Remove(kvp.Key);
+                                spiderManager.RemoveSpiderCloneFromList(kvp.Value);
 
                                 int index = UnityEngine.Random.Range(0, squishSounds.Length);
                                 AudioClip clip = squishSounds[index];
@@ -92,7 +93,7 @@ public class SquishSpider : MonoBehaviour
 
                                 OnSpiderSquished?.Invoke();
 
-                                Debug.Log($"Squished spider clone ID {kvp.Key} of {baseSpider.name}");
+                                //Debug.Log($"Squished spider clone ID {kvp.Key} of {baseSpider.name}");
                             }
                             else
                             {
@@ -114,19 +115,19 @@ public class SquishSpider : MonoBehaviour
 
     private void CheckBloodLevels()
     {
-        if (spidersKilled < 5)
+        if (spidersKilled < 25)
         {
             sporkBloodiness.SelectMaterial(0);
         }
-        else if (spidersKilled >= 5 && spidersKilled < 20)
+        else if (spidersKilled >= 25 && spidersKilled < 50)
         {
             sporkBloodiness.SelectMaterial(1);
         }
-        else if (spidersKilled >= 20 && spidersKilled < 30)
+        else if (spidersKilled >= 50 && spidersKilled < 100)
         {
             sporkBloodiness.SelectMaterial(2);
         }
-        else
+        else // over 100
         {
             sporkBloodiness.SelectMaterial(3);
         }

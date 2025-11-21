@@ -358,6 +358,16 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void DisableAllActions()
+    {
+        waiting = true;
+        canUseToilet = false;
+        canUseFood = false;
+        canKillSpidersTask = false;
+        canTalkToGuard = false;
+        canUseBed = false;
+    }
+
     // Day 3 Tutorial
     void HandleSpiderSquished()
     {
@@ -695,7 +705,7 @@ public class LevelManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            totalSpidersKilled = 100;
+            totalSpidersKilled = 175;
         }
         if (Input.GetKeyDown(KeyCode.Alpha8))
         {
@@ -880,6 +890,23 @@ public class LevelManager : MonoBehaviour
         tutorialText.text = "Kill " + spidersToKill + " spiders.";
         currentTutorialText = tutorialText.text;
 
+        // Summon that many spiders if needed
+        int totalLiveSpiders = spiderManager.numberOfLiveSpiders();
+        Debug.Log($"NumOfLiveSpiders: {totalLiveSpiders} | SpidersToKill: {spidersToKill}");
+        int amountToSpawn = 0;
+        if (totalLiveSpiders < spidersToKill)
+        {
+            Debug.Log("NEEDING TO SUMMON SPIDERS");
+            amountToSpawn = spidersToKill - totalLiveSpiders;
+            float setsOfSix = (float)(amountToSpawn / 6.0);
+            if (Math.Abs(setsOfSix - Math.Round(setsOfSix)) < 0.0001f)
+                CloneSpiders((int)setsOfSix);
+            else
+                CloneSpiders(((int)setsOfSix)+1);
+
+            Debug.Log($"SpidersToKill: {spidersToKill} | SetsOfSix: {setsOfSix}");
+        }
+
         SetAction(ActionType.SpiderKill);
         if (day > 4)
         {
@@ -892,19 +919,21 @@ public class LevelManager : MonoBehaviour
         if (canKillSpidersTask && !waiting)
         {
             spidersKilledToday++;
+            Debug.Log($"Current SpidersKilled Today: {spidersKilledToday}");
             if (spidersKilledToday >= spidersToKill)
             {
                 totalSpidersKilled += spidersKilledToday;
+                Debug.Log($"(if-part) Total Spiders Killed: {totalSpidersKilled}");
                 canKillSpidersTask = false;
                 notDoTaskText.SetActive(false);
                 StartCoroutine(FinishKillingSpidersTask());
             }
         }
-    }
-
-    public bool getIsSpiderTaskOn()
-    {
-        return canKillSpidersTask;
+        else
+        {
+            totalSpidersKilled += 1;
+            Debug.Log($"(else-part) Total Spiders Killed: {totalSpidersKilled}");
+        }
     }
 
     private IEnumerator FinishKillingSpidersTask()
@@ -960,12 +989,14 @@ public class LevelManager : MonoBehaviour
         {
             if (spiderKillSkips == 0 && foodSkips == 0 && bathroomSkips == 0)
             {
+                DisableAllActions();
                 gameReachedEnding = true;
                 isEscapeEnding = true;
                 EscapeEndingPart1();
             }
             else
             {
+                DisableAllActions();
                 gameReachedEnding = true;
                 StartCoroutine(ResidentPrisonerEnding());
             }
@@ -1211,20 +1242,21 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (totalSpidersKilled >= 50)
+        if (totalSpidersKilled >= 175) // normal amount killed should be 153
             return TriggerEnding(JuggernautEnding());
 
         if (stayedInBedConsecutively && stayedInBedCount >= 7)
             return TriggerEnding(BedriddenEnding());
 
-        if (bathroomSkips >= 5)
+        if (bathroomSkips >= 5) // 5
             return TriggerEnding(ConstipationEnding());
 
-        if (foodSkips >= 8)
+        if (foodSkips >= 8) // 8
             return TriggerEnding(StarvationEnding());
 
         if (spiderKillSkips >= 10)
         {
+            DisableAllActions();
             gameReachedEnding = true;
             isSpiderEnding = true;
             SpidersEndingPart1();
@@ -1240,6 +1272,10 @@ public class LevelManager : MonoBehaviour
 
     private bool TriggerEnding(IEnumerator coroutine)
     {
+        DisableAllActions();
+        if (notDoTaskText.activeSelf)
+            notDoTaskText.SetActive(false);
+        canUseBed = false;
         gameReachedEnding = true;
         StartCoroutine(coroutine);
         return false;
