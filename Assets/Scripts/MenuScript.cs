@@ -39,7 +39,7 @@ public class MenuScript : MonoBehaviour
 
     private void ResetStuff()
     {
-        hintsButton.enabled = false;
+        hintsButton.interactable = false;
         HideCredits();
     }
 
@@ -118,14 +118,14 @@ public class MenuScript : MonoBehaviour
 
     private void EnableCredits()
     {
-        if (LevelManager.checkIfGameIsBeingReplayed())
+        if (LevelManager.checkIfHintsCanBeShown())
         {
-            hintsButton.enabled = true;
+            hintsButton.interactable = true;
         }
     }
 
     public void ShowHints()
     {
-        Debug.Log("SHOW HINTS");
+        SceneManager.LoadSceneAsync("HintsScene", LoadSceneMode.Additive);
     }
 }

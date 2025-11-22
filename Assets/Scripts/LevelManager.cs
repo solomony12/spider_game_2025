@@ -136,8 +136,9 @@ public class LevelManager : MonoBehaviour
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     private bool notStarting = true;
-    private static bool gameReachedEnding = false;
+    private bool gameReachedEnding = false;
     private bool isInDialogue = false;
+    private static bool canShowHints = false;
 
 
     public VisibilityChecker visibilityChecker;
@@ -615,6 +616,7 @@ public class LevelManager : MonoBehaviour
             // show ending text
             ShowText($"Ending 0/{totalEndings}: ???");
             audioManager.PlaySFX(dayBoomSound, 4f);
+            canShowHints = true;
 
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
@@ -1415,6 +1417,7 @@ public class LevelManager : MonoBehaviour
         // show ending text
         ShowText($"True Ending {totalEndings}/{totalEndings}: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
+        canShowHints = true;
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
@@ -1554,6 +1557,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator EndingHelper(string text)
     {
+        canShowHints = true;
         gameReachedEnding = true;
 
         if (notDoTaskText.activeSelf)
@@ -1620,8 +1624,8 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public static bool checkIfGameIsBeingReplayed()
+    public static bool checkIfHintsCanBeShown()
     {
-        return gameReachedEnding;
+        return canShowHints;
     }
 }
