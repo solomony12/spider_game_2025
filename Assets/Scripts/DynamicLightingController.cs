@@ -26,6 +26,10 @@ public class DynamicLightingController : MonoBehaviour
     public Material eveningSkybox;
     public Material nightSkybox;
 
+    public Light defaultLight;
+    public Light darkLight;
+    public Light exitLight;
+
     public enum TimePhase { Morning, Noon, Evening, Night }
     public TimePhase currentPhase = TimePhase.Morning;
 
@@ -106,6 +110,26 @@ public class DynamicLightingController : MonoBehaviour
 
         // Re-sample skybox for ambient lighting
         //DynamicGI.UpdateEnvironment();
+    }
+
+    public void SetLightDefault()
+    {
+        defaultLight.enabled = true;
+        darkLight.enabled = false;
+        exitLight.enabled = false;
+        RenderSettings.skybox = morningSkybox;
+
+        DynamicGI.UpdateEnvironment();
+    }
+
+    public void SetLightDark()
+    {
+        defaultLight.enabled = false;
+        darkLight.enabled = true;
+        exitLight.enabled = true;
+        RenderSettings.skybox = nightSkybox;
+
+        DynamicGI.UpdateEnvironment();
     }
 
     private void UpdateSkyboxExposure()

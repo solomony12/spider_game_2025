@@ -9,6 +9,7 @@ TagManager:
   - Bed
   - Food
   - VN_Char
+  - ExitSlider
   layers:
   - Default
   - TransparentFX

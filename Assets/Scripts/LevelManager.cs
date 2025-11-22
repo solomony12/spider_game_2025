@@ -130,10 +130,13 @@ public class LevelManager : MonoBehaviour
     public GameObject headSpider;
     public MoveToCamera moveToCamera;
     private bool interactWithSlider = true;
+    private bool interactWithExit = false;
     private bool stayedInBedConsecutively = false;
     private int stayedInBedCount = 0;
     public GameObject deadSpidersWall;
     private List<GameObject> ballClones = new List<GameObject>();
+    public GameObject exitDoor;
+    public GameObject exitSlider;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -204,6 +207,7 @@ public class LevelManager : MonoBehaviour
         StopAllCoroutines();
         waiting = false;
         StartCoroutine(OccasionalSpiderScuttling());
+        lightingController.SetLightDefault();
 
         // Day / counters
         day = 0;
@@ -226,6 +230,7 @@ public class LevelManager : MonoBehaviour
         canKillSpidersTask = false;
         interactWithSlider = true;
         toiletFirstUsed = false;
+        interactWithExit = false;
 
         // Spider counters
         spidersToKill = 1;
@@ -268,9 +273,11 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(ball);
         }
+        exitDoor.SetActive(false);
+        exitSlider.SetActive(false);
 
-        // Music
-        audioManager.PlayMusic(hummingSound, 0.798f);
+    // Music
+    audioManager.PlayMusic(hummingSound, 0.798f);
 
         // Player / Camera
         ResetPlayerAndCamera();
@@ -461,8 +468,37 @@ public class LevelManager : MonoBehaviour
                         hovering = true;
                     }
                     break;
+                case "ExitSlider":
+                    dist = Vector3.Distance(playerParent.transform.position, exitSlider.transform.position);
+                    //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance)
+                    {
+                        tutorialText.text = "Press E to go home.";
+                        hovering = true;
+                    }
+                    break;
             }
         }
+        // Exit
+        if (isEscapeEnding && Physics.Raycast(ray, out hit) && interactWithExit)
+        {
+            float dist;
+
+            switch (hit.collider.tag)
+            {
+                case "ExitSlider":
+                    dist = Vector3.Distance(playerParent.transform.position, exitSlider.transform.position);
+                    //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance)
+                    {
+                        tutorialText.text = "Press E to go home.";
+                        hovering = true;
+                    }
+                    break;
+            }
+
+        }
+
         if (!hovering)
         {
             tutorialText.text = currentTutorialText;
@@ -559,11 +595,30 @@ public class LevelManager : MonoBehaviour
                         else if (isEscapeEnding)
                         {
                             interactWithSlider = false;
+                            interactWithExit = true;
                             LeaveRoomEscape();
                         }
                     }
                     break;
             }
+        }
+        // Exit
+        if (isEscapeEnding && Input.GetKeyDown(KeyCode.E) && Physics.Raycast(ray, out hit) && Physics.Raycast(ray, out hit) && interactWithExit)
+        {
+            float dist;
+
+            switch (hit.collider.tag)
+            {
+                case "ExitSlider":
+                    dist = Vector3.Distance(playerParent.transform.position, exitSlider.transform.position);
+                    //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
+                    if (dist <= maxClickDistance)
+                    {
+                        EscapeEndingPart2();
+                    }
+                    break;
+            }
+
         }
 
         // Click anywhere to continue dialogue
@@ -1465,7 +1520,8 @@ public class LevelManager : MonoBehaviour
 
     private void LeaveRoomEscape()
     {
-        audioManager.PlayMusic(hallwaySound, 0.698f);
+        lightingController.SetLightDark();
+        audioManager.PlayMusic(ambientMusic, 0.43f);
 
         // Disable the CharacterController temporarily
         CharacterController cc = playerParent.GetComponent<CharacterController>();
@@ -1480,20 +1536,24 @@ public class LevelManager : MonoBehaviour
             cc.enabled = true;
 
         fakeDoor.SetActive(true);
+        exitDoor.SetActive(true);
+        exitSlider.SetActive(true);
 
         tutorialText.text = "...";
         currentTutorialText = tutorialText.text;
-
-        StartCoroutine(EscapeEndingPart2());
     }
 
-    private IEnumerator EscapeEndingPart2()
+    private void EscapeEndingPart2()
     {
 
-        // but you can't do anything
-        yield return new WaitForSeconds(5f);
+        ShowText($"Ending 2/{totalEndings}: Good Behavior");
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        canShowHints = true;
 
-        StartCoroutine(EndingHelper($"Ending 2/{totalEndings}: Good Behavior"));
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        mainMenuButton.SetActive(true);
+        playAgainButton.SetActive(true);
 
         Debug.Log("Good Behavior Ending");
     }
