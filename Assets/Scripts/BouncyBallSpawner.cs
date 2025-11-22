@@ -18,7 +18,7 @@ public class BouncyBallSpawner : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && levelManager.getCurrentDay() > 1 && !levelManager.getGameReachedEndingBool())
+        if (Input.GetKeyDown(KeyCode.Space) && LevelManager.getCurrentDay() > 1 && !levelManager.getGameReachedEndingBool())
         {
             if (spawnedBall == null)
             {
@@ -94,7 +94,7 @@ public class BouncyBallSpawner : MonoBehaviour
 
     public void CheckBallThrownCount()
     {
-        if (ballThrown >= 100 && levelManager.getCurrentDay() > 4)
+        if (ballThrown >= 100 && LevelManager.getCurrentDay() > 4)
         {
             OnBallEndingReached?.Invoke();
         }

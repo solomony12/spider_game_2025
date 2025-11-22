@@ -79,7 +79,7 @@ public class LevelManager : MonoBehaviour
     private bool waiting = false;
     bool hasDialogueDay = false;
 
-    private int day;
+    private static int day;
     int[] specialDaysList = { 4, 5, 8, 10, 12, 14, 17, 19, 21, 23, 25 };
 
     private float delayTimeStartMin = 3f; // start off at 3f
@@ -109,6 +109,8 @@ public class LevelManager : MonoBehaviour
     public AudioClip bubblingSound;
     public AudioClip scuttlingSound;
     public AudioClip echoScuttlingSound;
+    public AudioClip windSound;
+    public AudioClip ambientMusic;
 
     public PlayerMovement playerMovement;
 
@@ -1107,6 +1109,10 @@ public class LevelManager : MonoBehaviour
                 webs[webActivateIndex++].SetActive(true); // web 3 show
                 DailySetup();
                 break;
+            case 25:
+                audioManager.PlayMusic(windSound, 0.87f);
+                DailySetup();
+                break;
             default:
                 DailySetup();
                 break;
@@ -1226,7 +1232,7 @@ public class LevelManager : MonoBehaviour
         SetAction(ActionType.Toilet);
     }
 
-    public int getCurrentDay()
+    public static int getCurrentDay()
     {
         return day;
     }

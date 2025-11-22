@@ -35,7 +35,7 @@ public class VisibilityChecker : MonoBehaviour
         {
             animator.SetTrigger("SpottedHead");
             showingHead = false;
-            audioManager.PlaySFX(scary1);
+            audioManager.PlaySFX(scary1, 0.65f);
             levelManager.HideHead();
         }
     }
