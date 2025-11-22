@@ -136,7 +136,7 @@ public class LevelManager : MonoBehaviour
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
     private bool notStarting = true;
-    private bool gameReachedEnding = false;
+    private static bool gameReachedEnding = false;
     private bool isInDialogue = false;
 
 
@@ -1618,5 +1618,10 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
             audioManager.PlaySFX(scuttlingSound);
         }
+    }
+
+    public static bool checkIfGameIsBeingReplayed()
+    {
+        return gameReachedEnding;
     }
 }
