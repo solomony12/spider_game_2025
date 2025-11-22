@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour
     [Header("Spawn Settings")]
     public Vector3 startPosition = Vector3.zero;
 
-    private const string totalEndings = "8"; // We don't include Ending 0
+    private const string totalEndings = "9"; // We don't include Ending 0
 
     public enum ActionType
     {
@@ -67,6 +67,9 @@ public class LevelManager : MonoBehaviour
 
     private int spacePressedTimes = 0;
     private bool dayTwoTutorialFinished = false;
+
+    private int zPressedTimes = 0;
+    private bool daySixTutorialFinished = false;
 
     private bool canUseToilet = false;
     private bool canUseBed = false;
@@ -126,6 +129,7 @@ public class LevelManager : MonoBehaviour
     private bool isSpiderEnding = false;
     private bool isEscapeEnding = false;
     private bool isBallEnding = false;
+    private bool isPaperPlaneEnding = false;
     public GameObject fakeDoor;
     public GameObject headSpider;
     public MoveToCamera moveToCamera;
@@ -151,6 +155,7 @@ public class LevelManager : MonoBehaviour
 
     public SquishSpider squishSpiderScript;
     public BouncyBallSpawner bouncyBallSpawner;
+    public PaperAirplaneSpawner paperPlaneSpawner;
 
     void Awake()
     {
@@ -214,13 +219,16 @@ public class LevelManager : MonoBehaviour
         delayTimeMin = delayTimeStartMin;
         delayTimeMax = delayTimeStartMax;
         bouncyBallSpawner.ResetBallThrownCount();
+        paperPlaneSpawner.ResetPlanesThrownCount();
 
         // Tutorial flags
         dayOneTutorialFinished = false;
         dayTwoTutorialFinished = false;
+        daySixTutorialFinished = false;
         wPressed = false;
         dPressed = false;
         spacePressedTimes = 0;
+        zPressedTimes = 0;
 
         // Actions
         canUseToilet = false;
@@ -262,6 +270,7 @@ public class LevelManager : MonoBehaviour
         isSpiderEnding = false;
         isEscapeEnding = false;
         isBallEnding = false;
+        isPaperPlaneEnding = false;
         fakeDoor.SetActive(false);
         headSpider.SetActive(false);
         gameReachedEnding = false;
@@ -286,6 +295,7 @@ public class LevelManager : MonoBehaviour
         squishSpiderScript.ResetSporkMaterial();
         sporkIsVisible = false;
         bouncyBallSpawner.DestroyBall();
+        paperPlaneSpawner.DestroyAirplane();
         CharacterController cc = playerParent.GetComponent<CharacterController>();
         if (cc != null)
             cc.enabled = true;
@@ -328,12 +338,14 @@ public class LevelManager : MonoBehaviour
     {
         SquishSpider.OnSpiderSquished += HandleSpiderSquished;
         BouncyBallSpawner.OnBallEndingReached += HandleBallEnding;
+        PaperAirplaneSpawner.OnAirplaneEndingReached += HandlePlaneEnding;
     }
 
     void OnDisable()
     {
         SquishSpider.OnSpiderSquished -= HandleSpiderSquished;
         BouncyBallSpawner.OnBallEndingReached -= HandleBallEnding;
+        PaperAirplaneSpawner.OnAirplaneEndingReached -= HandlePlaneEnding;
     }
 
     public void SetAction(ActionType action)
@@ -660,6 +672,25 @@ public class LevelManager : MonoBehaviour
 
                 SetAction(ActionType.Toilet);
                 dayTwoTutorialFinished = true;
+            }
+        }
+
+        // Update tutorial for Day 6 (paper plane)
+        if (day == 6 && !daySixTutorialFinished)
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                zPressedTimes++;
+            }
+
+            // Check if all have been pressed at least once
+            if (zPressedTimes == 2)
+            {
+                tutorialText.text = toiletText;
+                currentTutorialText = tutorialText.text;
+                notDoTaskText.SetActive(true);
+                SetAction(ActionType.Toilet);
+                daySixTutorialFinished = true;
             }
         }
 
@@ -1042,6 +1073,7 @@ public class LevelManager : MonoBehaviour
 
         // Check for Circus Clown Ending
         bouncyBallSpawner.CheckBallThrownCount();
+        paperPlaneSpawner.CheckPlanesThrownCount();
 
         if (day >= 30)
         {
@@ -1140,6 +1172,13 @@ public class LevelManager : MonoBehaviour
             case 5:
                 canUseBed = true;
                 DailySetup();
+                break;
+            case 6:
+                DailySetup();
+                tutorialText.text = "Z to throw paper plane. | Z to retrieve it.";
+                currentTutorialText = tutorialText.text;
+                canUseToilet = false;
+                notDoTaskText.SetActive(false);
                 break;
             case 7:
                 webs[webActivateIndex++].SetActive(true); // web 1 show
@@ -1302,9 +1341,14 @@ public class LevelManager : MonoBehaviour
         isBallEnding = true;
     }
 
+    private void HandlePlaneEnding()
+    {
+        isPaperPlaneEnding = true;
+    }
+
     private bool CheckThreshold()
     {
-        if (totalSpidersKilled >= 175) // normal amount killed should be 153
+        if (totalSpidersKilled >= 200) // normal amount killed should be 153
             return TriggerEnding(JuggernautEnding());
 
         if (stayedInBedConsecutively && stayedInBedCount >= 7)
@@ -1327,6 +1371,8 @@ public class LevelManager : MonoBehaviour
 
         if (isBallEnding)
             return TriggerEnding(CircusClownEnding());
+        if (isPaperPlaneEnding)
+            return TriggerEnding(HijackedEnding());
 
         // No ending triggered
         return true;
@@ -1360,7 +1406,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper($"Ending 7/{totalEndings}: Juggernaut"));
+        StartCoroutine(EndingHelper($"Ending 8/{totalEndings}: Juggernaut"));
         Debug.Log("Juggernaut Ending");
     }
 
@@ -1393,7 +1439,7 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(4.666f);
 
-        StartCoroutine(EndingHelper($"Ending 4/{totalEndings}: Constipation"));
+        StartCoroutine(EndingHelper($"Ending 5/{totalEndings}: Constipation"));
         Debug.Log("Constipation Ending");
     }
 
@@ -1582,7 +1628,7 @@ public class LevelManager : MonoBehaviour
         // but you can't do anything (except look around)
         yield return new WaitForSeconds(5f);
 
-        StartCoroutine(EndingHelper($"Ending 5/{totalEndings}: Bedridden"));
+        StartCoroutine(EndingHelper($"Ending 6/{totalEndings}: Bedridden"));
         Debug.Log("Bedridden Ending");
     }
 
@@ -1619,6 +1665,26 @@ public class LevelManager : MonoBehaviour
             ballClones.Add(ballClone);
             yield return new WaitForSeconds(0.3f);
         }
+    }
+
+    private IEnumerator HijackedEnding()
+    {
+        // Game over (seem like it's the next day)
+        ResetPlayerAndCamera();
+        audioManager.PlaySFX(dayBoomSound, 4f);
+        spork.SetActive(false);
+        sporkIsVisible = false;
+
+        tutorialText.text = "What's that in the distance?";
+        currentTutorialText = tutorialText.text;
+
+        // but you can't do anything
+        yield return new WaitForSeconds(3f);
+
+        // TODO: Plane crashes into building
+
+        StartCoroutine(EndingHelper($"Ending 7/{totalEndings}: Hijacked"));
+        Debug.Log("Hijacked Ending");
     }
 
     private IEnumerator EndingHelper(string text)
