@@ -143,6 +143,7 @@ public class LevelManager : MonoBehaviour
     private List<GameObject> ballClones = new List<GameObject>();
     public GameObject exitDoor;
     public GameObject exitSlider;
+    public Light planeLight;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -215,6 +216,7 @@ public class LevelManager : MonoBehaviour
         waiting = false;
         StartCoroutine(OccasionalSpiderScuttling());
         lightingController.SetLightDefault();
+        lightingController.ResetLightIntensity(planeLight);
 
         // Day / counters
         day = 0;
@@ -1684,9 +1686,11 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // TODO: Plane crashes into building
-        FindFirstObjectByType<CameraRumble>().StartRumble(7f);
-        audioManager.PlaySFX(planeSound, 0.9f, 7f);
-        yield return new WaitForSeconds(6.8f);
+        float duration = 7f;
+        FindFirstObjectByType<CameraRumble>().StartRumble(duration);
+        audioManager.PlaySFX(planeSound, 0.9f, duration);
+        lightingController.IncreaseLightIntensity(planeLight, 1000f, duration);
+        yield return new WaitForSeconds(duration - 0.15f);
         audioManager.PlaySFX(crashSound, 0.8f);
 
         canShowHints = true;
@@ -1700,6 +1704,8 @@ public class LevelManager : MonoBehaviour
         // show ending text
         ShowText($"Ending 7/{totalEndings}: Hijacked");
         audioManager.PlaySFX(dayBoomSound, 4f);
+
+        lightingController.ResetLightIntensity(planeLight);
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;

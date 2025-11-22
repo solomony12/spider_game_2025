@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class DynamicLightingController : MonoBehaviour
 {
@@ -131,6 +132,39 @@ public class DynamicLightingController : MonoBehaviour
 
         DynamicGI.UpdateEnvironment();
     }
+
+    public void IncreaseLightIntensity(Light light, float targetIntensity, float duration)
+    {
+        StartCoroutine(IncreaseLightRoutine(light, targetIntensity, duration));
+    }
+
+    private IEnumerator IncreaseLightRoutine(Light light, float targetIntensity, float duration)
+    {
+        light.enabled = true;
+        float startIntensity = 0f;
+        float time = 0f;
+
+        light.intensity = startIntensity;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            float t = time / duration;
+            light.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
+
+            yield return null;
+        }
+
+        light.intensity = targetIntensity;
+    }
+
+    public void ResetLightIntensity(Light light, float targetIntensity = 0f)
+    {
+        light.intensity = targetIntensity;
+        light.enabled = false;
+    }
+
 
     private void UpdateSkyboxExposure()
     {
