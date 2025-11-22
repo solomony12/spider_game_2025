@@ -19,6 +19,7 @@ public class HintsLooper : MonoBehaviour
         "Slack off just a little bit.",
         "Do as you're told.",
         "You really like the ball.",
+        "Folding planes is freeing.",
         "The toilet is gross.",
         "You're safe under the sheets.",
         "The food is disgusting.",

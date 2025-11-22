@@ -114,6 +114,8 @@ public class LevelManager : MonoBehaviour
     public AudioClip echoScuttlingSound;
     public AudioClip windSound;
     public AudioClip ambientMusic;
+    public AudioClip planeSound;
+    public AudioClip crashSound;
 
     public PlayerMovement playerMovement;
 
@@ -1679,11 +1681,32 @@ public class LevelManager : MonoBehaviour
         currentTutorialText = tutorialText.text;
 
         // but you can't do anything
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         // TODO: Plane crashes into building
+        FindFirstObjectByType<CameraRumble>().StartRumble(7f);
+        audioManager.PlaySFX(planeSound, 0.9f, 7f);
+        yield return new WaitForSeconds(6.8f);
+        audioManager.PlaySFX(crashSound, 0.8f);
 
-        StartCoroutine(EndingHelper($"Ending 7/{totalEndings}: Hijacked"));
+        canShowHints = true;
+        gameReachedEnding = true;
+
+        if (notDoTaskText.activeSelf)
+        {
+            notDoTaskText.SetActive(false);
+        }
+
+        // show ending text
+        ShowText($"Ending 7/{totalEndings}: Hijacked");
+        audioManager.PlaySFX(dayBoomSound, 4f);
+
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        gameIsBeingReplayed = true;
+        mainMenuButton.SetActive(true);
+        playAgainButton.SetActive(true);
+
         Debug.Log("Hijacked Ending");
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -39,8 +40,20 @@ public class AudioManager : MonoBehaviour
     }
 
     // Play a one-shot SFX
-    public void PlaySFX(AudioClip clip, float volume = 1f)
+    public void PlaySFX(AudioClip clip, float volume = 1f, float duration = -1f)
     {
         sfxSource.PlayOneShot(clip, volume);
+
+        if (duration > 0f)
+            StartCoroutine(StopSFXAfter(duration));
+    }
+
+    private IEnumerator StopSFXAfter(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        // Only stop if it's still playing
+        if (sfxSource.isPlaying)
+            sfxSource.Stop();
     }
 }
