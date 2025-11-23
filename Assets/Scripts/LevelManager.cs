@@ -44,6 +44,7 @@ public class LevelManager : MonoBehaviour
 
     public Animator dsAnimator;
     public Animator foodAnimator;
+    public Animator planeAnimator;
 
     public Camera mainCamera;
     public GameObject playerParent;
@@ -326,6 +327,10 @@ public class LevelManager : MonoBehaviour
         brownWaterAnimator.ResetTrigger("FlowBrownWater");
         brownWaterAnimator.Rebind();
         brownWaterAnimator.Update(0f);
+        planeAnimator.ResetTrigger("LaunchPlane");
+        planeAnimator.Rebind();
+        planeAnimator.Update(0f);
+
         moveToCamera.ResetPosition();
         visibilityChecker.ResetHead();
 
@@ -789,10 +794,12 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             isBallEnding = true;
+            StartCoroutine(CircusClownEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             isPaperPlaneEnding = true;
+            StartCoroutine(HijackedEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
@@ -1708,6 +1715,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator HijackedEnding()
     {
+        planeAnimator.Play("PlaneOutside");
         // Game over (seem like it's the next day)
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
@@ -1716,18 +1724,29 @@ public class LevelManager : MonoBehaviour
 
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
 
-        tutorialText.text = "What's that in the distance?";
+        tutorialText.text = "What's that in the distance (behind you)?";
         currentTutorialText = tutorialText.text;
 
         // but you can't do anything
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
-        // TODO: Plane crashes into building
+        // Plane crashes into building
         float duration = 7f;
+        float crashLeadTime = 5.31f;
+
+        // Start rumble, SFX, and light intensity ramp
         FindFirstObjectByType<CameraRumble>().StartRumble(duration);
         audioManager.PlaySFX(planeSound, 0.9f, duration);
         lightingController.IncreaseLightIntensity(planeLight, 1000f, duration);
-        yield return new WaitForSeconds(duration - 0.15f);
+
+        // Wait until just before crash
+        yield return new WaitForSeconds(crashLeadTime);
+
+        // Launch plane
+        planeAnimator.SetTrigger("LaunchPlane");
+
+        // Wait for the final lead time, then play crash sound
+        yield return new WaitForSeconds(duration - crashLeadTime);
         audioManager.PlaySFX(crashSound, 0.8f);
 
         canShowHints = true;
