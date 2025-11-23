@@ -86,7 +86,7 @@ public class SquishSpider : MonoBehaviour
 
                                 int index = UnityEngine.Random.Range(0, squishSounds.Length);
                                 AudioClip clip = squishSounds[index];
-                                audioManager.PlaySFX(clip, 0.4f);
+                                audioManager.PlaySFX(clip, 0.25f);
                                 spidersKilled++;
                                 levelManager.SpiderTaskCounter();
                                 CheckBloodLevels();
