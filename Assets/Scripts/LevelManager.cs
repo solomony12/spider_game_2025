@@ -1051,6 +1051,18 @@ public class LevelManager : MonoBehaviour
         lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Evening);
     }
 
+    public Dictionary<int, int> dayMapSkip = new Dictionary<int, int>()
+    {
+        {10, 12},
+        {12, 14},
+        {14, 17},
+        {17, 19},
+        {19, 21},
+        {21, 23},
+        {23, 25},
+        {25, 29},
+    };
+
     private void LevelManage(int dayUpdate = -1)
     {
         canUseFood = false;
@@ -1065,13 +1077,20 @@ public class LevelManager : MonoBehaviour
             canUseBed = true;
         }
 
-        if (dayUpdate == -1)
-        {
-            day++;
-        }
-        else
+        // Jump to time
+        if (dayUpdate != -1)
         {
             day = dayUpdate;
+        }
+        // Skip ahead in time
+        else if (dayMapSkip.ContainsKey(day))
+        {
+            day = dayMapSkip[day];
+        }
+        // Proceed as normal
+        else
+        {
+            day++;
         }
         Debug.Log($"Day {day} begins!");
 
