@@ -46,3 +46,6 @@ Play Testers (since 1.2): Fuego Bagel
 - Version 1.3.1 -- Bug Fix (11/20/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1119682/trapped-within-a-web-version-131-bug-fix)
 - Version 1.3.2 -- Updates, Bug Fixes (11/20/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1119809/trapped-within-a-web-version-132-updates-bug-fixes)
 - Version 1.4 -- Major Updates, Bug Fix (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121222/trapped-within-a-web-version-14-major-updates-bug-fixes)
+- Version 1.5 -- Major Updates, New Ending (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121964/trapped-within-a-web-version-15-major-updates-new-ending)
+- Version 1.5.1 -- Update (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121984/trapped-within-a-web-version-151-update)
+- Version 1.5.1.1 -- Update (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121989/trapped-within-a-web-version-1511-update)
