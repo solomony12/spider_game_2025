@@ -616,12 +616,14 @@ public class LevelManager : MonoBehaviour
                         if (isSpiderEnding)
                         {
                             interactWithSlider = false;
+                            spiderManager.DestroyAllClones();
                             LeaveRoomSpider();
                         }
                         else if (isEscapeEnding)
                         {
                             interactWithSlider = false;
                             interactWithExit = true;
+                            spiderManager.DestroyAllClones();
                             LeaveRoomEscape();
                         }
                     }
