@@ -51,9 +51,9 @@ public class LevelManager : MonoBehaviour
     public GameObject smackSpiderText;
     public GameObject tutorialTextObject;
     private TMP_Text tutorialText;
-    private string toiletText = "Use the toilet.";
-    private string foodText = "Eat the meal.";
-    private string talkText = "Talk to the guard (observation slot).";
+    private string toiletText = "Your body urges you to use the toilet.";
+    private string foodText = "Your hunger tells you to eat the meal.";
+    private string talkText = "You want to talk to someone (observation slot).";
     private string bedText = "Go to bed.";
     private string waitText = "Free time.";
     public GameObject dayText;
