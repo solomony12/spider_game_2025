@@ -86,7 +86,7 @@ public class PaperAirplaneSpawner : MonoBehaviour
 
     public void CheckPlanesThrownCount()
     {
-        if (planesThrown >= 100 && LevelManager.getCurrentDay() > 5)
+        if (planesThrown >= 75 && LevelManager.getCurrentDay() > 5)
         {
             OnAirplaneEndingReached?.Invoke();
         }

@@ -1374,16 +1374,16 @@ public class LevelManager : MonoBehaviour
         if (totalSpidersKilled >= 100) // normal amount killed should be 76
             return TriggerEnding(JuggernautEnding());
 
-        if (stayedInBedConsecutively && stayedInBedCount >= 7)
+        if (stayedInBedConsecutively && stayedInBedCount >= 5) // 5
             return TriggerEnding(BedriddenEnding());
 
-        if (bathroomSkips >= 5) // 5
+        if (bathroomSkips >= 3) // 3
             return TriggerEnding(ConstipationEnding());
 
-        if (foodSkips >= 8) // 8
+        if (foodSkips >= 3) // 3
             return TriggerEnding(StarvationEnding());
 
-        if (spiderKillSkips >= 10)
+        if (spiderKillSkips >= 4) // 4
         {
             DisableAllActions();
             gameReachedEnding = true;

@@ -94,7 +94,7 @@ public class BouncyBallSpawner : MonoBehaviour
 
     public void CheckBallThrownCount()
     {
-        if (ballThrown >= 100 && LevelManager.getCurrentDay() > 4)
+        if (ballThrown >= 75 && LevelManager.getCurrentDay() > 4)
         {
             OnBallEndingReached?.Invoke();
         }
