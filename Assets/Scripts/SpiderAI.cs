@@ -15,7 +15,7 @@ public class SpiderAI : MonoBehaviour
 
     [Header("Surface Bounds")]
     public Collider surfaceBounds;  // The plane the spider crawls on
-    public float edgeMargin = 0.65f; // Distance from edges to avoid
+    public float edgeMargin = 0.8f; // Distance from edges to avoid
 
     [Header("Movement Settings")]
     public float walkSpeed = 2f;
