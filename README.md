@@ -1,42 +1,24 @@
 ### Trapped Within a Web
-
 You wake up in a cramped, silent cell. No memories, no answers, just cold concrete and the faint hum of something watching. Nothing but pure instincts drives you to follow a schedule: eat, sleep, repeat. The room never changes…
-
 But the spiders do.
 
-
-
 # Credits:
-
 Soli (iveseanyori): Programming, Design, Animation
-
 Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
-
 Play Testers: Fuego Bagel, Carly “Khaosphoenix”, HatWithEyes
 
-
-
 # Controls: (tutorial in-game)
-
 - WASD for movement
-
 - Mouse for looking around
-
 - Left Mouse Click for using spork / progressing dialogue
-
 - E to interact
-
 - Esc for pause menu
-
 - Space to throw/retrieve ball
-
 - Z to throw/retrieve paper plane
-
-
+- P to skip the task
+- V to skip the tutorial (unlocked after reaching one ending)
 
 *Can you get all the endings?*
-
-
 
 # Versions
 - Version 1.1 was made within 48 hours for a Game Jam. (11/16/25)
