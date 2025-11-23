@@ -25,22 +25,15 @@ public class MenuScript : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Instance.RegisterUI(creditsPage, hintsButton);
-        ResetStuff();
-    }
-
-    public void RegisterUI(GameObject credits, Button hints)
-    {
-        creditsPage = credits;
-        hintsButton = hints;
-    }
-
     private void ResetStuff()
     {
         hintsButton.interactable = false;
         HideCredits();
+    }
+
+    private void Start()
+    {
+        creditsPage = GameObject.Find("CreditsPage");
     }
 
     void OnEnable()
@@ -82,7 +75,7 @@ public class MenuScript : MonoBehaviour
 
     public void HideCredits()
     {
-        if (creditsPage != null && creditsPage.activeSelf)
+        if (creditsPage != null)
         {
             creditsPage.SetActive(false);
         }
@@ -91,13 +84,28 @@ public class MenuScript : MonoBehaviour
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         string sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName == "TitleScene")
+
+        // Check if HintsScene is loaded
+        bool hintsLoaded = false;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name == "HintsScene")
+            {
+                hintsLoaded = true;
+                break;
+            }
+        }
+
+        // Only run if TitleScene is active and HintsScene is NOT loaded
+        if (sceneName == "TitleScene" && !hintsLoaded)
         {
             Button playButton = GameObject.Find("Play").GetComponent<Button>();
             playButton.onClick.AddListener(PlayGame);
             canPlay = true;
 
             creditsPage = GameObject.Find("CreditsPage");
+            creditsPage.SetActive(true);
+
             Button closeButton = GameObject.Find("Close").GetComponent<Button>();
             closeButton.onClick.AddListener(HideCredits);
 
@@ -110,13 +118,13 @@ public class MenuScript : MonoBehaviour
             Button quitButton = GameObject.Find("Quit").GetComponent<Button>();
             quitButton.onClick.AddListener(QuitGame);
 
-
-            ResetStuff();
-            EnableCredits();
+            ResetStuff(); // must go before EnableHints
+            EnableHints();
         }
     }
 
-    private void EnableCredits()
+
+    private void EnableHints()
     {
         if (LevelManager.checkIfHintsCanBeShown())
         {
