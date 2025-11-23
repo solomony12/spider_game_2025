@@ -1371,7 +1371,7 @@ public class LevelManager : MonoBehaviour
 
     private bool CheckThreshold()
     {
-        if (totalSpidersKilled >= 200) // normal amount killed should be 153
+        if (totalSpidersKilled >= 100) // normal amount killed should be 76
             return TriggerEnding(JuggernautEnding());
 
         if (stayedInBedConsecutively && stayedInBedCount >= 7)
