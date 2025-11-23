@@ -116,6 +116,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip ambientMusic;
     public AudioClip planeSound;
     public AudioClip crashSound;
+    public AudioClip stomachGrowlSound;
 
     public PlayerMovement playerMovement;
 
@@ -1482,6 +1483,7 @@ public class LevelManager : MonoBehaviour
         RenderSettings.fogColor = Color.gray;
         RenderSettings.fogMode = FogMode.ExponentialSquared;
         RenderSettings.fogDensity = 0.25f;
+        audioManager.PlaySFX(stomachGrowlSound);
 
         // but you can't do anything
         yield return new WaitForSeconds(3f);
