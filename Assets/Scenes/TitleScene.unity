@@ -724,7 +724,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -146}
+  m_AnchoredPosition: {x: 0, y: -197}
   m_SizeDelta: {x: 410.08, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &341520278
@@ -1555,12 +1555,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '- Programmer, Design, Animation: Soli (seanyori)
-
-    - 3D Models, Art,
-    Writing: Thatcher (Cilantro Lime Rice)
-
-    - Play Testers: Fuego Bagel'
+  m_text: "- Programmer, Design, Animation: Soli (seanyori)\n- 3D Models, Art, Writing:
+    Thatcher (Cilantro Lime Rice)\n- Play Testers: Fuego Bagel, Carly \u201CKhaosphoenix\u201D\n                          
+    HatWithEyes"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}

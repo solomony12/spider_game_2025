@@ -799,7 +799,7 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             isPaperPlaneEnding = true;
-            StartCoroutine(HijackedEnding());
+            StartCoroutine(MaydayEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
@@ -1415,7 +1415,7 @@ public class LevelManager : MonoBehaviour
         if (isBallEnding)
             return TriggerEnding(CircusClownEnding());
         if (isPaperPlaneEnding)
-            return TriggerEnding(HijackedEnding());
+            return TriggerEnding(MaydayEnding());
 
         // No ending triggered
         return true;
@@ -1713,7 +1713,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private IEnumerator HijackedEnding()
+    private IEnumerator MaydayEnding()
     {
         planeAnimator.Play("PlaneOutside");
         // Game over (seem like it's the next day)
@@ -1758,7 +1758,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // show ending text
-        ShowText($"Ending 7/{totalEndings}: Hijacked");
+        ShowText($"Ending 7/{totalEndings}: Mayday");
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         lightingController.ResetLightIntensity(planeLight);
@@ -1769,7 +1769,7 @@ public class LevelManager : MonoBehaviour
         mainMenuButton.SetActive(true);
         playAgainButton.SetActive(true);
 
-        Debug.Log("Hijacked Ending");
+        Debug.Log("Mayday Ending");
     }
 
     private IEnumerator EndingHelper(string text)
