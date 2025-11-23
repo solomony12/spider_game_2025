@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform spork;
 
+    public MouseSensitivityData mouseSettings;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -64,8 +66,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Look()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSettings.CurrentSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSettings.CurrentSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);

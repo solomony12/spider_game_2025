@@ -47,6 +47,8 @@ public class LevelManager : MonoBehaviour
 
     public Camera mainCamera;
     public GameObject playerParent;
+    public GameObject mouseSensitivityObj;
+    public GameObject pauseText;
 
     public GameObject smackSpiderText;
     public GameObject tutorialTextObject;
@@ -270,6 +272,8 @@ public class LevelManager : MonoBehaviour
         UnityEngine.Cursor.visible = false;
         mainMenuButton.SetActive(false);
         playAgainButton.SetActive(false);
+        mouseSensitivityObj.SetActive(false);
+        pauseText.SetActive(false);
         FadeController.Instance.ResetEndingBool();
         dialogueHead.SetActive(false);
         isSpiderEnding = false;
@@ -1789,12 +1793,13 @@ public class LevelManager : MonoBehaviour
         blackScreen.SetActive(!blackScreen.activeSelf);
         playAgainButton.SetActive(!playAgainButton.activeSelf);
         mainMenuButton.SetActive(!mainMenuButton.activeSelf);
+        mouseSensitivityObj.SetActive(!mouseSensitivityObj.activeSelf);
 
         if (playAgainButton.activeSelf)
         {
             blackScreen.GetComponent<UnityEngine.UI.Image>().color = new Color(0f, 0f, 0f, 0.5f);
             Time.timeScale = 0f;
-            ShowText("Paused");
+            pauseText.SetActive(true);
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
         }
@@ -1802,6 +1807,7 @@ public class LevelManager : MonoBehaviour
         {
             blackScreen.GetComponent<UnityEngine.UI.Image>().color = new Color(0f, 0f, 0f, 1f);
             Time.timeScale = 1f;
+            pauseText.SetActive(false);
             headerText.SetActive(false);
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UnityEngine.Cursor.visible = false;
