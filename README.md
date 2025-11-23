@@ -3,9 +3,9 @@ You wake up in a cramped, silent cell. No memories, no answers, just cold concre
 But the spiders do.
 
 # Credits:
-Soli (iveseanyori): Programming, Design, Animation
-Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
-Play Testers: Fuego Bagel, Carly “Khaosphoenix”, HatWithEyes
+- Soli (iveseanyori): Programming, Design, Animation
+- Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
+- Play Testers: Fuego Bagel, Carly “Khaosphoenix”, HatWithEyes
 
 # Controls: (tutorial in-game)
 - WASD for movement
