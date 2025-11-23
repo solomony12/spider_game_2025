@@ -30,6 +30,7 @@ public class DynamicLightingController : MonoBehaviour
     public Light defaultLight;
     public Light darkLight;
     public Light exitLight;
+    public Light roomLight;
 
     public enum TimePhase { Morning, Noon, Evening, Night }
     public TimePhase currentPhase = TimePhase.Morning;
@@ -70,24 +71,28 @@ public class DynamicLightingController : MonoBehaviour
                 RenderSettings.skybox = morningSkybox;
                 targetColor = morningColor;
                 targetIntensity = 0.8f;
+                IncreaseLightIntensity(roomLight, 2, 1f);
                 break;
 
             case TimePhase.Noon:
                 RenderSettings.skybox = noonSkybox;
                 targetColor = noonColor;
                 targetIntensity = 1.0f;
+                IncreaseLightIntensity(roomLight, 4, 1f);
                 break;
 
             case TimePhase.Evening:
                 RenderSettings.skybox = eveningSkybox;
                 targetColor = eveningColor;
                 targetIntensity = 0.6f;
+                IncreaseLightIntensity(roomLight, 1, 1f);
                 break;
 
             case TimePhase.Night:
                 RenderSettings.skybox = nightSkybox;
                 targetColor = nightColor;
                 targetIntensity = 0.25f;
+                IncreaseLightIntensity(roomLight, 0, 1f);
                 break;
         }
 
@@ -141,7 +146,7 @@ public class DynamicLightingController : MonoBehaviour
     private IEnumerator IncreaseLightRoutine(Light light, float targetIntensity, float duration)
     {
         light.enabled = true;
-        float startIntensity = 0f;
+        float startIntensity = light.intensity;
         float time = 0f;
 
         light.intensity = startIntensity;

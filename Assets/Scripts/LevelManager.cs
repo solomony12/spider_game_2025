@@ -782,26 +782,34 @@ public class LevelManager : MonoBehaviour
             waiting = false;
             LevelManage(29);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            isBallEnding = true;
+        }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            gameReachedEnding = true;
-            StartCoroutine(ConstipationEnding());
+            isPaperPlaneEnding = true;
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             gameReachedEnding = true;
-            StartCoroutine(BedriddenEnding());
+            StartCoroutine(ConstipationEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             gameReachedEnding = true;
-            StartCoroutine(StarvationEnding());
+            StartCoroutine(BedriddenEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            totalSpidersKilled = 175;
+            gameReachedEnding = true;
+            StartCoroutine(StarvationEnding());
         }
         if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            totalSpidersKilled = 1000;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             gameReachedEnding = true;
             isSpiderEnding = true;
@@ -1419,6 +1427,8 @@ public class LevelManager : MonoBehaviour
         ResetPlayerAndCamera();
         audioManager.PlaySFX(dayBoomSound, 4f);
 
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Evening);
+
         tutorialText.text = "Spiders fear your very existence.";
         currentTutorialText = tutorialText.text;
 
@@ -1699,6 +1709,8 @@ public class LevelManager : MonoBehaviour
         audioManager.PlaySFX(dayBoomSound, 4f);
         spork.SetActive(false);
         sporkIsVisible = false;
+
+        lightingController.ApplyPhaseSettings(DynamicLightingController.TimePhase.Night);
 
         tutorialText.text = "What's that in the distance?";
         currentTutorialText = tutorialText.text;
