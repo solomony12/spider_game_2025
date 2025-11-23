@@ -12,6 +12,8 @@ public class BouncyBallSpawner : MonoBehaviour
     private GameObject spawnedBall;
 
     public LevelManager levelManager;
+    public AudioManager audioManager;
+    public AudioClip throwSound;
 
     public static event Action OnBallEndingReached;
     private static int ballThrown = 0;
@@ -50,6 +52,8 @@ public class BouncyBallSpawner : MonoBehaviour
         {
             spawnedBall = Instantiate(spider, spawnPos, Quaternion.identity);
         }
+
+        audioManager.PlaySFX(throwSound, 0.3f);
 
 
         // Ensure it has a Rigidbody
