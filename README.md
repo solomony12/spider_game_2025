@@ -1,6 +1,6 @@
 ### Trapped Within a Web
 
-You wake up in a cramped, silent cell. No memories, no answers, just cold concrete and the faint hum of something watching. Each day, a metal door slides open and a voice orders you through the same routines: eat, sleep, repeat. The room never changes…
+You wake up in a cramped, silent cell. No memories, no answers, just cold concrete and the faint hum of something watching. Nothing but pure instincts drives you to follow a schedule: eat, sleep, repeat. The room never changes…
 
 But the spiders do.
 
@@ -12,7 +12,7 @@ Soli (iveseanyori): Programming, Design, Animation
 
 Thatcher (Cilantro Lime Rice): 3D Models, Art, Writing
 
-Play Testers (since 1.2): Fuego Bagel
+Play Testers: Fuego Bagel, Carly “Khaosphoenix”, HatWithEyes
 
 
 
@@ -24,11 +24,13 @@ Play Testers (since 1.2): Fuego Bagel
 
 - Left Mouse Click for using spork / progressing dialogue
 
-- Space to throw/retrieve ball
-
 - E to interact
 
 - Esc for pause menu
+
+- Space to throw/retrieve ball
+
+- Z to throw/retrieve paper plane
 
 
 
@@ -49,3 +51,4 @@ Play Testers (since 1.2): Fuego Bagel
 - Version 1.5 -- Major Updates, New Ending (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121964/trapped-within-a-web-version-15-major-updates-new-ending)
 - Version 1.5.1 -- Update (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121984/trapped-within-a-web-version-151-update)
 - Version 1.5.1.1 -- Update (11/22/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1121989/trapped-within-a-web-version-1511-update)
+- Version 1.5.2 -- Updates, Bug Fixes (11/23/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1122063/trapped-within-a-web-version-152-updates-bug-fixes)
