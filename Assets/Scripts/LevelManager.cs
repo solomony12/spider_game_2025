@@ -656,7 +656,6 @@ public class LevelManager : MonoBehaviour
                             interactedWithDoor = true;
                             StartCoroutine(EndingHelper($"Ending 2/{totalEndings}: Good Behavior"));
                         }
-                        //EscapeEndingPart2();
                     }
                     break;
             }
@@ -1657,21 +1656,6 @@ public class LevelManager : MonoBehaviour
 
         tutorialText.text = "...";
         currentTutorialText = tutorialText.text;
-    }
-
-    private void EscapeEndingPart2()
-    {
-
-        ShowText($"Ending 2/{totalEndings}: Good Behavior");
-        audioManager.PlaySFX(dayBoomSound, 4f);
-        canShowHints = true;
-
-        UnityEngine.Cursor.lockState = CursorLockMode.None;
-        UnityEngine.Cursor.visible = true;
-        mainMenuButton.SetActive(true);
-        playAgainButton.SetActive(true);
-
-        Debug.Log("Good Behavior Ending");
     }
 
     private IEnumerator BedriddenEnding()
