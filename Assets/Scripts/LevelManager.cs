@@ -1513,7 +1513,7 @@ public class LevelManager : MonoBehaviour
 
         // TODO:
 
-        StartCoroutine(EndingHelper($"Ending 6/{totalEndings}: Starvation"));
+        StartCoroutine(EndingHelper($"Ending 7/{totalEndings}: Starvation"));
         Debug.Log("Starvation Ending");
     }
 
@@ -1760,7 +1760,7 @@ public class LevelManager : MonoBehaviour
         }
 
         // show ending text
-        ShowText($"Ending 7/{totalEndings}: Mayday");
+        ShowText($"Ending 4/{totalEndings}: Mayday");
         audioManager.PlaySFX(dayBoomSound, 4f);
 
         lightingController.ResetLightIntensity(planeLight);
