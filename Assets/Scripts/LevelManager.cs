@@ -1568,11 +1568,11 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(7f);
         audioManager.PlaySFX(scaryStingSound, 0.65f);
         headSpider.SetActive(true);
+        cursor.GetComponent<CanvasRenderer>().SetAlpha(0f);
         cameraSlerp.StartRotate(headSpider.transform);
         yield return new WaitForSeconds(0.72f);
 
         // SPIDER ATTACK
-        cursor.GetComponent<CanvasRenderer>().SetAlpha(0f);
         moveToCamera.MoveTowardCamera(0.25f);
         audioManager.PlaySFX(scarySound);
         audioManager.PlaySFX(echoScuttlingSound, 3f);
