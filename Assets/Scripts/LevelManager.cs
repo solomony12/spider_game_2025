@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using UnityEngine.WSA;
 using Yarn;
 using Yarn.Unity;
 using static System.Net.Mime.MediaTypeNames;
@@ -120,6 +121,7 @@ public class LevelManager : MonoBehaviour
     public AudioClip planeSound;
     public AudioClip crashSound;
     public AudioClip stomachGrowlSound;
+    public AudioClip scaryStingSound;
 
     public PlayerMovement playerMovement;
 
@@ -150,6 +152,7 @@ public class LevelManager : MonoBehaviour
     public Light planeLight;
     public GameObject cacoonsAndWebs;
     public CameraSlerpToTarget cameraSlerp;
+    public GameObject cursor;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -297,6 +300,7 @@ public class LevelManager : MonoBehaviour
         exitDoor.SetActive(false);
         exitSlider.SetActive(false);
         cacoonsAndWebs.SetActive(false);
+        cursor.GetComponent<CanvasRenderer>().SetAlpha(0.45f); // Default opacity os 0.45f
 
     // Music
     audioManager.PlayMusic(hummingSound, 0.798f);
@@ -1535,7 +1539,6 @@ public class LevelManager : MonoBehaviour
     private void LeaveRoomSpider()
     {
         audioManager.PlayMusic(hallwaySound, 0.698f);
-        headSpider.SetActive(true);
 
         // Disable the CharacterController temporarily
         CharacterController cc = playerParent.GetComponent<CharacterController>();
@@ -1563,10 +1566,13 @@ public class LevelManager : MonoBehaviour
 
         // but you can't do anything
         yield return new WaitForSeconds(7f);
+        audioManager.PlaySFX(scaryStingSound, 0.65f);
+        headSpider.SetActive(true);
         cameraSlerp.StartRotate(headSpider.transform);
         yield return new WaitForSeconds(0.72f);
 
         // SPIDER ATTACK
+        cursor.GetComponent<CanvasRenderer>().SetAlpha(0f);
         moveToCamera.MoveTowardCamera(0.25f);
         audioManager.PlaySFX(scarySound);
         audioManager.PlaySFX(echoScuttlingSound, 3f);
@@ -1576,6 +1582,7 @@ public class LevelManager : MonoBehaviour
 
         // SUDDEN BLACKNESS
         // show ending text
+        cursor.GetComponent<CanvasRenderer>().SetAlpha(0.45f);
         ShowText($"True Ending {totalEndings}/{totalEndings}: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
         canShowHints = true;
