@@ -148,6 +148,8 @@ public class LevelManager : MonoBehaviour
     public GameObject exitDoor;
     public GameObject exitSlider;
     public Light planeLight;
+    public GameObject cacoonsAndWebs;
+    public CameraSlerpToTarget cameraSlerp;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -294,6 +296,7 @@ public class LevelManager : MonoBehaviour
         }
         exitDoor.SetActive(false);
         exitSlider.SetActive(false);
+        cacoonsAndWebs.SetActive(false);
 
     // Music
     audioManager.PlayMusic(hummingSound, 0.798f);
@@ -1547,6 +1550,7 @@ public class LevelManager : MonoBehaviour
             cc.enabled = true;
 
         fakeDoor.SetActive(true);
+        cacoonsAndWebs.SetActive(true);
 
         tutorialText.text = "...";
         currentTutorialText = tutorialText.text;
@@ -1558,7 +1562,9 @@ public class LevelManager : MonoBehaviour
     {
 
         // but you can't do anything
-        yield return new WaitForSeconds(4.72f);
+        yield return new WaitForSeconds(7f);
+        cameraSlerp.StartRotate(headSpider.transform);
+        yield return new WaitForSeconds(0.72f);
 
         // SPIDER ATTACK
         moveToCamera.MoveTowardCamera(0.25f);
@@ -1578,6 +1584,7 @@ public class LevelManager : MonoBehaviour
         UnityEngine.Cursor.visible = true;
         mainMenuButton.SetActive(true);
         playAgainButton.SetActive(true);
+        cameraSlerp.StopRotate();
 
         Debug.Log("Spiders Ending");
     }
