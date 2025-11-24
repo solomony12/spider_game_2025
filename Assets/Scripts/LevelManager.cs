@@ -153,6 +153,7 @@ public class LevelManager : MonoBehaviour
     public GameObject cacoonsAndWebs;
     public CameraSlerpToTarget cameraSlerp;
     public GameObject cursor;
+    private bool interactedWithDoor = false;
 
     public GameObject playAgainButton;
     public GameObject mainMenuButton;
@@ -252,6 +253,7 @@ public class LevelManager : MonoBehaviour
         interactWithSlider = true;
         toiletFirstUsed = false;
         interactWithExit = false;
+        interactedWithDoor = false;
 
         // Spider counters
         spidersToKill = 1;
@@ -649,7 +651,12 @@ public class LevelManager : MonoBehaviour
                     //Debug.Log("Door Slider: dist: " + dist + ", max " + (maxClickDistance).ToString());
                     if (dist <= maxClickDistance)
                     {
-                        EscapeEndingPart2();
+                        if (!interactedWithDoor)
+                        {
+                            interactedWithDoor = true;
+                            StartCoroutine(EndingHelper($"Ending 2/{totalEndings}: Good Behavior"));
+                        }
+                        //EscapeEndingPart2();
                     }
                     break;
             }
@@ -1570,14 +1577,15 @@ public class LevelManager : MonoBehaviour
         headSpider.SetActive(true);
         cursor.GetComponent<CanvasRenderer>().SetAlpha(0f);
         cameraSlerp.StartRotate(headSpider.transform);
-        yield return new WaitForSeconds(0.72f);
+        yield return new WaitForSeconds(1.22f); // original was 0.72
 
         // SPIDER ATTACK
-        moveToCamera.MoveTowardCamera(0.25f);
+        float moveDuration = 0.31f;
+        moveToCamera.MoveTowardCamera(moveDuration);
         audioManager.PlaySFX(scarySound);
         audioManager.PlaySFX(echoScuttlingSound, 3f);
 
-        yield return new WaitForSeconds(0.24f);
+        yield return new WaitForSeconds(moveDuration + 0.1f);
         //moveToCamera.ResetPosition();
 
         // SUDDEN BLACKNESS
@@ -1762,8 +1770,9 @@ public class LevelManager : MonoBehaviour
         planeAnimator.SetTrigger("LaunchPlane");
 
         // Wait for the final lead time, then play crash sound
-        yield return new WaitForSeconds(duration - crashLeadTime);
+        yield return new WaitForSeconds(duration - crashLeadTime - 0.15f);
         audioManager.PlaySFX(crashSound, 0.8f);
+        yield return new WaitForSeconds(0.25f); // before blackout
 
         canShowHints = true;
         gameReachedEnding = true;
