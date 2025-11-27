@@ -1639,7 +1639,7 @@ public class LevelManager : MonoBehaviour
             cc.enabled = false;
 
         // Teleport player
-        playerParent.transform.position = new Vector3(7.07f, 3.84f, -1.4f);
+        playerParent.transform.position = new Vector3(23.19f, 3.19f, -1.74f);
 
         // Re-enable CharacterController
         if (cc != null)
