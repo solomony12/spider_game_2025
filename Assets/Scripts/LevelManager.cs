@@ -1588,6 +1588,7 @@ public class LevelManager : MonoBehaviour
         ShowText($"True Ending {totalEndings}/{totalEndings}: Spiders");
         audioManager.PlaySFX(dayBoomSound, 4f);
         canShowHints = true;
+        gameIsBeingReplayed = true;
 
         UnityEngine.Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
