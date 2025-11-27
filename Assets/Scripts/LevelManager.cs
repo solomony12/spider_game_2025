@@ -383,6 +383,7 @@ public class LevelManager : MonoBehaviour
                 canUseToilet = true;
                 break;
             case ActionType.Food:
+                canUseBed = false;
                 canUseFood = true;
                 break;
             case ActionType.SpiderKill:
