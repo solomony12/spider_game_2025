@@ -31,11 +31,6 @@ public class MenuScript : MonoBehaviour
         HideCredits();
     }
 
-    private void Start()
-    {
-        creditsPage = GameObject.Find("CreditsPage");
-    }
-
     void OnEnable()
     {
         canPlay = true;
