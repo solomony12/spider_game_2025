@@ -36,3 +36,4 @@ But the spiders do.
 - Version 1.5.2 -- Updates, Bug Fixes (11/23/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1122063/trapped-within-a-web-version-152-updates-bug-fixes)
 - ​Version 1.5.3 -- Updates, Bug Fix (11/23/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1122956/trapped-within-a-web-version-153-updates-bug-fix)
 - Version 1.5.4 -- Updates, Bug Fixes (11/28/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1127955/trapped-within-a-web-version-154-updates-bug-fixes)
+- Version 1.5.4.1 -- Bug Fix (11/28/25) (https://iveseanyori.itch.io/trapped-within-a-web/devlog/1128031/trapped-within-a-web-version-1541-bug-fix)
